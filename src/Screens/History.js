@@ -12,8 +12,8 @@ function History(props) {
 }
 const styles = StyleSheet.create({
     container: {
+        flex:1,
         width:'100%',
-        backgroundColor:'#0f0'
     },
     
 })
