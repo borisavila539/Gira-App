@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         padding: 10,
         backgroundColor:'#fff',
-        borderRadius: 10,
+        borderRadius: 20,
     },
     containerIconItem: {
         flex: 1,
