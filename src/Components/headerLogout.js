@@ -30,8 +30,10 @@ const styles = StyleSheet.create({
     },
     text:{
         flex:3,
+        fontSize:16,
         fontWeight:'bold',
-        color:'#1A4D2E'
+        color:'#1A4D2E',
+        textAlign: "center",
     },
 })
 

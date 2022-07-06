@@ -6,7 +6,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Buttons } from '../Components/indexComponents';
 import { useDispatch } from 'react-redux'
 import { iniciarSesion } from '../store/slices/usuarioSlice';
-import { StatusBar } from "react-native";
+
 
 const Login = (props) => {
     const dispatch = useDispatch();

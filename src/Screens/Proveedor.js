@@ -1,10 +1,12 @@
 import { StyleSheet, View, Text } from "react-native";
 import {HeaderLogout} from "../Components/indexComponents";
+import { StatusBar } from "react-native";
 
 function Proveedor(props) {
 
     return (
         <View style={styles.container}>
+            <StatusBar style="auto"/>
             <HeaderLogout/>
             <Text style={{fontSize:30, color:'#000'}}>Proveedor</Text>
         </View>
