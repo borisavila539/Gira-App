@@ -31,6 +31,7 @@ function Navigator(props) {
                 tabBarLabelStyle: { paddingBottom: 15 },
                 tabBarIconStyle: { marginTop: 5 },
                 headerShown:false,
+                tabBarHideOnKeyboard:true
             })}
 
         >

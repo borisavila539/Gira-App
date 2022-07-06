@@ -38,21 +38,20 @@ const Login = (props) => {
             }
 
         } catch {
-            if(user === ''){
+            if (user === '') {
                 Alert.alert('Debe ingresar usuario')
-            }else if(password=== ''){
+            } else if (password === '') {
                 Alert.alert('Debe ingresar su contraseña')
-            }else if(password.length < 8 ){
+            } else if (password.length < 8) {
                 Alert.alert('La contraseña deber ser minimo de 8 caracteres')
-            }else{
+            } else {
                 Alert.alert('Usuario o Contraseña incorrecta')
             }
         }
     }
-
     return (
         <View style={{ flex: 1 }}>
-            
+
             <LinearGradient
                 style={styles.container}
                 colors={['#4E9F3D', '#D8E9A8']}

@@ -12,7 +12,7 @@ const HeaderLogout = () => {
     }
     return (
         <View style={styles.header}>
-            <Text style={styles.text}>Bienvenid@: {nombre}</Text>
+            <Text style={styles.text}>Bienvenido(a): {nombre}</Text>
             <Pressable onPress={handlePressLogout}>
                 <FontAwesome5 name='sign-out-alt' size={40} color={'#9EB23B'}></FontAwesome5>
             </Pressable>
