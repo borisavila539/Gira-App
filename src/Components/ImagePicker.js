@@ -62,11 +62,11 @@ const MyImagePicker = (props) => {
                 onRequestClose={() => setModalCameraUpload(!modalCameraUpload)}
             >
                 <View style={styles.modal}>
-                    <View style={styles.containerIcon}>
+                    <View style={styles.containerIconModal}>
                         <View style={styles.containerIconItem}>
                             <Pressable style={{ width: '100%' }} onPress={pickImage} >
                                 <View style={styles.button}>
-                                    <FontAwesome5 name="camera" size={50} color={'#1A4D2E'} />
+                                    <FontAwesome5 name="camera-retro" size={50} color={'#1A4D2E'} />
                                     <Text style={styles.text}>Tomar Foto</Text>
                                 </View>
                             </Pressable>
@@ -74,7 +74,7 @@ const MyImagePicker = (props) => {
                         <View style={styles.containerIconItem}>
                             <Pressable style={{ width: '100%' }} onPress={upLoadImage} >
                                 <View style={styles.button}>
-                                    <FontAwesome5 name="upload" size={50} color={'#1A4D2E'} />
+                                    <FontAwesome5 name="file-upload" size={50} color={'#1A4D2E'} />
                                     <Text style={styles.text}>Subir Foto</Text>
                                 </View>
                             </Pressable>
@@ -87,13 +87,13 @@ const MyImagePicker = (props) => {
                 <View style={styles.containerIconItem}>
                     <TouchableOpacity style={{ width: '100%' }} onPress={() => setModalCameraUpload(true)} >
                         <View style={styles.button}>
-                            <FontAwesome5 name="camera" size={50} color={'#1A4D2E'} />
+                            <FontAwesome5 name="camera-retro" size={50} color={'#1A4D2E'} />
                         </View>
                     </TouchableOpacity>
                 </View>
             </View>
             {
-                image && <TouchableOpacity onPress={() => SetModalVisible(true)}><Image source={{ uri: image }} style={styles.image} /></TouchableOpacity>
+                image && <Pressable onPress={() => SetModalVisible(true)}><Image source={{ uri: image }} style={styles.image} /></Pressable>
             }
         </View >
     )
@@ -101,7 +101,7 @@ const MyImagePicker = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        width:'100%',
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 10,
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
         padding: 5,
     },
     image: {
-        width: 400,
+        width: 300,
         height: 400,
         marginBottom: 10,
         resizeMode: 'contain',
@@ -122,11 +122,23 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     containerIcon: {
-        width: '70%',
+        width: '100%',
         flexDirection: 'row',
         padding: 10,
         backgroundColor:'#fff',
         borderRadius: 20,
+        borderBottomWidth:1,
+        marginBottom:5,  
+    },
+    containerIconModal: {
+        width: '80%',
+        maxWidth: 500,
+        flexDirection: 'row',
+        padding: 10,
+        backgroundColor:'#fff',
+        borderRadius: 20,
+        borderBottomWidth:1,
+        marginBottom:5,  
     },
     containerIconItem: {
         flex: 1,

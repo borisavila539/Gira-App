@@ -1,10 +1,11 @@
-import { StyleSheet, View, TouchableOpacity, SafeAreaView } from "react-native";
+import { StyleSheet, View, TouchableOpacity, SafeAreaView, Text } from "react-native";
 import { Buttons, HeaderLogout } from "../Components/indexComponents";
 import { TextInputContainer, DropdownList, MyImagePicker } from "../Components/indexComponents";
 import { StatusBar } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const Viaje = (props) => {
     const [nFactura, setNFactura] = useState('')
@@ -35,7 +36,7 @@ const Viaje = (props) => {
     let Tipo = ['Gastos de Viaje', 'Gastos de Combustible', 'Gastos por Deprecuacion'];
 
     return (
-        <ScrollView backgroundColor={'#C4DFAA'}>
+        <ScrollView backgroundColor={'#005555'}>
             <HeaderLogout />
             <SafeAreaView style={styles.container}>
                 <View style={styles.formulario}>
@@ -46,7 +47,19 @@ const Viaje = (props) => {
                     <TextInputContainer title='Descripcion: ' multiline={true} maxLength={300} Justify={true} height={60} />
                     <TextInputContainer title={'Valor:'} placeholder={'00.00'} teclado='decimal-pad' />
                     <TouchableOpacity onPress={() => SetOpenDate(true)}>
-                        <TextInputContainer title='Fecha Factura:' placeholder={'01/01/2000'} editable={false} value={date} onPressIn={() => SetOpenDate(true)} />
+                        <View style={styles.textInputDateContainer}>
+                            <Text style={styles.text}>Fecha Factura:</Text>
+                            <View style={styles.inputIconContainer}>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder={'01/01/2000'} 
+                                    editable={false} 
+                                    value={date} 
+                                    onPressIn={() => SetOpenDate(true)}
+                                />
+                                <FontAwesome5 name="calendar-alt" size={20} color={'#1A4D2E'}/>
+                            </View>
+                        </View>
                     </TouchableOpacity>
                     {
                         openDate && (<DateTimePicker
@@ -67,7 +80,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        backgroundColor: '#C4DFAA',
+        backgroundColor: '#005555',
         alignItems: "center",
         paddingVertical: 20
     },
@@ -76,8 +89,44 @@ const styles = StyleSheet.create({
         maxWidth: 500,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: '#C4DFAA',
+        
     },
+    textInputDateContainer:{
+        flexDirection: 'row',
+        width: '100%',
+        
+        alignItems: "center",
+        padding: 5,
+    },
+    text: {
+        fontSize: 16,
+        width: '30%',
+        fontWeight: 'bold',
+        color:'#fff'
+    },
+    inputIconContainer:{
+        flexDirection: 'row',
+        width: '70%',
+        alignItems: "center",
+        backgroundColor:'#fff',
+        borderRadius: 5,
+        borderWidth:1,
+        borderColor: '#30475E',
+        paddingHorizontal:5,
+    },
+    input: {
+        flex: 1,
+        maxHeight: 100,
+        fontSize: 16,
+        backgroundColor: '#fff',
+        height: 35,
+        borderRightWidth:1,
+        borderColor:'#30475E',
+        marginRight:5,
+        color: '#121212',
+        padding: 2,
+        textAlign: "center",
+    }
 })
 
 export default Viaje;

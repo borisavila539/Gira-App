@@ -14,7 +14,7 @@ const HeaderLogout = () => {
         <View style={styles.header}>
             <Text style={styles.text}>Bienvenido(a): {nombre}</Text>
             <Pressable onPress={handlePressLogout}>
-                <FontAwesome5 name='sign-out-alt' size={40} color={'#9EB23B'}></FontAwesome5>
+                <FontAwesome5 name='sign-out-alt' size={40} color={'#fff'}></FontAwesome5>
             </Pressable>
         </View>
     )
@@ -25,14 +25,14 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: "center",
         flexDirection: 'row',
-        backgroundColor: '#fff',
+        backgroundColor: '#069A8E',
         padding:5,
     },
     text:{
         flex:3,
         fontSize:16,
         fontWeight:'bold',
-        color:'#1A4D2E',
+        color:'#fff',
         textAlign: "center",
     },
 })

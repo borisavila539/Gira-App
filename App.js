@@ -1,10 +1,12 @@
 import React from 'react';
-import { Login, Navegador } from './src/Screens/indexScreens'
+import { Login } from './src/Screens/indexScreens';
+import Navegador from "./src/Screens/Navigator";
 import { Provider } from 'react-redux';
 import { store } from './src/store';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
+
 
 const Stack = createStackNavigator();
 

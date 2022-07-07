@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { StyleSheet, View, Image, TextInput, Pressable, Alert } from 'react-native';
+import { StyleSheet, View, Image, TextInput, Pressable, Alert, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Buttons } from '../Components/indexComponents';
@@ -55,12 +55,13 @@ const Login = (props) => {
 
             <LinearGradient
                 style={styles.container}
-                colors={['#4E9F3D', '#D8E9A8']}
+                colors={['#069A8E','#005555']}
             >
                 <Image
                     source={require('../../assets/Logo.png')}
                     style={styles.imagen}
                 />
+                <Text style={styles.text}>Bienvenido(a)</Text>
                 <View style={styles.containerinputs}>
                     <View style={styles.textInputAlign}>
                         <FontAwesome5
@@ -70,6 +71,7 @@ const Login = (props) => {
                         <TextInput
                             style={styles.input}
                             placeholder='Usuario'
+                            placeholderTextColor={'#069A8E'}
                             onChangeText={(value) => setUser(value)}
                             value={user}
                         />
@@ -82,6 +84,7 @@ const Login = (props) => {
                         <TextInput
                             style={styles.input}
                             placeholder='Contraseña'
+                            placeholderTextColor={'#069A8E'}
                             secureTextEntry={viewPassword}
                             onChangeText={(value) => setPassword(value)}
                             value={password}
@@ -120,9 +123,13 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     containerinputs: {
-        width: '80%',
+        width: '90%',
         maxWidth: 400,
         alignItems: 'center',
+        paddingVertical:20,
+        paddingHorizontal:10,
+        backgroundColor:'#FFF8F3',
+        borderRadius:10,
 
     },
     input: {
@@ -130,15 +137,15 @@ const styles = StyleSheet.create({
         padding: 5,
         marginLeft: 10,
         fontSize: 20,
-        color: '#1E5128',
+        color:'#005555',
     },
     textInputAlign: {
         flexDirection: 'row',
         alignItems: 'center',
         width: '100%',
         paddingHorizontal: 3,
-        marginTop: 15,
-        backgroundColor: '#fff',
+        marginBottom: 15,
+        backgroundColor: '#A1E3D8',
         maxWidth: 500,
         shadowColor: '#000',
         shadowOffset: {
@@ -148,15 +155,20 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.58,
         shadowRadius: 16.00,
         elevation: 24,
-
-        borderRadius: 5,
+        borderRadius: 8,
     },
     icons: {
         flex: 0,
         fontSize: 20,
         marginLeft: 5,
-        color: '#1E5128',
+        color: '#005555',
     },
+    text:{
+        color:'#fff',
+        fontSize:30,
+        marginBottom:15,
+        fontWeight:'bold',
+    }
 })
 
 export default Login;

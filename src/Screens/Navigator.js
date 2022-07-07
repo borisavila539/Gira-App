@@ -10,7 +10,7 @@ const Navegador = (props) => {
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color }) => {
                     let iconName;
-                    color = focused ? '#1A4D2E' : '#9EB23B';
+                    color = focused ? '#069A8E' : '#005555';
                     if (route.name === 'Gastos de Viaje') {
                         iconName = 'file-invoice-dollar'
                     } else if (route.name === 'Historial') {
@@ -23,8 +23,8 @@ const Navegador = (props) => {
 
                     return <FontAwesome5 name={iconName} size={30} color={color}></FontAwesome5>
                 },
-                tabBarActiveTintColor: '#1A4D2E',
-                tabBarInactiveTintColor: '#9EB23B',
+                tabBarActiveTintColor: '#069A8E',
+                tabBarInactiveTintColor: '#005555',
                 tabBarActiveBackgroundColor: '#fff',
                 tabBarInactiveBackgroundColor: '#fff',
                 tabBarStyle: { height: 70 },

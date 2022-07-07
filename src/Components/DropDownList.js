@@ -5,7 +5,7 @@ import { View, StyleSheet, Text } from 'react-native'
 
 function Icon() {
     return (
-        <FontAwesome5 name='chevron-down' size={20} />
+        <FontAwesome5 name='caret-down' size={20} color={'#1A4D2E'} />
     )
 }
 const DropdownList = (props) => {
@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         width: '30%',
         fontWeight: 'bold',
+        color:'#fff'
     },
     button: {
         borderRadius: 5,
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
         borderColor: '#30475E',
         backgroundColor: '#fff',
         height: 35,
-        width: '70%'
+        width: '70%',
     }
 })
 
