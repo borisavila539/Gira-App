@@ -30,6 +30,7 @@ const Login = (props) => {
             const result = await request.json();
             let data = result['Data'];
             let nombre = data['Nombre'];
+            console.log(data['Message'])
 
             dispatch(iniciarSesion({ nombre }));
 
