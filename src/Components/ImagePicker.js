@@ -5,7 +5,7 @@ import {  TouchableOpacity } from "react-native-gesture-handler";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 
-function MyImagePicker(props) {
+const MyImagePicker = (props) => {
     const [image, setImage] = useState();
     const [modalVisible, SetModalVisible] = useState(false)
     const [modalCameraUpload, setModalCameraUpload] = useState(false)

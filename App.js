@@ -1,6 +1,5 @@
 import React from 'react';
-import { Login } from './src/Screens/indexScreens'
-import { Navigator } from './src/Screens/Navigator'
+import { Login, Navegador } from './src/Screens/indexScreens'
 import { Provider } from 'react-redux';
 import { store } from './src/store';
 import { NavigationContainer } from '@react-navigation/native';
@@ -16,7 +15,7 @@ const AppNavigation = () => {
     <NavigationContainer >
       <Stack.Navigator screenOptions={{ header: () => null }}>
         {logeado
-          ? <Stack.Screen name='ScreenNavigator' component={Navigator} />
+          ? <Stack.Screen name='ScreenNavigator' component={Navegador} />
           : <Stack.Screen name='ScreenLogin' component={Login} />}
       </Stack.Navigator>
     </NavigationContainer>

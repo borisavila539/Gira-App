@@ -6,7 +6,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-function Viaje(props) {
+const Viaje = (props) => {
     const [nFactura, setNFactura] = useState('')
     const [openDate, SetOpenDate] = useState(false)
     const [date, setDate] = useState('')

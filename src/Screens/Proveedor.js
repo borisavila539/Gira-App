@@ -2,7 +2,7 @@ import { StyleSheet, View, Text } from "react-native";
 import {HeaderLogout} from "../Components/indexComponents";
 import { StatusBar } from "react-native";
 
-function Proveedor(props) {
+const Proveedor = (props) => {
 
     return (
         <View style={styles.container}>

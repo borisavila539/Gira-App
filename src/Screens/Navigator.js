@@ -3,7 +3,7 @@ import { Viaje, History, Proveedor, NoSync } from "../Screens/indexScreens";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 const Tab = createBottomTabNavigator();
 
-function Navigator(props) {
+const Navegador = (props) => {
 
     return (
         <Tab.Navigator
@@ -44,4 +44,4 @@ function Navigator(props) {
     )
 }
 
-export default Navigator;
+export default Navegador;

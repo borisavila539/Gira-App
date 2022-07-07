@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text } from "react-native";
 import {HeaderLogout} from "../Components/indexComponents";
 
-function NoSync(props) {
+const NoSync = (props) => {
 
     return (
         <View style={styles.container}>
