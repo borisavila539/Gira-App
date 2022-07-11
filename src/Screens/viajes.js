@@ -1,4 +1,4 @@
-import { StyleSheet, View, TouchableOpacity, SafeAreaView, Text } from "react-native";
+import { StyleSheet, View, TouchableOpacity, SafeAreaView, Text, Alert } from "react-native";
 import { Buttons, HeaderLogout } from "../Components/indexComponents";
 import { TextInputContainer, DropdownList, MyImagePicker } from "../Components/indexComponents";
 import { StatusBar } from "react-native";
@@ -12,6 +12,7 @@ const Viaje = (props) => {
     const [openDate, SetOpenDate] = useState(false)
     const [date, setDate] = useState('')
     const [showdate, setShowDate] = useState(new Date())
+    const [today, setToday] =  useState(new Date())
 
     const onChanceNFactura = (value) => {
         if (value.length == 16) {
@@ -27,8 +28,12 @@ const Viaje = (props) => {
         const currentDate = selectedDate.getDate() + '/' + (selectedDate.getMonth() + 1) + '/' + selectedDate.getFullYear();
         SetOpenDate(false)
         if (event.type === 'set') {
-            setDate(currentDate)
-            setShowDate(selectedDate)
+            if (selectedDate <= today) {
+                setDate(currentDate)
+                setShowDate(selectedDate)
+            }else{
+                Alert.alert('Debe seleccionar una fecha correcta')
+            }
         }
         console.log(event)
     }
@@ -52,11 +57,11 @@ const Viaje = (props) => {
                             <View style={styles.inputIconContainer}>
                                 <TextInput
                                     style={styles.input}
-                                    placeholder={'01/01/2000'} 
-                                    editable={false} 
-                                    value={date} 
+                                    placeholder={'01/01/2000'}
+                                    editable={false}
+                                    value={date}
                                 />
-                                <FontAwesome5 name="calendar-alt" size={20} color={'#1A4D2E'}/>
+                                <FontAwesome5 name="calendar-alt" size={20} color={'#1A4D2E'} />
                             </View>
                         </View>
                     </TouchableOpacity>
@@ -88,12 +93,12 @@ const styles = StyleSheet.create({
         maxWidth: 500,
         justifyContent: "center",
         alignItems: "center",
-        
+
     },
-    textInputDateContainer:{
+    textInputDateContainer: {
         flexDirection: 'row',
         width: '100%',
-        
+
         alignItems: "center",
         padding: 5,
     },
@@ -101,17 +106,17 @@ const styles = StyleSheet.create({
         fontSize: 16,
         width: '30%',
         fontWeight: 'bold',
-        color:'#005555'
+        color: '#005555'
     },
-    inputIconContainer:{
+    inputIconContainer: {
         flexDirection: 'row',
         width: '70%',
         alignItems: "center",
-        backgroundColor:'#fff',
+        backgroundColor: '#fff',
         borderRadius: 5,
-        borderWidth:1,
+        borderWidth: 1,
         borderColor: '#30475E',
-        paddingHorizontal:5,
+        paddingHorizontal: 5,
     },
     input: {
         flex: 1,
@@ -119,9 +124,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
         backgroundColor: '#fff',
         height: 35,
-        borderRightWidth:1,
-        borderColor:'#30475E',
-        marginRight:5,
+        borderRightWidth: 1,
+        borderColor: '#30475E',
+        marginRight: 5,
         color: '#121212',
         padding: 2,
         textAlign: "center",
