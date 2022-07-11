@@ -30,13 +30,13 @@ const MyImagePicker = (props) => {
             mediaTypes: ImagePicker.MediaTypeOptions.Images = "Images",
             allowsEditing: true,
             quality: 1,
+            base64: true
         });
-        console.log(result);
+        console.log(result["base64"]);
 
         if (!result.cancelled) {
             setImage(result.uri);
             setModalCameraUpload(false);
-            console.log(result.uri)
         }
     };
 
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
         width:'100%',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 10,
+        marginVertical: 10,
         borderWidth:1,
         borderColor:'#30475E',
         borderRadius: 10,
