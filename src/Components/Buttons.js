@@ -9,7 +9,7 @@ import {
 const Buttons= (props) => {
     return(
         <TouchableOpacity 
-          style={{width:'100%'}}
+          style={{width:'90%'}}
           activeOpacity={0.5}  
           onPress={props.onPressFunction}
           hitSlop={{ top:10, bottom:20, left:20, right: 20}}
@@ -23,13 +23,11 @@ const Buttons= (props) => {
 
 const styles = StyleSheet.create({
     button:{
-        marginTop:10,
         width:'100%',
         padding:10,
         alignItems: 'center',
-        borderRadius:5,
+        borderRadius:100,
         backgroundColor:'#069A8E',
-        
       },
       text:{
         fontSize:20,

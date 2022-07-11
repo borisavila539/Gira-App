@@ -32,6 +32,7 @@ const Navegador = (props) => {
                 tabBarIconStyle: { marginTop: 5 },
                 headerShown:false,
                 tabBarHideOnKeyboard:true
+                
             })}
 
         >

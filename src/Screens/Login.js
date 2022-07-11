@@ -55,13 +55,16 @@ const Login = (props) => {
 
             <LinearGradient
                 style={styles.container}
-                colors={['#069A8E','#005555']}
+                colors={['#069A8E','#005555']} //'#069A8E','#005555'
             >
-                <Image
-                    source={require('../../assets/Logo.png')}
-                    style={styles.imagen}
-                />
-                <Text style={styles.text}>Bienvenido(a)</Text>
+                <View style={styles.imagenContainer}>
+                    <Image
+                        source={require('../../assets/Logo.png')}
+                        style={styles.imagen}
+                    />
+                    <Text style={styles.text}>Bienvenido(a)</Text>
+                </View>
+                
                 <View style={styles.containerinputs}>
                     <View style={styles.textInputAlign}>
                         <FontAwesome5
@@ -97,7 +100,7 @@ const Login = (props) => {
                             />
                         </Pressable>
                     </View>
-                    <View style={{ width: '100%', marginTop: 20 }}>
+                    <View style={{ width: '100%', marginTop: 10, alignItems: 'center' }}>
                         <Buttons
                             title='Iniciar Sesion'
                             onPressFunction={onPressHandle}
@@ -115,11 +118,22 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         alignItems: 'center',
-        justifyContent: 'center',
+        
+    },
+    imagenContainer:{
+        width:'100%',
+        height:'50%',
+        maxHeight:500,
+        alignItems: 'center',
+        backgroundColor:'#fff',
+        borderBottomLeftRadius:50,
+        borderBottomEndRadius:50,
+        marginBottom:30
     },
     imagen: {
-        width: 300,
-        height: 300,
+        width: '100%',
+        height: '80%',
+        resizeMode:'contain',
         marginBottom: 20,
     },
     containerinputs: {
@@ -127,9 +141,9 @@ const styles = StyleSheet.create({
         maxWidth: 400,
         alignItems: 'center',
         paddingVertical:20,
-        paddingHorizontal:10,
+        paddingHorizontal:20,
         backgroundColor:'#FFF8F3',
-        borderRadius:10,
+        borderRadius:40,
 
     },
     input: {
@@ -164,7 +178,7 @@ const styles = StyleSheet.create({
         color: '#005555',
     },
     text:{
-        color:'#fff',
+        color:'#F27281',
         fontSize:30,
         marginBottom:15,
         fontWeight:'bold',
