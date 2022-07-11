@@ -6,7 +6,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const HeaderLogout = () => {
     const dispatch = useDispatch();
-    const {nombre} = useSelector(state => state.usuario)
+    const { nombre } = useSelector(state => state.usuario)
     const handlePressLogout = () => {
         dispatch(terminarSesion());
     }
@@ -26,15 +26,15 @@ const styles = StyleSheet.create({
         alignItems: "center",
         flexDirection: 'row',
         backgroundColor: '#069A8E',
-        padding:5,
-        borderBottomLeftRadius:20,
-        borderBottomEndRadius:20
+        padding: 5,
+        borderBottomLeftRadius: 20,
+        borderBottomEndRadius: 20
     },
-    text:{
-        flex:3,
-        fontSize:16,
-        fontWeight:'bold',
-        color:'#fff',
+    text: {
+        flex: 3,
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#fff',
         textAlign: "center",
     },
 })

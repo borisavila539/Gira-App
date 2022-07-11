@@ -15,13 +15,13 @@ const MyImagePicker = (props) => {
             mediaTypes: ImagePicker.MediaTypeOptions.Images = "Images",
             allowsEditing: true,
             quality: 1,
+            base64: true
         });
-        console.log(result);
+        console.log(result["base64"]);
 
         if (!result.cancelled) {
             setImage(result.uri);
             setModalCameraUpload(false);
-            console.log(result.uri)
         }
     };
 

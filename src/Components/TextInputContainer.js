@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         width: '30%',
         fontWeight: 'bold',
-        color:'#fff'
+        color:'#005555'
     },
     textInput: {
         flexDirection: 'row',

@@ -36,7 +36,7 @@ const Viaje = (props) => {
     let Tipo = ['Gastos de Viaje', 'Gastos de Combustible', 'Gastos por Deprecuacion'];
 
     return (
-        <ScrollView backgroundColor={'#005555'}>
+        <ScrollView backgroundColor={'#fff'}>
             <HeaderLogout />
             <SafeAreaView style={styles.container}>
                 <View style={styles.formulario}>
@@ -55,7 +55,6 @@ const Viaje = (props) => {
                                     placeholder={'01/01/2000'} 
                                     editable={false} 
                                     value={date} 
-                                    onPressIn={() => SetOpenDate(true)}
                                 />
                                 <FontAwesome5 name="calendar-alt" size={20} color={'#1A4D2E'}/>
                             </View>
@@ -80,7 +79,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        backgroundColor: '#005555',
+        backgroundColor: '#fff',
         alignItems: "center",
         paddingVertical: 20
     },
@@ -102,7 +101,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         width: '30%',
         fontWeight: 'bold',
-        color:'#fff'
+        color:'#005555'
     },
     inputIconContainer:{
         flexDirection: 'row',
