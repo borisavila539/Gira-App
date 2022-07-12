@@ -75,11 +75,11 @@ const Viaje = (props) => {
         })
     } 
     const onSelectCategoria = () =>{
-        
+
     }
 
     useEffect(() => {
-        onScreenLoad();
+         onScreenLoad();
     }, [])
 
     return (
