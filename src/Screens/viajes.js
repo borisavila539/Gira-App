@@ -16,11 +16,11 @@ const Viaje = (props) => {
     const [showdate, setShowDate] = useState(new Date());
     const [today, setToday] = useState(new Date());
     const { empresa } = useSelector(state => state.usuario);
-    const [resultTipo,setResultTipo] = useState();
-    const [resultCategoria,setResultCategoria] = useState();
+    const [resultTipo, setResultTipo] = useState();
+    const [resultCategoria, setResultCategoria] = useState();
     const [resultTipoJSON, setResultTipoJSON] = useState();
 
-    
+
 
     const onChanceNFactura = (value) => {
         if (value.length == 16) {
@@ -47,40 +47,49 @@ const Viaje = (props) => {
     }
     const onScreenLoad = async () => {
         const request = await fetch('http://10.100.1.27:5055/api/TipoGastoViaje/' + empresa);
-         setResultTipoJSON(await request.json())
-        let array=[];
-        resultTipoJSON.forEach(element => {
-            array.push(element['nombre'])
-        });
-        setResultTipo(array)
-    }   
+        setResultTipoJSON(await request.json())
+      
+    }
 
     let resultCategoriaJSON;
-    const llenarCategoria = async (id) =>{
-        const request = await fetch('http://10.100.1.27:5055/api/CategoriaTipoGastoViaje/'+id);
+    const llenarCategoria = async (id) => {
+        const request = await fetch('http://10.100.1.27:5055/api/CategoriaTipoGastoViaje/' + id);
         resultCategoriaJSON = await request.json();
-        let array= [];
-        resultCategoriaJSON.forEach(element =>{
+        let array = [];
+        resultCategoriaJSON.forEach(element => {
             array.push(element['nombre'])
         })
         setResultCategoria(array)
-
     }
 
-    const onSelectTipo =  (selectedItem, index) =>{
-        resultTipoJSON.forEach(element =>{
-            if(element['nombre'] == selectedItem){
+    const onSelectTipo = (selectedItem, index) => {
+        resultTipoJSON.forEach(element => {
+            if (element['nombre'] == selectedItem) {
                 llenarCategoria(element['idTipoGastoViaje'])
             }
         })
-    } 
-    const onSelectCategoria = () =>{
-
+    }
+    const onSelectCategoria = (selectedItem, index) => {
+        console.log(index)
     }
 
     useEffect(() => {
-         onScreenLoad();
+        onScreenLoad();
     }, [])
+
+    useEffect(() => {
+        let array = [];
+        if (resultTipoJSON)
+        {
+            resultTipoJSON.forEach(element => {
+                array.push(element['nombre'])
+            });
+            setResultTipo(array)
+        }
+   
+
+    }, [resultTipoJSON])
+
 
     return (
         <ScrollView backgroundColor={'#fff'}>
