@@ -12,18 +12,19 @@ const DropdownList = (props) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>{props.title}</Text>
             <SelectDropdown
                 data={props.data}
-                onSelect={(selectedItem, index) => {
-                    console.log(selectedItem, index)
-                }}
+                label={props.labelField}
+                //valueField={props.valueField}
+                onSelect={props.onSelect}
+                
                 buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem
                 }}
                 defaultButtonText={props.defaultButtonText}
                 buttonStyle={styles.button}
                 renderDropdownIcon={() => Icon()}
+                rowTextForSelection={props.rowTextForSelection}
             />
         </View>
     )
@@ -34,19 +35,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         padding: 5
     },
-    text: {
-        fontSize: 16,
-        width: '30%',
-        fontWeight: 'bold',
-        color:'#005555'
-    },
     button: {
         borderRadius: 5,
         borderWidth: 1,
         borderColor: '#30475E',
         backgroundColor: '#fff',
         height: 35,
-        width: '70%',
+        width: '100%',
     }
 })
 

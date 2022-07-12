@@ -28,9 +28,8 @@ const styles = StyleSheet.create({
         color:'#005555'
     },
     textInput: {
-        flexDirection: 'row',
+        
         width: '100%',
-        alignItems: "center",
         padding: 5,
     },
     input: {

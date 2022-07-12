@@ -6,13 +6,21 @@ import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { useEffect } from "react";
+import { useDispatch, useSelector, } from 'react-redux';
 
 const Viaje = (props) => {
-    const [nFactura, setNFactura] = useState('')
-    const [openDate, SetOpenDate] = useState(false)
-    const [date, setDate] = useState('')
-    const [showdate, setShowDate] = useState(new Date())
-    const [today, setToday] =  useState(new Date())
+    const [nFactura, setNFactura] = useState('');
+    const [openDate, SetOpenDate] = useState(false);
+    const [date, setDate] = useState('');
+    const [showdate, setShowDate] = useState(new Date());
+    const [today, setToday] = useState(new Date());
+    const { empresa } = useSelector(state => state.usuario);
+    const [resultTipo,setResultTipo] = useState();
+    const [resultCategoria,setResultCategoria] = useState();
+    const [resultTipoJSON, setResultTipoJSON] = useState();
+
+    
 
     const onChanceNFactura = (value) => {
         if (value.length == 16) {
@@ -31,22 +39,56 @@ const Viaje = (props) => {
             if (selectedDate <= today) {
                 setDate(currentDate)
                 setShowDate(selectedDate)
-            }else{
+            } else {
                 Alert.alert('Debe seleccionar una fecha correcta')
             }
         }
         console.log(event)
     }
-    let Categoria = ['Hospedaje', 'Alimentacion', 'Combustible', 'Papeleria', 'Peaje', 'Otros']
-    let Tipo = ['Gastos de Viaje', 'Gastos de Combustible', 'Gastos por Deprecuacion'];
+    const onScreenLoad = async () => {
+        const request = await fetch('http://10.100.1.27:5055/api/TipoGastoViaje/' + empresa);
+         setResultTipoJSON(await request.json())
+        let array=[];
+        resultTipoJSON.forEach(element => {
+            array.push(element['nombre'])
+        });
+        setResultTipo(array)
+    }   
+
+    let resultCategoriaJSON;
+    const llenarCategoria = async (id) =>{
+        const request = await fetch('http://10.100.1.27:5055/api/CategoriaTipoGastoViaje/'+id);
+        resultCategoriaJSON = await request.json();
+        let array= [];
+        resultCategoriaJSON.forEach(element =>{
+            array.push(element['nombre'])
+        })
+        setResultCategoria(array)
+
+    }
+
+    const onSelectTipo =  (selectedItem, index) =>{
+        resultTipoJSON.forEach(element =>{
+            if(element['nombre'] == selectedItem){
+                llenarCategoria(element['idTipoGastoViaje'])
+            }
+        })
+    } 
+    const onSelectCategoria = () =>{
+        
+    }
+
+    useEffect(() => {
+        onScreenLoad();
+    }, [])
 
     return (
         <ScrollView backgroundColor={'#fff'}>
             <HeaderLogout />
             <SafeAreaView style={styles.container}>
                 <View style={styles.formulario}>
-                    <DropdownList title='Tipo:' data={Tipo} defaultButtonText='Seleccione Tipo' />
-                    <DropdownList title='Categoria:' data={Categoria} defaultButtonText='Seleccione Categoria' />
+                    <DropdownList data={resultTipo} defaultButtonText='Seleccione Tipo' onSelect={onSelectTipo} />
+                    <DropdownList data={resultCategoria} defaultButtonText='Seleccione Categoria' onSelect={onSelectCategoria} />
                     <StatusBar style="auto" />
                     <TextInputContainer title={'No. Factura:'} placeholder={'XXX-XXX-XX-XXXXXXXX'} maxLength={19} teclado='decimal-pad' value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
                     <TextInputContainer title='Descripcion: ' multiline={true} maxLength={300} Justify={true} height={60} />
@@ -96,10 +138,7 @@ const styles = StyleSheet.create({
 
     },
     textInputDateContainer: {
-        flexDirection: 'row',
         width: '100%',
-
-        alignItems: "center",
         padding: 5,
     },
     text: {
@@ -110,7 +149,7 @@ const styles = StyleSheet.create({
     },
     inputIconContainer: {
         flexDirection: 'row',
-        width: '70%',
+        width: '100%',
         alignItems: "center",
         backgroundColor: '#fff',
         borderRadius: 5,
