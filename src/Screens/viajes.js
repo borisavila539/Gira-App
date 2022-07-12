@@ -8,6 +8,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useEffect } from "react";
 import { useDispatch, useSelector, } from 'react-redux';
+import { useRef } from "react";
 
 const Viaje = (props) => {
     const [nFactura, setNFactura] = useState('');
@@ -19,8 +20,7 @@ const Viaje = (props) => {
     const [resultTipo, setResultTipo] = useState();
     const [resultCategoria, setResultCategoria] = useState();
     const [resultTipoJSON, setResultTipoJSON] = useState();
-
-
+    const dropDownRef = useRef({})
 
     const onChanceNFactura = (value) => {
         if (value.length == 16) {
@@ -48,7 +48,7 @@ const Viaje = (props) => {
     const onScreenLoad = async () => {
         const request = await fetch('http://10.100.1.27:5055/api/TipoGastoViaje/' + empresa);
         setResultTipoJSON(await request.json())
-      
+
     }
 
     let resultCategoriaJSON;
@@ -79,14 +79,13 @@ const Viaje = (props) => {
 
     useEffect(() => {
         let array = [];
-        if (resultTipoJSON)
-        {
+        if (resultTipoJSON) {
             resultTipoJSON.forEach(element => {
                 array.push(element['nombre'])
             });
             setResultTipo(array)
         }
-   
+
 
     }, [resultTipoJSON])
 
@@ -97,7 +96,7 @@ const Viaje = (props) => {
             <SafeAreaView style={styles.container}>
                 <View style={styles.formulario}>
                     <DropdownList data={resultTipo} defaultButtonText='Seleccione Tipo' onSelect={onSelectTipo} />
-                    <DropdownList data={resultCategoria} defaultButtonText='Seleccione Categoria' onSelect={onSelectCategoria} />
+                    <DropdownList data={resultCategoria} defaultButtonText='Seleccione Categoria' onSelect={onSelectCategoria} ref={dropDownRef} />
                     <StatusBar style="auto" />
                     <TextInputContainer title={'No. Factura:'} placeholder={'XXX-XXX-XX-XXXXXXXX'} maxLength={19} teclado='decimal-pad' value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
                     <TextInputContainer title='Descripcion: ' multiline={true} maxLength={300} Justify={true} height={60} />

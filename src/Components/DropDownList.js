@@ -17,7 +17,7 @@ const DropdownList = (props) => {
                 label={props.labelField}
                 //valueField={props.valueField}
                 onSelect={props.onSelect}
-                
+                ref={props.ref}
                 buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem
                 }}
