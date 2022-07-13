@@ -3,39 +3,49 @@ import * as ImagePicker from 'expo-image-picker';
 import { useState } from "react";
 import {  TouchableOpacity } from "react-native-gesture-handler";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { useDispatch } from "react-redux";
+import { mandarFoto } from '../store/slices/usuarioSlice';
 
 
 const MyImagePicker = (props) => {
-    const [image, setImage] = useState();
+    const dispatch = useDispatch();
+    const [imagen, setImagen] = useState();
     const [modalVisible, SetModalVisible] = useState(false)
     const [modalCameraUpload, setModalCameraUpload] = useState(false)
+    const [Base64,setBase64] = useState('')
+    let result;
 
     const pickImage = async () => {
-        let result = await ImagePicker.launchCameraAsync({
+            result = await ImagePicker.launchCameraAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images = "Images",
-            allowsEditing: true,
-            quality: 1,
-            base64: true
+            base64: true,
+            quality: 1
         });
-        console.log(result["base64"]);
+        
+        setBase64(result.base64);
+        let texto = Base64.toString();
+        console.log(texto);
+        
 
         if (!result.cancelled) {
-            setImage(result.uri);
+            setImagen(result.base64);
             setModalCameraUpload(false);
+            dispatch(mandarFoto({imagen:texto}));
         }
     };
 
     const upLoadImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
+            result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images = "Images",
+            base64: true,
             allowsEditing: true,
-            quality: 1,
-            base64: true
+            quality: 1
         });
         console.log(result["base64"]);
 
         if (!result.cancelled) {
-            setImage(result.uri);
+            setImagen(result.uri);
+            console.log(result.base64)
             setModalCameraUpload(false);
         }
     };
@@ -50,7 +60,7 @@ const MyImagePicker = (props) => {
             >
                 <View style={styles.modal}>
                     <Pressable style={styles.hideimage} onPress={() => SetModalVisible(!modalVisible)}>
-                        <Image source={{ uri: image }} style={styles.imageModal} />
+                        <Image source={{ uri: imagen }} style={styles.imageModal} />
                     </Pressable>
 
                 </View>
@@ -93,7 +103,7 @@ const MyImagePicker = (props) => {
                 </View>
             </View>
             {
-                image && <Pressable onPress={() => SetModalVisible(true)}><Image source={{ uri: image }} style={styles.image} /></Pressable>
+                imagen && <Pressable onPress={() => SetModalVisible(true)}><Image source={{ uri: 'data:image/jpeg;base64,' + imagen }} style={styles.image} /></Pressable>
             }
         </View >
     )

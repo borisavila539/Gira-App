@@ -7,27 +7,35 @@ import { useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useEffect } from "react";
-import { useDispatch, useSelector, } from 'react-redux';
-import { useRef } from "react";
+import { useSelector, } from 'react-redux';
 
 const Viaje = (props) => {
     const [nFactura, setNFactura] = useState('');
+    const [descripion, setDescripcion] = useState('');
+    const [valor, setValor] = useState(0);
     const [openDate, SetOpenDate] = useState(false);
     const [date, setDate] = useState('');
     const [showdate, setShowDate] = useState(new Date());
     const [today, setToday] = useState(new Date());
-    const { empresa } = useSelector(state => state.usuario);
+    const { empresa, user, imagen } = useSelector(state => state.usuario);
     const [resultTipo, setResultTipo] = useState();
     const [resultCategoria, setResultCategoria] = useState();
     const [resultTipoJSON, setResultTipoJSON] = useState();
-    const dropDownRef = useRef({})
+    const [resultCategoriaJSON, setResultCategoriaJSON] = useState();
+    const [IdCategoria,setIdCategoria] = useState();
+    const [enviado,setEnviado] = useState(false);
+
 
     const onChanceNFactura = (value) => {
-        if (value.length == 16) {
-            setNFactura(value[0] + value[1] + value[2] + '-' + value[3] + value[4] + value[5] + '-' + value[6] + value[7] + '-' + value[8] + value[9] + value[10] + value[11] + value[12] + value[13] + value[14] + value[15])
-        } else if (value.length == 17) {
-            value = value[0] + value[1] + value[2] + value[4] + value[5] + value[6] + value[8] + value[9] + value[11] + value[12] + value[13] + value[14] + value[15] + value[16]
-            setNFactura(value);
+        if (empresa == 'IMHN') {
+            if (value.length == 16) {
+                setNFactura(value[0] + value[1] + value[2] + '-' + value[3] + value[4] + value[5] + '-' + value[6] + value[7] + '-' + value[8] + value[9] + value[10] + value[11] + value[12] + value[13] + value[14] + value[15])
+            } else if (value.length == 17) {
+                value = value[0] + value[1] + value[2] + value[4] + value[5] + value[6] + value[8] + value[9] + value[11] + value[12] + value[13] + value[14] + value[15] + value[16]
+                setNFactura(value);
+            } else {
+                setNFactura(value);
+            }
         } else {
             setNFactura(value);
         }
@@ -48,18 +56,11 @@ const Viaje = (props) => {
     const onScreenLoad = async () => {
         const request = await fetch('http://10.100.1.27:5055/api/TipoGastoViaje/' + empresa);
         setResultTipoJSON(await request.json())
-
     }
 
-    let resultCategoriaJSON;
     const llenarCategoria = async (id) => {
         const request = await fetch('http://10.100.1.27:5055/api/CategoriaTipoGastoViaje/' + id);
-        resultCategoriaJSON = await request.json();
-        let array = [];
-        resultCategoriaJSON.forEach(element => {
-            array.push(element['nombre'])
-        })
-        setResultCategoria(array)
+        setResultCategoriaJSON(await request.json())
     }
 
     const onSelectTipo = (selectedItem, index) => {
@@ -69,8 +70,66 @@ const Viaje = (props) => {
             }
         })
     }
+
     const onSelectCategoria = (selectedItem, index) => {
-        console.log(index)
+        resultCategoriaJSON.forEach(element => {
+            if (element['nombre'] == selectedItem) {
+                setIdCategoria((element['idCategoriaTipoGastoViaje']))
+            }
+        })
+        console.log('categoria ' + IdCategoria)
+    }
+
+    const EnviarGasto = async () => {
+        let facturaObligatoria = false;
+        let descripcionObligatoria = false;
+        if(resultCategoriaJSON){
+            resultCategoriaJSON.forEach(element => {
+                if (element["idCategoriaTipoGastoViaje"] == IdCategoria) {
+                    facturaObligatoria = element["facturaObligatoria"]
+                    descripcionObligatoria = element["descripcion"]
+                }
+            })
+        }
+        if(!resultCategoriaJSON){
+            Alert.alert('Debe Seleccionar un tipo de gasto')
+        }else if (IdCategoria == null) {
+            Alert.alert('Debe seleccionar una categoria...')
+        } else if (facturaObligatoria && nFactura == '') {
+            Alert.alert('Debe llenar el numero de factura')
+        } else if (descripcionObligatoria && descripion == '') {
+            Alert.alert('Debe llenar la descripcion')
+        } else {
+            try {
+                const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle', {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        idCategoriaTipoGastoViaje: IdCategoria,
+                        usuarioAsesor: user,
+                        proveedor: "1234",
+                        noFactura: nFactura,
+                        descripcion: descripion,
+                        valorFactura: valor,
+                        fechaFactura: showdate,
+                        fechaCreacion: today,
+                        imagen: imagen
+                        
+                    })
+                })
+                const result = await request.json();
+                console.log(result)
+                setEnviado(!enviado)
+
+            } catch (err) {
+                console.log('no se envio: ' + err)
+            }
+        }
+
+
     }
 
     useEffect(() => {
@@ -85,9 +144,17 @@ const Viaje = (props) => {
             });
             setResultTipo(array)
         }
-
-
     }, [resultTipoJSON])
+
+    useEffect(() => {
+        let array = [];
+        if (resultCategoriaJSON) {
+            resultCategoriaJSON.forEach(element => {
+                array.push(element['nombre'])
+            });
+            setResultCategoria(array)
+        }
+    }, [resultCategoriaJSON])
 
 
     return (
@@ -96,11 +163,11 @@ const Viaje = (props) => {
             <SafeAreaView style={styles.container}>
                 <View style={styles.formulario}>
                     <DropdownList data={resultTipo} defaultButtonText='Seleccione Tipo' onSelect={onSelectTipo} />
-                    <DropdownList data={resultCategoria} defaultButtonText='Seleccione Categoria' onSelect={onSelectCategoria} ref={dropDownRef} />
+                    <DropdownList data={resultCategoria} defaultButtonText='Seleccione Categoria' onSelect={onSelectCategoria} />
                     <StatusBar style="auto" />
-                    <TextInputContainer title={'No. Factura:'} placeholder={'XXX-XXX-XX-XXXXXXXX'} maxLength={19} teclado='decimal-pad' value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
-                    <TextInputContainer title='Descripcion: ' multiline={true} maxLength={300} Justify={true} height={60} />
-                    <TextInputContainer title={'Valor:'} placeholder={'00.00'} teclado='decimal-pad' />
+                    <TextInputContainer title={'No. Factura:'} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
+                    <TextInputContainer title='Descripcion: ' multiline={true} maxLength={300} Justify={true} height={60} onChangeText={(value) => setDescripcion(value)} />
+                    <TextInputContainer title={'Valor:'} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(parseFloat(value))} />
                     <TouchableOpacity onPress={() => SetOpenDate(true)}>
                         <View style={styles.textInputDateContainer}>
                             <Text style={styles.text}>Fecha Factura:</Text>
@@ -124,7 +191,7 @@ const Viaje = (props) => {
                         />)
                     }
                     <MyImagePicker />
-                    <Buttons title={'Enviar'}></Buttons>
+                    <Buttons title={'Enviar'} onPressFunction={EnviarGasto}></Buttons>
                 </View>
             </SafeAreaView>
         </ScrollView>
