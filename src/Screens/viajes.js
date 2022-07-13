@@ -7,7 +7,8 @@ import { useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useEffect } from "react";
-import { useSelector, } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { mandarFoto } from '../store/slices/usuarioSlice';
 
 const Viaje = (props) => {
     const [nFactura, setNFactura] = useState('');
@@ -22,8 +23,9 @@ const Viaje = (props) => {
     const [resultCategoria, setResultCategoria] = useState();
     const [resultTipoJSON, setResultTipoJSON] = useState();
     const [resultCategoriaJSON, setResultCategoriaJSON] = useState();
-    const [IdCategoria,setIdCategoria] = useState();
-    const [enviado,setEnviado] = useState(false);
+    const [IdCategoria, setIdCategoria] = useState();
+    const [enviado, setEnviado] = useState(false);
+    const dispatch = useDispatch();
 
 
     const onChanceNFactura = (value) => {
@@ -83,7 +85,7 @@ const Viaje = (props) => {
     const EnviarGasto = async () => {
         let facturaObligatoria = false;
         let descripcionObligatoria = false;
-        if(resultCategoriaJSON){
+        if (resultCategoriaJSON) {
             resultCategoriaJSON.forEach(element => {
                 if (element["idCategoriaTipoGastoViaje"] == IdCategoria) {
                     facturaObligatoria = element["facturaObligatoria"]
@@ -91,9 +93,9 @@ const Viaje = (props) => {
                 }
             })
         }
-        if(!resultCategoriaJSON){
+        if (!resultCategoriaJSON) {
             Alert.alert('Debe Seleccionar un tipo de gasto')
-        }else if (IdCategoria == null) {
+        } else if (IdCategoria == null) {
             Alert.alert('Debe seleccionar una categoria...')
         } else if (facturaObligatoria && nFactura == '') {
             Alert.alert('Debe llenar el numero de factura')
@@ -117,13 +119,13 @@ const Viaje = (props) => {
                         fechaFactura: showdate,
                         fechaCreacion: today,
                         imagen: imagen
-                        
                     })
                 })
                 const result = await request.json();
                 console.log(result)
                 setEnviado(!enviado)
 
+                dispatch(mandarFoto({ imagen: "" }))
             } catch (err) {
                 console.log('no se envio: ' + err)
             }
@@ -155,6 +157,17 @@ const Viaje = (props) => {
             setResultCategoria(array)
         }
     }, [resultCategoriaJSON])
+    useEffect(() => {
+        if (enviado) {
+            Alert.alert('Su gasto fue enviado a revision')
+        }
+        setNFactura('')
+        setDescripcion('')
+        setValor('')
+        setDate('')
+        setResultCategoriaJSON()
+        setEnviado(false)
+    }, [enviado])
 
 
     return (
@@ -166,8 +179,8 @@ const Viaje = (props) => {
                     <DropdownList data={resultCategoria} defaultButtonText='Seleccione Categoria' onSelect={onSelectCategoria} />
                     <StatusBar style="auto" />
                     <TextInputContainer title={'No. Factura:'} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
-                    <TextInputContainer title='Descripcion: ' multiline={true} maxLength={300} Justify={true} height={60} onChangeText={(value) => setDescripcion(value)} />
-                    <TextInputContainer title={'Valor:'} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(parseFloat(value))} />
+                    <TextInputContainer title='Descripcion: ' multiline={true} maxLength={300} Justify={true} height={60} onChangeText={(value) => setDescripcion(value)} value={descripion} />
+                    <TextInputContainer title={'Valor:'} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(parseFloat(value))} value={valor} />
                     <TouchableOpacity onPress={() => SetOpenDate(true)}>
                         <View style={styles.textInputDateContainer}>
                             <Text style={styles.text}>Fecha Factura:</Text>
