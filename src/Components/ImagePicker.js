@@ -1,7 +1,7 @@
-import { StyleSheet, Image, View, Modal, Pressable,Text } from "react-native";
+import { StyleSheet, Image, View, Modal, Pressable, Text } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from "react";
-import {  TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useDispatch } from "react-redux";
 import { mandarFoto } from '../store/slices/usuarioSlice';
@@ -12,41 +12,40 @@ const MyImagePicker = (props) => {
     const [imagen, setImagen] = useState();
     const [modalVisible, SetModalVisible] = useState(false)
     const [modalCameraUpload, setModalCameraUpload] = useState(false)
-    const [Base64,setBase64] = useState('')
+    const [Base64, setBase64] = useState('')
     let result;
 
     const pickImage = async () => {
-            result = await ImagePicker.launchCameraAsync({
+        result = await ImagePicker.launchCameraAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images = "Images",
             base64: true,
             quality: 1
         });
-        
+
         setBase64(result.base64);
         let texto = Base64.toString();
-        console.log(texto);
-        
 
         if (!result.cancelled) {
             setImagen(result.base64);
             setModalCameraUpload(false);
-            dispatch(mandarFoto({imagen:texto}));
+            dispatch(mandarFoto({ imagen: texto }));
         }
     };
 
     const upLoadImage = async () => {
-            result = await ImagePicker.launchImageLibraryAsync({
+        result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images = "Images",
             base64: true,
             allowsEditing: true,
             quality: 1
         });
-        console.log(result["base64"]);
+        setBase64(result.base64);
+        let texto = Base64.toString();
 
         if (!result.cancelled) {
-            setImagen(result.uri);
-            console.log(result.base64)
+            setImagen(result.base64);
             setModalCameraUpload(false);
+            dispatch(mandarFoto({ imagen: texto }));
         }
     };
 
@@ -60,7 +59,7 @@ const MyImagePicker = (props) => {
             >
                 <View style={styles.modal}>
                     <Pressable style={styles.hideimage} onPress={() => SetModalVisible(!modalVisible)}>
-                        <Image source={{ uri: imagen }} style={styles.imageModal} />
+                        <Image source={{ uri: 'data:image/jpeg;base64,' + imagen }} style={styles.imageModal} />
                     </Pressable>
 
                 </View>
@@ -111,12 +110,12 @@ const MyImagePicker = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        width:'100%',
+        width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
         marginVertical: 10,
-        borderWidth:1,
-        borderColor:'#30475E',
+        borderWidth: 1,
+        borderColor: '#30475E',
         borderRadius: 10,
         backgroundColor: '#fff',
         padding: 5,
@@ -135,20 +134,20 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         padding: 10,
-        backgroundColor:'#fff',
+        backgroundColor: '#fff',
         borderRadius: 20,
-        borderBottomWidth:1,
-        marginBottom:5,  
+        borderBottomWidth: 1,
+        marginBottom: 5,
     },
     containerIconModal: {
         width: '80%',
         maxWidth: 500,
         flexDirection: 'row',
         padding: 10,
-        backgroundColor:'#fff',
+        backgroundColor: '#fff',
         borderRadius: 20,
-        borderBottomWidth:1,
-        marginBottom:5,  
+        borderBottomWidth: 1,
+        marginBottom: 5,
     },
     containerIconItem: {
         flex: 1,
@@ -172,11 +171,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: 'center',
     },
-    text:{
-        fontSize:18,
+    text: {
+        fontSize: 18,
         fontWeight: 'bold',
-        color:'#1A4D2E'
+        color: '#1A4D2E'
 
-    } 
+    }
 })
 export default MyImagePicker;
