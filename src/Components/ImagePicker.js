@@ -5,6 +5,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useDispatch } from "react-redux";
 import { mandarFoto } from '../store/slices/usuarioSlice';
+import { useEffect } from "react";
 
 
 const MyImagePicker = (props) => {
@@ -48,7 +49,9 @@ const MyImagePicker = (props) => {
             dispatch(mandarFoto({ imagen: texto }));
         }
     };
-
+    useEffect(()=>{
+        setImagen()
+    },[props.render])
     return (
         <View style={styles.container}>
             <Modal

@@ -203,7 +203,7 @@ const Viaje = (props) => {
                             onTouchCancel={() => console.log('Cancelado')}
                         />)
                     }
-                    <MyImagePicker />
+                    <MyImagePicker render={enviado} />
                     <Buttons title={'Enviar'} onPressFunction={EnviarGasto}></Buttons>
                 </View>
             </SafeAreaView>
