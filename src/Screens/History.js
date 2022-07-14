@@ -4,7 +4,6 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect } from "react";
 import { useSelector } from 'react-redux';
 
@@ -22,7 +21,7 @@ const History = (props) => {
     const [resultEstadoJSON, setResultEstadoJSON] = useState([]);
     const [resultEstado, setresultEstado] = useState([]);
     const [EstadoFiltrado, setEstadoFiltrado] = useState('Todos')
-    const [idEstado, setIdEstado] = useState();
+    const [idEstado, setIdEstado] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
     const [today, setToday] = useState(new Date());
 
@@ -65,30 +64,30 @@ const History = (props) => {
         setShowHistorialJSON(data)
     }
 
-    const HistorialFiltrado = async() =>{
+    const HistorialFiltrado = async () => {
         const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin);
         let data = await request.json()
         setHistorialJSON(data)
         setShowHistorialJSON(data)
     }
-    useEffect(()=>{
-        if(idEstado == 0){
+    useEffect(() => {
+        if (idEstado == 0) {
             setShowHistorialJSON(historialJSON)
-        }else{
+        } else {
             let array = [];
-            historialJSON.forEach(element =>{
-                if(element['idEstado'] == idEstado){
+            historialJSON.forEach(element => {
+                if (element['idEstado'] == idEstado) {
                     array.push(element)
                 }
             })
             setShowHistorialJSON(array)
         }
-    },[idEstado])
+    }, [idEstado])
 
-    useEffect(()=>{
+    useEffect(() => {
         HistorialFiltrado()
-    },[dateIni,dateFin])
-    
+    }, [dateIni, dateFin])
+
     useEffect(() => {
         onchange(dateFin, dateIni)
         Historial(dateFin, dateIni)
@@ -192,18 +191,20 @@ const History = (props) => {
         }
         return (
             <View style={{ borderWidth: 1, width: "98%", flexDirection: 'row', margin: 5, padding: 3, borderRadius: 10, borderColor: EstadoColor(item.idEstado) }}>
-                <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
-                    <FontAwesome5
-                        name='file-invoice'
-                        style={{ color: EstadoColor(item.idEstado) }}
-                        size={40}
-                        solid />
-                </View>
-                <View style={{ width: '80%' }}>
-                    <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.idEstado) }]}>Categoria: {tipoGasto(item.idCategoriaTipoGastoViaje)}</Text>
-                    <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.idEstado) }]}>Valor: {item.valorFactura}</Text>
-                    <Text style={[styles.text, { color: EstadoColor(item.idEstado) }]}>Fecha: {cambioFecha(item.fechaFactura)}</Text>
-                </View>
+                <TouchableOpacity style={{width:'100%',flexDirection:'row'}} onPress={()=>Alert.alert('ID: ' + item.idGastoViajeDetalle)}>
+                    <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
+                        <FontAwesome5
+                            name='file-invoice-dollar'
+                            style={{ color: EstadoColor(item.idEstado) }}
+                            size={40}
+                            solid />
+                    </View>
+                    <View style={{ width: '80%' }}>
+                        <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.idEstado) }]}>Categoria: {tipoGasto(item.idCategoriaTipoGastoViaje)}</Text>
+                        <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.idEstado) }]}>Valor: {item.valorFactura}</Text>
+                        <Text style={[styles.text, { color: EstadoColor(item.idEstado) }]}>Fecha Factura: {cambioFecha(item.fechaFactura)}</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
         );
     }
@@ -272,7 +273,7 @@ const History = (props) => {
                 keyExtractor={(item) => item.idGastoViajeDetalle.toString()}
                 renderItem={({ item }) => renderItem(item)}
                 refreshControl={
-                    <RefreshControl refreshing={refreshing} onRefresh={HistorialFiltrado} colors={['#069A8E']}></RefreshControl>
+                    <RefreshControl refreshing={refreshing} onRefresh={HistorialFiltrado} colors={['#069A8E']}/>
                 }
             />
         </View >

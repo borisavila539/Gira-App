@@ -19,11 +19,11 @@ const Viaje = (props) => {
     const [showdate, setShowDate] = useState(new Date());
     const [today, setToday] = useState(new Date());
     const { empresa, user, imagen } = useSelector(state => state.usuario);
-    const [resultTipo, setResultTipo] = useState();
-    const [resultCategoria, setResultCategoria] = useState();
+    const [resultTipo, setResultTipo] = useState([]);
+    const [resultCategoria, setResultCategoria] = useState([]);
     const [resultTipoJSON, setResultTipoJSON] = useState([]);
     const [resultCategoriaJSON, setResultCategoriaJSON] = useState([]);
-    const [IdCategoria, setIdCategoria] = useState();
+    const [IdCategoria, setIdCategoria] = useState(null);
     const [enviado, setEnviado] = useState(false);
     const dispatch = useDispatch();
 
