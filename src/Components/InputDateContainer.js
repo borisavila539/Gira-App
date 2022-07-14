@@ -46,9 +46,8 @@ const InputDateContainer = (props) => {
 }
 const styles = StyleSheet.create({
     textInputDateContainer: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         width: '100%',
-
         alignItems: "center",
         padding: 5,
     },

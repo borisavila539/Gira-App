@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, Alert, FlatList,RefreshControl } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, Alert, FlatList, RefreshControl } from "react-native";
 import { HeaderLogout, DropdownList } from "../Components/indexComponents";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -16,12 +16,18 @@ const History = (props) => {
     const [showdateIni, setShowDateIni] = useState(new Date());
     const [showdateFin, setShowDateFin] = useState(new Date());
     const [historialJSON, setHistorialJSON] = useState([]);
+    const [showHistorialJSON, setShowHistorialJSON] = useState([]);
     const { user } = useSelector(state => state.usuario);
-    const [resultCategoriaJSON, setResultCategoriaJSON] = useState();
-    const [refreshing, setRefreshing] = useState(false)
+    const [resultCategoriaJSON, setResultCategoriaJSON] = useState([]);
+    const [resultEstadoJSON, setResultEstadoJSON] = useState([]);
+    const [resultEstado, setresultEstado] = useState([]);
+    const [EstadoFiltrado, setEstadoFiltrado] = useState('Todos')
+    const [idEstado, setIdEstado] = useState();
+    const [refreshing, setRefreshing] = useState(false);
+    const [today, setToday] = useState(new Date());
 
     const onchangeIni = (event, selectedDate) => {
-        const currentDate = selectedDate.getDate() + '/' + (selectedDate.getMonth() + 1) + '/' + selectedDate.getFullYear();
+        const currentDate = selectedDate.getFullYear() + '-' + (selectedDate.getMonth() + 1) + '-' + selectedDate.getDate();
         setOpenDateIni(false)
         if (event.type === 'set') {
             if (showdateFin) {
@@ -40,6 +46,8 @@ const History = (props) => {
     }
 
     const onchange = (fin, ini) => {
+        setShowDateIni(ini)
+        setShowDateFin(fin)
         ini.setMonth(ini.getMonth() - 1)
         const inicio = ini.getFullYear() + '-' + (ini.getMonth() + 1) + '-' + ini.getDate();
         const final = fin.getFullYear() + '-' + (fin.getMonth() + 1) + '-' + fin.getDate();
@@ -54,24 +62,60 @@ const History = (props) => {
         const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + inicio + '/' + final);
         let data = await request.json()
         setHistorialJSON(data)
+        setShowHistorialJSON(data)
     }
 
+    const HistorialFiltrado = async() =>{
+        const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin);
+        let data = await request.json()
+        setHistorialJSON(data)
+        setShowHistorialJSON(data)
+    }
+    useEffect(()=>{
+        if(idEstado == 0){
+            setShowHistorialJSON(historialJSON)
+        }else{
+            let array = [];
+            historialJSON.forEach(element =>{
+                if(element['idEstado'] == idEstado){
+                    array.push(element)
+                }
+            })
+            setShowHistorialJSON(array)
+        }
+    },[idEstado])
+
+    useEffect(()=>{
+        HistorialFiltrado()
+    },[dateIni,dateFin])
+    
     useEffect(() => {
         onchange(dateFin, dateIni)
         Historial(dateFin, dateIni)
         llenarCategoria()
+        llenarEstado()
     }, [])
 
+    useEffect(() => {
+        let array = ['Todos'];
+        if (resultEstadoJSON) {
+            resultEstadoJSON.forEach(element => {
+                array.push(element['nombre'])
+            })
+        }
+        setresultEstado(array)
+    }, [resultEstadoJSON])
+
     const onchangeFIn = (event, selectedDate) => {
-        const currentDate = selectedDate.getDate() + '/' + (selectedDate.getMonth() + 1) + '/' + selectedDate.getFullYear();
+        const currentDate = selectedDate.getFullYear() + '-' + (selectedDate.getMonth() + 1) + '-' + selectedDate.getDate();
         setOpenDateFin(false)
         if (event.type === 'set') {
             if (showdateIni) {
-                if (selectedDate >= showdateIni) {
+                if (selectedDate >= showdateIni && selectedDate <= today) {
                     setDateFin(currentDate)
                     setShowDateFin(selectedDate)
                 } else {
-                    Alert.alert('La fecha final debe ser mayor o igual que fecha inicial')
+                    Alert.alert('La fecha final debe ser mayor o igual que fecha inicial y deber ser una fecha igual o menor a la actual')
                 }
             } else {
                 setDateFin(currentDate)
@@ -82,41 +126,83 @@ const History = (props) => {
     const llenarCategoria = async () => {
         const request = await fetch('http://10.100.1.27:5055/api/CategoriaTipoGastoViaje/');
         let data = await request.json();
-        console.log(data)
         setResultCategoriaJSON(data)
     }
+    const llenarEstado = async () => {
+        const request = await fetch('http://10.100.1.27:5055/api/Estado');
+        let data = await request.json();
+        setResultEstadoJSON(data)
+    }
+    const onSelectEstado = (selectedItem) => {
+        if (selectedItem == 'Todos') {
+            setEstadoFiltrado('Todos')
+            setIdEstado(0)
+        } else {
+            resultEstadoJSON.forEach(element => {
+                if (element['nombre'] == selectedItem) {
+                    let id = element['idEstado'];
+                    setIdEstado(id);
+                }
+            })
+        }
+    }
+
 
     const renderItem = (item) => {
-        const cambioFecha = ( fecha) =>{
-           
-            return fecha.substring(0,10);
-           
+        const cambioFecha = (fecha) => {
+            return fecha.substring(0, 10);
         };
 
-        const tipoGasto = (id) =>{
-            let categoria ='';
-            if(resultCategoriaJSON){
+        const tipoGasto = (id) => {
+            let categoria = '';
+            if (resultCategoriaJSON) {
                 resultCategoriaJSON.forEach(element => {
-                    if(element['idCategoriaTipoGastoViaje']==id)
-                        categoria =element['nombre'];
+                    if (element['idCategoriaTipoGastoViaje'] == id)
+                        categoria = element['nombre'];
                 });
             }
             return categoria;
         }
+
+        const EstadoColor = (id) => {
+            let colorEstado = '#000';
+            if (resultEstadoJSON) {
+                resultEstadoJSON.forEach(element => {
+                    if (element['idEstado'] == id) {
+                        switch (element['nombre']) {
+                            case 'Pendiente':
+                                colorEstado = '#000';
+                                break;
+                            case 'Aprobado':
+                                colorEstado = '#0078AA';
+                                break;
+                            case 'Rechazado':
+                                colorEstado = '#F32424';
+                                break;
+                            case 'PendienteAX':
+                                colorEstado = '#FF9F29'
+                                break;
+                            default:
+                                colorEstado = '#000';
+                        }
+                    }
+                })
+            }
+            return colorEstado;
+        }
         return (
-            
-            <View style={{ borderWidth: 1, width: "98%",maxWidth:500,flexDirection: 'row' ,margin:5, padding:3, borderRadius:10}}>
-                <View style={{ width: '20%', alignItems:'center', justifyContent:'center'}}>
-                <FontAwesome5
-                            name='file-invoice'
-                            style={{color:'red'}}
-                            size={40}
-                            solid />
+            <View style={{ borderWidth: 1, width: "98%", flexDirection: 'row', margin: 5, padding: 3, borderRadius: 10, borderColor: EstadoColor(item.idEstado) }}>
+                <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
+                    <FontAwesome5
+                        name='file-invoice'
+                        style={{ color: EstadoColor(item.idEstado) }}
+                        size={40}
+                        solid />
                 </View>
                 <View style={{ width: '80%' }}>
-                    <Text style={[styles.text,{textAlign:'left'}]}>Categoria: {tipoGasto(item.idCategoriaTipoGastoViaje)}</Text>
-                    <Text style={[styles.text,{textAlign:'left'}]}>Valor: {item.valorFactura}</Text>
-                    <Text style={styles.text}>Fecha: {cambioFecha(item.fechaFactura)}</Text>
+                    <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.idEstado) }]}>Categoria: {tipoGasto(item.idCategoriaTipoGastoViaje)}</Text>
+                    <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.idEstado) }]}>Valor: {item.valorFactura}</Text>
+                    <Text style={[styles.text, { color: EstadoColor(item.idEstado) }]}>Fecha: {cambioFecha(item.fechaFactura)}</Text>
                 </View>
             </View>
         );
@@ -126,7 +212,7 @@ const History = (props) => {
         <View style={styles.container}>
             <HeaderLogout />
             <View style={styles.filtersContainer}>
-                <ScrollView backgroundColor={'#fff'} horizontal={true} contentContainerStyle={{paddingHorizontal:5}}>
+                <ScrollView backgroundColor={'#fff'} horizontal={true} contentContainerStyle={{ paddingHorizontal: 5 }}>
                     <View style={styles.containerSafeAreView}>
                         <View style={styles.filters}>
                             <View style={styles.textInputDateContainer}>
@@ -157,8 +243,8 @@ const History = (props) => {
                                     </View>
                                 </TouchableOpacity>
                             </View>
-                            <View style={{ width: 200 }}>
-                                <DropdownList defaultButtonText='-- Estado --' />
+                            <View style={{ width: 180, justifyContent: "flex-end" }}>
+                                <DropdownList defaultButtonText='-- Estado --' data={resultEstado} onSelect={onSelectEstado} />
                             </View>
                         </View>
                         {
@@ -182,12 +268,12 @@ const History = (props) => {
             </View>
 
             <FlatList
-                data={historialJSON}
+                data={showHistorialJSON}
                 keyExtractor={(item) => item.idGastoViajeDetalle.toString()}
                 renderItem={({ item }) => renderItem(item)}
                 refreshControl={
-                       <RefreshControl refreshing={refreshing} onRefresh={Historial} colors={['red']}></RefreshControl>
-                    }
+                    <RefreshControl refreshing={refreshing} onRefresh={HistorialFiltrado} colors={['#069A8E']}></RefreshControl>
+                }
             />
         </View >
     )
@@ -201,12 +287,11 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: '#fff',
         alignItems: "center",
-        paddingVertical: 10,
+        paddingVertical: 2,
     },
     textInputDateContainer: {
-        flexDirection: 'row',
+        alignItems: "flex-start",
         width: 200,
-        alignItems: "center",
         paddingVertical: 2,
     },
     text: {
@@ -226,7 +311,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
     },
     input: {
-        maxHeight: 100,
+        width: 130,
         fontSize: 16,
         backgroundColor: '#fff',
         height: 35,
@@ -244,7 +329,7 @@ const styles = StyleSheet.create({
     filtersContainer: {
         width: '100%',
         height: 70,
-        backgroundColor:'#fff'
+        backgroundColor: '#fff'
     }
 })
 
