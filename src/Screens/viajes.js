@@ -8,7 +8,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { mandarFoto } from '../store/slices/usuarioSlice';
+import { mandarFoto, EnviarGasto } from '../store/slices/usuarioSlice';
 
 const Viaje = (props) => {
     const [nFactura, setNFactura] = useState('');
@@ -85,11 +85,13 @@ const Viaje = (props) => {
     const EnviarGasto = async () => {
         let facturaObligatoria = false;
         let descripcionObligatoria = false;
+        let imagenObligatoria = false;
         if (resultCategoriaJSON) {
             resultCategoriaJSON.forEach(element => {
                 if (element["idCategoriaTipoGastoViaje"] == IdCategoria) {
                     facturaObligatoria = element["facturaObligatoria"]
                     descripcionObligatoria = element["descripcion"]
+                    imagenObligatoria = element["imagenObligatoria"]
                 }
             })
         }
@@ -101,8 +103,10 @@ const Viaje = (props) => {
             Alert.alert('Debe llenar el numero de factura')
         } else if (descripcionObligatoria && descripion == '') {
             Alert.alert('Debe llenar la descripcion')
-        } else if(!imagen || imagen==""){
-            Alert.alert('Debe tomar una foto')
+        } else if(!imagenObligatoria && !imagen){
+            if(!imagen || imagen==""){
+                Alert.alert('Debe subir una imagen de la factura')
+            }
         }else {
             try {
                 const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle', {
@@ -177,9 +181,11 @@ const Viaje = (props) => {
             <HeaderLogout />
             <SafeAreaView style={styles.container}>
                 <View style={styles.formulario}>
-                    <DropdownList data={resultTipo} defaultButtonText='Seleccione Tipo' onSelect={onSelectTipo} />
+                    <DropdownList data={resultTipo} defaultButtonText='Seleccione Tipo' onSelect={onSelectTipo}/>
                     <DropdownList data={resultCategoria} defaultButtonText='Seleccione Categoria' onSelect={onSelectCategoria} />
                     <StatusBar style="auto" />
+                    <TextInputContainer title={'RTN:'} teclado={'decimal-pad'} />
+                    <DropdownList defaultButtonText='Seleccione Proveedor'/>
                     <TextInputContainer title={'No. Factura:'} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
                     <TextInputContainer title='Descripcion: ' multiline={true} maxLength={300} Justify={true} height={60} onChangeText={(value) => setDescripcion(value)} value={descripion} />
                     <TextInputContainer title={'Valor:'} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(parseFloat(value))} value={valor} />
@@ -235,7 +241,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         width: '30%',
         fontWeight: 'bold',
-        color: '#005555'
+        color: '#005555',        
     },
     inputIconContainer: {
         flexDirection: 'row',

@@ -23,6 +23,7 @@ const DropdownList = (props) => {
                 buttonStyle={styles.button}
                 renderDropdownIcon={() => Icon()}
                 rowTextForSelection={props.rowTextForSelection}
+                search={props.search}
             />
         </View>
     )

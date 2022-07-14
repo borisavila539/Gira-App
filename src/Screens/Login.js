@@ -31,16 +31,19 @@ const Login = (props) => {
             let data = result['Data'];
             let nombre = data['Nombre'];
             let empresa = data['Empresa'];
-            console.log(data['Empresa']);
+            let usuario = data['Usuario'];
+            let nombreUsuario = usuario['IdUsuario']
+            console.log(nombreUsuario);
 
-            dispatch(iniciarSesion({ user , nombre, empresa}));
+            dispatch(iniciarSesion({ user:nombreUsuario , nombre, empresa}));
             
 
             if (result["Message"] != "Ok") {
                 Alert.alert("No se pudo iniciar sesión");
             }
 
-        } catch {
+        } catch(err) {
+            console.log(err)
             if (user === '') {
                 Alert.alert('Debe ingresar usuario')
             } else if (password === '') {

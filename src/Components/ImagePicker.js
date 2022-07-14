@@ -20,6 +20,7 @@ const MyImagePicker = (props) => {
         result = await ImagePicker.launchCameraAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images = "Images",
             base64: true,
+            allowsEditing: true,
             quality: 1
         });
 
