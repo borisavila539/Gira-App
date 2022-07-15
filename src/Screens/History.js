@@ -55,20 +55,28 @@ const History = (props) => {
     }
 
     const Historial = async (fin, ini) => {
-        const inicio = ini.getFullYear() + '-' + (ini.getMonth() + 1) + '-' + ini.getDate();
-        const final = fin.getFullYear() + '-' + (fin.getMonth() + 1) + '-' + fin.getDate();
-        console.log('Usuario: ' + user + '/' + inicio + '/' + final);
-        const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + inicio + '/' + final);
-        let data = await request.json()
-        setHistorialJSON(data)
-        setShowHistorialJSON(data)
+        try {
+            const inicio = ini.getFullYear() + '-' + (ini.getMonth() + 1) + '-' + ini.getDate();
+            const final = fin.getFullYear() + '-' + (fin.getMonth() + 1) + '-' + fin.getDate();
+            console.log('Usuario: ' + user + '/' + inicio + '/' + final);
+            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + inicio + '/' + final);
+            let data = await request.json()
+            setHistorialJSON(data)
+            setShowHistorialJSON(data)
+        } catch (error) {
+            console.log('No se obtuvo el Historial')
+        }
     }
 
     const HistorialFiltrado = async () => {
-        const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin);
-        let data = await request.json()
-        setHistorialJSON(data)
-        setShowHistorialJSON(data)
+        try {
+            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin);
+            let data = await request.json()
+            setHistorialJSON(data)
+            setShowHistorialJSON(data)
+        } catch (error) {
+            console.log('Historial no filtrado')
+        }
     }
     useEffect(() => {
         if (idEstado == 0) {
@@ -123,14 +131,22 @@ const History = (props) => {
         }
     }
     const llenarCategoria = async () => {
-        const request = await fetch('http://10.100.1.27:5055/api/CategoriaTipoGastoViaje/');
-        let data = await request.json();
-        setResultCategoriaJSON(data)
+        try {
+            const request = await fetch('http://10.100.1.27:5055/api/CategoriaTipoGastoViaje/');
+            let data = await request.json();
+            setResultCategoriaJSON(data)
+        } catch (error) {
+            console.log('No se lleno la Categoria')
+        }
     }
     const llenarEstado = async () => {
-        const request = await fetch('http://10.100.1.27:5055/api/Estado');
-        let data = await request.json();
-        setResultEstadoJSON(data)
+        try {
+            const request = await fetch('http://10.100.1.27:5055/api/Estado');
+            let data = await request.json();
+            setResultEstadoJSON(data)
+        } catch (error) {
+            console.log('No se obtuvo el estado')
+        }
     }
     const onSelectEstado = (selectedItem) => {
         if (selectedItem == 'Todos') {
@@ -191,7 +207,7 @@ const History = (props) => {
         }
         return (
             <View style={{ borderWidth: 1, width: "98%", flexDirection: 'row', margin: 5, padding: 3, borderRadius: 10, borderColor: EstadoColor(item.idEstado) }}>
-                <TouchableOpacity style={{width:'100%',flexDirection:'row'}} onPress={()=>{props.navigation.navigate('ScreenHistoryDetalle',{ID: item.idGastoViajeDetalle})}}>
+                <TouchableOpacity style={{ width: '100%', flexDirection: 'row' }} onPress={() => { props.navigation.navigate('ScreenHistoryDetalle', { ID: item.idGastoViajeDetalle }) }}>
                     <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
                         <FontAwesome5
                             name='file-invoice-dollar'
@@ -273,7 +289,7 @@ const History = (props) => {
                 keyExtractor={(item) => item.idGastoViajeDetalle.toString()}
                 renderItem={({ item }) => renderItem(item)}
                 refreshControl={
-                    <RefreshControl refreshing={refreshing} onRefresh={HistorialFiltrado} colors={['#069A8E']}/>
+                    <RefreshControl refreshing={refreshing} onRefresh={HistorialFiltrado} colors={['#069A8E']} />
                 }
                 showsVerticalScrollIndicator={false}
             />

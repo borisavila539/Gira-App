@@ -7,7 +7,6 @@ const usuarioSlice = createSlice({
         nombre: "",
         token: "",
         empresa: "",
-        imagen: "",
         mensaje: "",
         logeado: false
     },
@@ -18,9 +17,6 @@ const usuarioSlice = createSlice({
             state.empresa = action.payload.empresa;
             state.logeado = true;
         },
-        mandarFoto: (state, action) => {
-            state.imagen = action.payload.imagen;
-        },
         mensajeLogin: (state, action) =>{
             state.mensaje = action.payload.mensaje;
         },
@@ -30,11 +26,10 @@ const usuarioSlice = createSlice({
             state.logeado = false;
             state.token = "";
             state.empresa = "";
-            state.imagen = "";
             state.mensaje = "";
         }
     }
 });
 
-export const { iniciarSesion, terminarSesion, mandarFoto, mensajeLogin } = usuarioSlice.actions;
+export const { iniciarSesion, terminarSesion, mensajeLogin } = usuarioSlice.actions;
 export default usuarioSlice.reducer;

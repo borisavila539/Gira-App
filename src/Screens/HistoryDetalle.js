@@ -23,14 +23,22 @@ const HistoyDetalle = (props) => {
     const [imagen, setImagen] = useState('');
 
     const datosGasto = async () => {
-        const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + props.route.params.ID);
-        let data = await request.json();
-        setResultHistorialJSON(data)
+        try {
+            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + props.route.params.ID);
+            let data = await request.json();
+            setResultHistorialJSON(data)
+        } catch (error) {
+            console.log('No hay historial: ' + error)
+        }
     }
     const llenarCategoria = async () => {
-        const request = await fetch('http://10.100.1.27:5055/api/CategoriaTipoGastoViaje/');
-        let data = await request.json();
-        setResultCategoriaJSON(data)
+        try {
+            const request = await fetch('http://10.100.1.27:5055/api/CategoriaTipoGastoViaje/');
+            let data = await request.json();
+            setResultCategoriaJSON(data)
+        } catch (error) {
+            console.log('No hay historial: ' + error)
+        }
     }
 
     const categoriaGasto = (id) => {
@@ -94,7 +102,7 @@ const HistoyDetalle = (props) => {
             <View style={styles.containerDetalle}>
                 {
                     valor != '' &&
-                    <View style={styles.containerDetalle}>
+                    <View style={styles.containerDetalle2}>
                         {
                             imagen == '' ?
                                 <View>
@@ -110,17 +118,17 @@ const HistoyDetalle = (props) => {
                                 </View>
                         }
                         <View style={styles.containerInfo}>
-                            <Text style={styles.text}>Asesor: {nombre}</Text>
-                            <Text style={styles.text}>Categoria: {categoria}</Text>
-                            <Text style={styles.text}>Fecha Envio: {fechaCreacion}</Text>
-                            <Text style={styles.text}>Fecha Factura: {fechaFactura}</Text>
-                            <Text style={styles.text}>Proveedor: {proveedor}</Text>
-                            <Text style={styles.text}>No. Factura: {noFactura}</Text>
-                            <Text style={styles.text}>Descripcion: {descripcionAsesor}</Text>
-                            <Text style={styles.text}>Valor: {valor}</Text>
+                            <Text style={styles.text}>Asesor: <Text style={{fontWeight:'normal'}}>{nombre}</Text></Text> 
+                            <Text style={styles.text}>Categoria:<Text style={{fontWeight:'normal'}}> {categoria}</Text></Text>
+                            <Text style={styles.text}>Fecha Envio: <Text style={{fontWeight:'normal'}}>{fechaCreacion}</Text></Text>
+                            <Text style={styles.text}>Fecha Factura: <Text style={{fontWeight:'normal'}}>{fechaFactura}</Text></Text>
+                            <Text style={styles.text}>Proveedor: <Text style={{fontWeight:'normal'}}>{proveedor}</Text></Text>
+                            <Text style={styles.text}>No. Factura: <Text style={{fontWeight:'normal'}}>{noFactura}</Text></Text>
+                            <Text style={styles.text}>Descripcion: <Text style={{fontWeight:'normal'}}>{descripcionAsesor}</Text></Text>
+                            <Text style={styles.text}>Valor: <Text style={{fontWeight:'normal'}}>{valor}</Text></Text>
                             {
                                 descripcionAdmin &&
-                                <Text style={styles.text}>Descripcion Admin: {descripcionAdmin}</Text>
+                                <Text style={styles.text}>Descripcion Admin: <Text style={{fontWeight:'normal'}}>{descripcionAdmin}</Text></Text>
                             }
                         </View>
                     </View>
@@ -146,17 +154,27 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 16,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        
     },
     containerDetalle: {
         flex: 1,
         width: '100%',
         alignItems: "center",
         justifyContent: "center",
-        padding: 10
+        padding: 10,
+    },
+    containerDetalle2:{
+        width: '100%',
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 10,
+        borderWidth:1,
+        borderRadius:20,
+        borderColor: '#069A8E'
     },
     containerInfo: {
-        width: '80%',
+        width: '90%',
         maxWidth: 500,
     },
     image: {
