@@ -1,5 +1,5 @@
 import React from 'react';
-import { Login } from './src/Screens/indexScreens';
+import { HistoyDetalle, Login } from './src/Screens/indexScreens';
 import Navegador from "./src/Screens/Navigator";
 import { Provider } from 'react-redux';
 import { store } from './src/store';
@@ -19,6 +19,7 @@ const AppNavigation = () => {
         {logeado
           ? <Stack.Screen name='ScreenNavigator' component={Navegador} />
           : <Stack.Screen name='ScreenLogin' component={Login} />}
+          <Stack.Screen name ='ScreenHistoryDetalle' component={HistoyDetalle}/>
       </Stack.Navigator>
     </NavigationContainer>
   )

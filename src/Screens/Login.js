@@ -4,8 +4,8 @@ import { StyleSheet, View, Image, TextInput, Pressable, Alert, Text } from 'reac
 import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Buttons } from '../Components/indexComponents';
-import { useDispatch } from 'react-redux'
-import { iniciarSesion } from '../store/slices/usuarioSlice';
+import { useDispatch, useSelector } from 'react-redux'
+import { iniciarSesion, mensajeLogin } from '../store/slices/usuarioSlice';
 
 
 const Login = (props) => {
@@ -13,6 +13,7 @@ const Login = (props) => {
     const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
     const [viewPassword, setViewPassword] = useState(true);
+    const { mensaje } = useSelector(state => state.usuario)
 
     const onPressHandle = async () => {
         try {
@@ -28,32 +29,23 @@ const Login = (props) => {
                 })
             })
             const result = await request.json();
-            let data = result['Data'];
-            let nombre = data['Nombre'];
-            let empresa = data['Empresa'];
-            let usuario = data['Usuario'];
-            let nombreUsuario = usuario['IdUsuario']
-            console.log(nombreUsuario);
+            console.log(result);
+            if (result['Data']) {
+                let data = result['Data'];
+                let nombre = data['Nombre'];
+                let empresa = data['Empresa'];
+                let usuario = data['Usuario'];
+                let nombreUsuario = usuario['IdUsuario']
 
-            dispatch(iniciarSesion({ user: nombreUsuario, nombre, empresa }));
-
-
-
-            if (result["Message"] != "Ok") {
-                Alert.alert("No se pudo iniciar sesión");
+                dispatch(iniciarSesion({ user: nombreUsuario, nombre, empresa }));
+            } else {
+                let menssage = result['Message']
+                dispatch(mensajeLogin({ mensaje: menssage }))
+                Alert.alert(result['Message'])
             }
-
         } catch (err) {
             console.log(err)
-            if (user === '') {
-                Alert.alert('Debe ingresar usuario')
-            } else if (password === '') {
-                Alert.alert('Debe ingresar su contraseña')
-            } else if (password.length < 8) {
-                Alert.alert('La contraseña deber ser minimo de 8 caracteres')
-            } else {
-                Alert.alert('Usuario o Contraseña incorrecta')
-            }
+            Alert.alert(mensaje)
         }
     }
     return (

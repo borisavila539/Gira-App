@@ -20,7 +20,7 @@ const History = (props) => {
     const [resultCategoriaJSON, setResultCategoriaJSON] = useState([]);
     const [resultEstadoJSON, setResultEstadoJSON] = useState([]);
     const [resultEstado, setresultEstado] = useState([]);
-    const [EstadoFiltrado, setEstadoFiltrado] = useState('Todos')
+    const [EstadoFiltrado, setEstadoFiltrado] = useState('Todos');
     const [idEstado, setIdEstado] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
     const [today, setToday] = useState(new Date());
@@ -191,7 +191,7 @@ const History = (props) => {
         }
         return (
             <View style={{ borderWidth: 1, width: "98%", flexDirection: 'row', margin: 5, padding: 3, borderRadius: 10, borderColor: EstadoColor(item.idEstado) }}>
-                <TouchableOpacity style={{width:'100%',flexDirection:'row'}} onPress={()=>{props.navigation.navigate('Gastos de Viaje')}}>
+                <TouchableOpacity style={{width:'100%',flexDirection:'row'}} onPress={()=>{props.navigation.navigate('ScreenHistoryDetalle',{ID: item.idGastoViajeDetalle})}}>
                     <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
                         <FontAwesome5
                             name='file-invoice-dollar'

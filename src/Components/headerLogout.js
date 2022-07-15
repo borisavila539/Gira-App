@@ -4,7 +4,7 @@ import { useDispatch, useSelector, } from 'react-redux';
 import { terminarSesion } from "../store/slices/usuarioSlice";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-const HeaderLogout = () => {
+const HeaderLogout = (props) => {
     const dispatch = useDispatch();
     const { nombre } = useSelector(state => state.usuario)
     const handlePressLogout = () => {
@@ -12,6 +12,12 @@ const HeaderLogout = () => {
     }
     return (
         <View style={styles.header}>
+            {
+                props.back &&
+                <Pressable onPress={props.navegacion.goBack}>
+                    <FontAwesome5 name="chevron-left" size={40} color={'#fff'} />
+                </Pressable>
+            }
             <Text style={styles.text}>Bienvenido(a): {nombre}</Text>
             <Pressable onPress={handlePressLogout}>
                 <FontAwesome5 name='sign-out-alt' size={40} color={'#fff'}></FontAwesome5>
