@@ -191,7 +191,7 @@ const History = (props) => {
         }
         return (
             <View style={{ borderWidth: 1, width: "98%", flexDirection: 'row', margin: 5, padding: 3, borderRadius: 10, borderColor: EstadoColor(item.idEstado) }}>
-                <TouchableOpacity style={{width:'100%',flexDirection:'row'}} onPress={()=>Alert.alert('ID: ' + item.idGastoViajeDetalle)}>
+                <TouchableOpacity style={{width:'100%',flexDirection:'row'}} onPress={()=>{props.navigation.navigate('Gastos de Viaje')}}>
                     <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
                         <FontAwesome5
                             name='file-invoice-dollar'
@@ -213,7 +213,7 @@ const History = (props) => {
         <View style={styles.container}>
             <HeaderLogout />
             <View style={styles.filtersContainer}>
-                <ScrollView backgroundColor={'#fff'} horizontal={true} contentContainerStyle={{ paddingHorizontal: 5 }}>
+                <ScrollView backgroundColor={'#fff'} horizontal={true} contentContainerStyle={{ paddingHorizontal: 5 }} showsHorizontalScrollIndicator={false}>
                     <View style={styles.containerSafeAreView}>
                         <View style={styles.filters}>
                             <View style={styles.textInputDateContainer}>
@@ -275,6 +275,7 @@ const History = (props) => {
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={HistorialFiltrado} colors={['#069A8E']}/>
                 }
+                showsVerticalScrollIndicator={false}
             />
         </View >
     )

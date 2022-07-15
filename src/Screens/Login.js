@@ -35,14 +35,15 @@ const Login = (props) => {
             let nombreUsuario = usuario['IdUsuario']
             console.log(nombreUsuario);
 
-            dispatch(iniciarSesion({ user:nombreUsuario , nombre, empresa}));
-            
+            dispatch(iniciarSesion({ user: nombreUsuario, nombre, empresa }));
+
+
 
             if (result["Message"] != "Ok") {
                 Alert.alert("No se pudo iniciar sesión");
             }
 
-        } catch(err) {
+        } catch (err) {
             console.log(err)
             if (user === '') {
                 Alert.alert('Debe ingresar usuario')

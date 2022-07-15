@@ -74,7 +74,7 @@ const MyImagePicker = (props) => {
                 visible={modalCameraUpload}
                 onRequestClose={() => setModalCameraUpload(!modalCameraUpload)}
             >
-                <View style={styles.modal}>
+                <Pressable style={styles.modal} onPress={()=> setModalCameraUpload(!modalCameraUpload)}>
                     <View style={styles.containerIconModal}>
                         <View style={styles.containerIconItem}>
                             <Pressable style={{ width: '100%' }} onPress={pickImage} >
@@ -93,7 +93,7 @@ const MyImagePicker = (props) => {
                             </Pressable>
                         </View>
                     </View>
-                </View>
+                </Pressable>
 
             </Modal>
             <View style={styles.containerIcon}>
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         padding: 10,
         backgroundColor: '#fff',
-        borderRadius: 20,
+        
         borderBottomWidth: 1,
         marginBottom: 5,
     },

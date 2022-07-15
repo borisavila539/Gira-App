@@ -103,10 +103,8 @@ const Viaje = (props) => {
             Alert.alert('Debe llenar el numero de factura')
         } else if (descripcionObligatoria && descripion == '') {
             Alert.alert('Debe llenar la descripcion')
-        } else if(!imagenObligatoria && !imagen){
-            if(!imagen || imagen==""){
+        } else if(imagenObligatoria && (!imagen || imagen=="")){
                 Alert.alert('Debe subir una imagen de la factura')
-            }
         }else {
             try {
                 const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle', {
