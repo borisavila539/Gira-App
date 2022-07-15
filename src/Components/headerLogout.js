@@ -19,9 +19,12 @@ const HeaderLogout = (props) => {
                 </Pressable>
             }
             <Text style={styles.text}>Bienvenido(a): {nombre}</Text>
-            <Pressable onPress={handlePressLogout}>
-                <FontAwesome5 name='sign-out-alt' size={40} color={'#fff'}></FontAwesome5>
-            </Pressable>
+            {
+                !props.back &&
+                <Pressable onPress={handlePressLogout}>
+                    <FontAwesome5 name='sign-out-alt' size={40} color={'#fff'}></FontAwesome5>
+                </Pressable>
+            }
         </View>
     )
 }

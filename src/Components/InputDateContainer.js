@@ -16,7 +16,6 @@ const InputDateContainer = (props) => {
             setDate(currentDate)
             setShowDate(selectedDate)
         }
-        console.log(event)
     }
     return (
         <TouchableOpacity onPress={() => SetOpenDate(true)}>

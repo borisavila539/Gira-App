@@ -19,8 +19,8 @@ const HistoyDetalle = (props) => {
     const [noFactura, setNoFactura] = useState('');
     const [descripcionAsesor, setDescripcionAsesor] = useState('');
     const [valor, setValor] = useState('')
-    const [descripcionAdmin, setDescripcionAdmin] = useState('0');
-    const [imagen, setImagen] = useState('');
+    const [descripcionAdmin, setDescripcionAdmin] = useState('');
+    const [imagen, setImagen] = useState(null);
 
     const datosGasto = async () => {
         try {
@@ -62,9 +62,9 @@ const HistoyDetalle = (props) => {
             resultHistorialJSON.forEach(Element => {
                 let id = Element['idCategoriaTipoGastoViaje'];
                 setCategoria(categoriaGasto(id));
-                let fechac = Element['fechaCreacion'];
+                let fechac = (Element['fechaCreacion']).toString();
                 setFechaCreacion(fechac.substring(0, 10));
-                let fechaf = Element['fechaFactura'];
+                let fechaf = (Element['fechaFactura']).toString();
                 setFechaFactura(fechaf.substring(0, 10));
                 let prov = Element['proveedor'];
                 setProveedor(prov);

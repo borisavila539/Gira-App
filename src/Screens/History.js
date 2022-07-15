@@ -10,8 +10,8 @@ import { useSelector } from 'react-redux';
 const History = (props) => {
     const [openDateIni, setOpenDateIni] = useState(false);
     const [openDateFin, setOpenDateFin] = useState(false);
-    const [dateIni, setDateIni] = useState(new Date());
-    const [dateFin, setDateFin] = useState(new Date());
+    const [dateIni, setDateIni] = useState('');
+    const [dateFin, setDateFin] = useState('');
     const [showdateIni, setShowDateIni] = useState(new Date());
     const [showdateFin, setShowDateFin] = useState(new Date());
     const [historialJSON, setHistorialJSON] = useState([]);
@@ -97,8 +97,8 @@ const History = (props) => {
     }, [dateIni, dateFin])
 
     useEffect(() => {
-        onchange(dateFin, dateIni)
-        Historial(dateFin, dateIni)
+        onchange(showdateFin, showdateIni)
+        Historial(showdateFin, showdateIni)
         llenarCategoria()
         llenarEstado()
     }, [])
@@ -218,6 +218,7 @@ const History = (props) => {
                     <View style={{ width: '80%' }}>
                         <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.idEstado) }]}>Categoria: {tipoGasto(item.idCategoriaTipoGastoViaje)}</Text>
                         <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.idEstado) }]}>Valor: {item.valorFactura}</Text>
+                        <Text style={[styles.text, { color: EstadoColor(item.idEstado) }]}>Fecha Factura: {item.fechaCreacion}</Text>
                         <Text style={[styles.text, { color: EstadoColor(item.idEstado) }]}>Fecha Factura: {cambioFecha(item.fechaFactura)}</Text>
                     </View>
                 </TouchableOpacity>

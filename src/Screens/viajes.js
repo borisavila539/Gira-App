@@ -13,7 +13,7 @@ import * as ImagePicker from 'expo-image-picker';
 const Viaje = (props) => {
     const [nFactura, setNFactura] = useState('');
     const [descripion, setDescripcion] = useState('');
-    const [valor, setValor] = useState(0);
+    const [valor, setValor] = useState('');
     const [openDate, SetOpenDate] = useState(false);
     const [date, setDate] = useState('');
     const [showdate, setShowDate] = useState(new Date());
@@ -82,7 +82,6 @@ const Viaje = (props) => {
                 Alert.alert('Debe seleccionar una fecha correcta')
             }
         }
-        console.log(event)
     };
 
     const onScreenLoad = async () => {
@@ -229,6 +228,7 @@ const Viaje = (props) => {
         setResultCategoriaJSON();
         setEnviado(false);
         setImagen(null)
+        onScreenLoad()
 
     }, [enviado])
 
