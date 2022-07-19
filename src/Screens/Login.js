@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { StyleSheet, View, Image, TextInput, Pressable, Alert, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { Buttons } from '../Components/indexComponents';
+import { Buttons, myAlert } from '../Components/indexComponents';
 import { useDispatch, useSelector } from 'react-redux'
 import { iniciarSesion, mensajeLogin } from '../store/slices/usuarioSlice';
 

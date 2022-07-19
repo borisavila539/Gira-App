@@ -8,6 +8,11 @@ function Icon() {
         <FontAwesome5 name='caret-down' size={20} color={'#1A4D2E'} />
     )
 }
+function iconFind(){
+    return (
+        <FontAwesome5 name='search' size={20} color={'#1A4D2E'} />
+    )
+}
 const DropdownList = (props) => {
 
     return (
@@ -24,6 +29,10 @@ const DropdownList = (props) => {
                 renderDropdownIcon={() => Icon()}
                 rowTextForSelection={props.rowTextForSelection}
                 search={props.search}
+                searchPlaceHolder={props.searchPlaceHolder}
+                renderSearchInputLeftIcon={iconFind}
+                disableAutoScroll={true}
+                
             />
         </View>
     )

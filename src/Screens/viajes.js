@@ -9,9 +9,8 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useEffect } from "react";
 import { useSelector } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
-import { render } from "react-dom";
 import RadioButtonRN from "radio-buttons-react-native";
-import { Button } from "react-native-web";
+
 
 const Viaje = (props) => {
     const [nFactura, setNFactura] = useState('');
@@ -37,6 +36,9 @@ const Viaje = (props) => {
     const [mensajeAlerta, setmensajeAlerta] = useState('');
     const [showMensajeAlerta, setShowMensajeAlerta] = useState(false);
     const [tipoMensaje, setTipoMensaje] = useState(false);
+    const [RTN, setRTN] = useState('');
+    const [proveedoresJSON, setProveedoresJSON] = useState([]);
+    const [proveedores, setProveedores] = useState([]);
     const dataAlimentos = [{ label: 'Desayuno' }, { label: 'Almuerzo' }, { label: 'Cena' }]
 
 
@@ -106,6 +108,16 @@ const Viaje = (props) => {
         const request = await fetch('http://10.100.1.27:5055/api/CategoriaTipoGastoViaje/' + id);
         setResultCategoriaJSON(await request.json())
         setIdCategoria(null)
+    };
+
+    const llenarProveedor = async () => {
+        const request = await fetch('http://190.109.223.244:8083/api/proveedores/' + RTN + '/' + empresa);
+        let data = await request.json()
+        setProveedoresJSON(data)
+        console.log(data)
+        setmensajeAlerta('Lista de Proveedores llena')
+        setShowMensajeAlerta(true)
+        setTipoMensaje(true)
     };
 
     const onSelectTipo = (selectedItem, index) => {
@@ -189,6 +201,8 @@ const Viaje = (props) => {
                 return
             }
         }
+
+        let hoy = new Date();
         try {
             const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle', {
                 method: 'POST',
@@ -204,14 +218,21 @@ const Viaje = (props) => {
                     descripcion: descripion,
                     valorFactura: valor,
                     fechaFactura: showdate,
-                    fechaCreacion: today,
+                    fechaCreacion: hoy,
                     imagen: imagen,
                     descripcionGasto: descripcionGasto
                 })
             })
             const result = await request.json();
-            console.log(result)
-            setEnviado(true)
+            if (result['idEstado']) {
+                console.log(result)
+                setEnviado(true)
+            } else {
+                setmensajeAlerta('Gasto no enviado')
+                setShowMensajeAlerta(true)
+                setTipoMensaje(false)
+            }
+
         } catch (err) {
             console.log('no se envio: ' + err)
         }
@@ -243,6 +264,16 @@ const Viaje = (props) => {
     }, [resultCategoriaJSON])
 
     useEffect(() => {
+        let array = [];
+        if (proveedoresJSON) {
+            proveedoresJSON.forEach(element => {
+                array.push(element['Identificacion'] + ' - ' + element['Nombre'])
+            });
+            setProveedores(array)
+        }
+    }, [proveedoresJSON])
+
+    useEffect(() => {
         if (enviado) {
             setmensajeAlerta('Su gasto fue enviado a revision')
             setShowMensajeAlerta(true)
@@ -257,6 +288,8 @@ const Viaje = (props) => {
         onScreenLoad()
 
     }, [enviado])
+
+
 
     return (
         <ScrollView backgroundColor={'#fff'}>
@@ -280,8 +313,16 @@ const Viaje = (props) => {
                             circleSize={10}
                         />
                     }
-                    <TextInputContainer title={'RTN:'} teclado={'decimal-pad'} />
-                    <DropdownList defaultButtonText='Seleccione Proveedor' />
+                    <View style={styles.textInputDateContainer}>
+                        <Text style={styles.text}>RTN:</Text>
+                        <View style={styles.inputIconContainer}>
+                            <TextInput style={styles.input} keyboardType={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={RTN} onChangeText={(value) => setRTN(value)} />
+                            <TouchableOpacity onPress={llenarProveedor}>
+                                <FontAwesome5 name="search" size={20} color={'#1A4D2E'} />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <DropdownList defaultButtonText='Seleccione Proveedor' data={proveedores} onSelect={() => console.log('seleccccionado')} search={true} searchPlaceHolder={'Buscar por nombre'} />
                     <TextInputContainer title={'No. Factura:'} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
                     <TextInputContainer title='Descripcion: ' multiline={true} maxLength={300} Justify={true} height={60} onChangeText={(value) => setDescripcion(value)} value={descripion} />
                     <TextInputContainer title={'Valor:'} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(parseFloat(value))} value={valor.toString()} />
@@ -349,8 +390,8 @@ const Viaje = (props) => {
                     <Modal visible={showMensajeAlerta} transparent={true}>
                         <View style={styles.modal}>
                             <View style={{ width: '80%', backgroundColor: '#fff', alignItems: "center", borderRadius: 10, paddingVertical: 15 }} >
-                                <FontAwesome5 name={tipoMensaje?'check':'exclamation-triangle'} size={80} color={tipoMensaje? '#ddd' :'orange'} />
-                                <Text style={{ fontSize: 16, fontWeight: 'bold' , marginTop:10}}>{mensajeAlerta}</Text>
+                                <FontAwesome5 name={tipoMensaje ? 'check' : 'exclamation-triangle'} size={80} color={tipoMensaje ? 'green' : 'orange'} />
+                                <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 10 }}>{mensajeAlerta}</Text>
                                 <Pressable onPress={() => setShowMensajeAlerta(false)} style={{ backgroundColor: '#0078AA', paddingVertical: 7, paddingHorizontal: 20, borderRadius: 5, marginTop: 15 }}>
                                     <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#fff' }}>Ok</Text>
                                 </Pressable>
