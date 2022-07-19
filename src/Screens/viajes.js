@@ -1,6 +1,6 @@
 import { StyleSheet, View, TouchableOpacity, SafeAreaView, Text, Alert, Image, Modal, Pressable } from "react-native";
 import { Buttons, HeaderLogout } from "../Components/indexComponents";
-import { TextInputContainer, DropdownList } from "../Components/indexComponents";
+import { TextInputContainer, DropdownList, myAlert } from "../Components/indexComponents";
 import { StatusBar } from "react-native";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { useState } from "react";
@@ -9,15 +9,17 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useEffect } from "react";
 import { useSelector } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
+import { render } from "react-dom";
+import RadioButtonRN from "radio-buttons-react-native";
+import { Button } from "react-native-web";
 
 const Viaje = (props) => {
     const [nFactura, setNFactura] = useState('');
     const [descripion, setDescripcion] = useState('');
-    const [valor, setValor] = useState('');
+    const [valor, setValor] = useState(0.00);
     const [openDate, SetOpenDate] = useState(false);
     const [date, setDate] = useState('');
     const [showdate, setShowDate] = useState(new Date());
-    const [today, setToday] = useState(new Date());
     const { empresa, user } = useSelector(state => state.usuario);
     const [resultTipo, setResultTipo] = useState([]);
     const [resultCategoria, setResultCategoria] = useState([]);
@@ -26,8 +28,18 @@ const Viaje = (props) => {
     const [IdCategoria, setIdCategoria] = useState(null);
     const [enviado, setEnviado] = useState(false);
     const [imagen, setImagen] = useState(null);
-    const [modalVisible, SetModalVisible] = useState(false)
-    const [modalCameraUpload, setModalCameraUpload] = useState(false)
+    const [modalVisible, SetModalVisible] = useState(false);
+    const [modalCameraUpload, setModalCameraUpload] = useState(false);
+    const [today, setToday] = useState(new Date());
+    const [alimentacionIsSelected, setAlimentacionIsSelected] = useState(false);
+    const [alimento, setAlimento] = useState('');
+    const [descripcionGasto, setDescripcionGasto] = useState('');
+    const [mensajeAlerta, setmensajeAlerta] = useState('');
+    const [showMensajeAlerta, setShowMensajeAlerta] = useState(false);
+    const [tipoMensaje, setTipoMensaje] = useState(false);
+    const dataAlimentos = [{ label: 'Desayuno' }, { label: 'Almuerzo' }, { label: 'Cena' }]
+
+
     let result;
 
     const pickImage = async () => {
@@ -38,6 +50,7 @@ const Viaje = (props) => {
             quality: 1
         });
         if (!result.cancelled) {
+            console.log(result.base64)
             setImagen(result.base64);
             setModalCameraUpload(false);
         }
@@ -92,6 +105,7 @@ const Viaje = (props) => {
     const llenarCategoria = async (id) => {
         const request = await fetch('http://10.100.1.27:5055/api/CategoriaTipoGastoViaje/' + id);
         setResultCategoriaJSON(await request.json())
+        setIdCategoria(null)
     };
 
     const onSelectTipo = (selectedItem, index) => {
@@ -106,9 +120,14 @@ const Viaje = (props) => {
         resultCategoriaJSON.forEach(element => {
             if (element['nombre'] == selectedItem) {
                 setIdCategoria((element['idCategoriaTipoGastoViaje']))
+                console.log('categoria ' + element['idCategoriaTipoGastoViaje'])
             }
         })
-        console.log('categoria ' + IdCategoria)
+        if (selectedItem == 'Alimentacion') {
+            setAlimentacionIsSelected(true);
+        } else {
+            setAlimentacionIsSelected(false);
+        }
     };
 
     const EnviarGasto = async () => {
@@ -124,74 +143,80 @@ const Viaje = (props) => {
                 }
             })
         }
-        if (!resultCategoriaJSON) {
-            Alert.alert('Debe Seleccionar un tipo de gasto')
-        } else if (IdCategoria == null) {
-            Alert.alert('Debe seleccionar una categoria...')
-        } else if (facturaObligatoria && nFactura == '') {
-            Alert.alert('Debe llenar el numero de factura')
-        } else if (descripcionObligatoria && descripion == '') {
-            Alert.alert('Debe llenar la descripcion')
-        } else if (imagenObligatoria) {
-            if (imagen == '')
-                Alert.alert('Debe subir una imagen de la factura')
-            else {
-                try {
-                    const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle', {
-                        method: 'POST',
-                        headers: {
-                            Accept: 'application/json',
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            idCategoriaTipoGastoViaje: IdCategoria,
-                            usuarioAsesor: user,
-                            proveedor: "1234",
-                            noFactura: nFactura,
-                            descripcion: descripion,
-                            valorFactura: valor,
-                            fechaFactura: showdate,
-                            fechaCreacion: today,
-                            imagen: imagen
-                        })
-                    })
-                    const result = await request.json();
-                    console.log(result['idEstado'])
-                    setEnviado(!enviado)
-                } catch (err) {
-                    console.log('no se envio: ' + err)
-                }
-            }
-        } else {
-            try {
-                const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle', {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        idCategoriaTipoGastoViaje: IdCategoria,
-                        usuarioAsesor: user,
-                        proveedor: "1234",
-                        noFactura: nFactura,
-                        descripcion: descripion,
-                        valorFactura: valor,
-                        fechaFactura: showdate,
-                        fechaCreacion: today,
-                        imagen: imagen
-                    })
-                })
-                const result = await request.json();
-                console.log(result['idEstado'])
 
-                setEnviado(!enviado)
-            } catch (err) {
-                console.log('no se envio: ' + err)
+        if (IdCategoria == null) {
+            setmensajeAlerta('Debe seleccionar una categoria')
+            setShowMensajeAlerta(true)
+            setTipoMensaje(false)
+            return
+        }
+        if (facturaObligatoria) {
+            if (nFactura == '') {
+                setmensajeAlerta('Debe llenar el numero de factura')
+                setShowMensajeAlerta(true)
+                setTipoMensaje(false)
+                return
+            }
+        }
+        if (descripcionObligatoria) {
+            if (descripion == '') {
+                setmensajeAlerta('Debe llenar la descripcion')
+                setShowMensajeAlerta(true)
+                setTipoMensaje(false)
+                return
             }
         }
 
-    };
+        if (valor == 0) {
+            setmensajeAlerta('Debe ingresar el valor del gasto')
+            setShowMensajeAlerta(true)
+            setTipoMensaje(false)
+            return
+        }
+
+        if (date == '') {
+            setmensajeAlerta('Debe seleccionar la fecha de la factura')
+            setShowMensajeAlerta(true)
+            setTipoMensaje(false)
+            return
+        }
+
+        if (imagenObligatoria) {
+            if (imagen == null) {
+                setmensajeAlerta('Debe subir una imagen de la factura')
+                setShowMensajeAlerta(true)
+                setTipoMensaje(false)
+                return
+            }
+        }
+        try {
+            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    idCategoriaTipoGastoViaje: IdCategoria,
+                    usuarioAsesor: user,
+                    proveedor: "1234",
+                    noFactura: nFactura,
+                    descripcion: descripion,
+                    valorFactura: valor,
+                    fechaFactura: showdate,
+                    fechaCreacion: today,
+                    imagen: imagen,
+                    descripcionGasto: descripcionGasto
+                })
+            })
+            const result = await request.json();
+            console.log(result)
+            setEnviado(true)
+        } catch (err) {
+            console.log('no se envio: ' + err)
+        }
+    }
+
 
     useEffect(() => {
         onScreenLoad();
@@ -219,13 +244,14 @@ const Viaje = (props) => {
 
     useEffect(() => {
         if (enviado) {
-            Alert.alert('Su gasto fue enviado a revision')
+            setmensajeAlerta('Su gasto fue enviado a revision')
+            setShowMensajeAlerta(true)
+            setTipoMensaje(true)
         }
         setNFactura('');
         setDescripcion('');
         setValor('');
         setDate('');
-        setResultCategoriaJSON();
         setEnviado(false);
         setImagen(null)
         onScreenLoad()
@@ -237,14 +263,28 @@ const Viaje = (props) => {
             <HeaderLogout />
             <SafeAreaView style={styles.container}>
                 <View style={styles.formulario}>
+                    <StatusBar style="auto" />
                     <DropdownList data={resultTipo} defaultButtonText='Seleccione Tipo' onSelect={onSelectTipo} />
                     <DropdownList data={resultCategoria} defaultButtonText='Seleccione Categoria' onSelect={onSelectCategoria} />
-                    <StatusBar style="auto" />
+                    {
+                        alimentacionIsSelected &&
+                        <RadioButtonRN data={dataAlimentos}
+                            style={{ flex: 1, width: '95%', }}
+                            boxStyle={{ flex: 1, alignItems: 'center', marginHorizontal: 0, paddingHorizontal: 10 }}
+                            textStyle={{ color: '#000', fontSize: 16 }}
+                            initial={1}
+                            selectedBtn={value => console.log(value)}
+                            box={false}
+                            textColor={'#000'}
+                            icon={<FontAwesome5 name="check" size={15} color={'#005555'} />}
+                            circleSize={10}
+                        />
+                    }
                     <TextInputContainer title={'RTN:'} teclado={'decimal-pad'} />
                     <DropdownList defaultButtonText='Seleccione Proveedor' />
                     <TextInputContainer title={'No. Factura:'} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
                     <TextInputContainer title='Descripcion: ' multiline={true} maxLength={300} Justify={true} height={60} onChangeText={(value) => setDescripcion(value)} value={descripion} />
-                    <TextInputContainer title={'Valor:'} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(parseFloat(value))} value={valor} />
+                    <TextInputContainer title={'Valor:'} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(parseFloat(value))} value={valor.toString()} />
                     <TouchableOpacity onPress={() => SetOpenDate(true)}>
                         <View style={styles.textInputDateContainer}>
                             <Text style={styles.text}>Fecha Factura:</Text>
@@ -255,7 +295,7 @@ const Viaje = (props) => {
                         </View>
                     </TouchableOpacity>
                     {
-                        openDate && 
+                        openDate &&
                         <DateTimePicker mode='date' value={showdate} onChange={onchange} onTouchCancel={() => console.log('Cancelado')} />
                     }
                     <View style={styles.containerImage}>
@@ -264,7 +304,6 @@ const Viaje = (props) => {
                                 <Pressable style={styles.hideimage} onPress={() => SetModalVisible(!modalVisible)}>
                                     <Image source={{ uri: 'data:image/jpeg;base64,' + imagen }} style={styles.imageModal} />
                                 </Pressable>
-
                             </View>
                         </Modal>
                         <Modal animationType="fade" transparent={true} visible={modalCameraUpload} onRequestClose={() => setModalCameraUpload(!modalCameraUpload)}>
@@ -306,6 +345,18 @@ const Viaje = (props) => {
                         }
                     </View >
                     <Buttons title={'Enviar'} onPressFunction={EnviarGasto}></Buttons>
+
+                    <Modal visible={showMensajeAlerta} transparent={true}>
+                        <View style={styles.modal}>
+                            <View style={{ width: '80%', backgroundColor: '#fff', alignItems: "center", borderRadius: 10, paddingVertical: 15 }} >
+                                <FontAwesome5 name={tipoMensaje?'check':'exclamation-triangle'} size={80} color={tipoMensaje? '#ddd' :'orange'} />
+                                <Text style={{ fontSize: 16, fontWeight: 'bold' , marginTop:10}}>{mensajeAlerta}</Text>
+                                <Pressable onPress={() => setShowMensajeAlerta(false)} style={{ backgroundColor: '#0078AA', paddingVertical: 7, paddingHorizontal: 20, borderRadius: 5, marginTop: 15 }}>
+                                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#fff' }}>Ok</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </Modal>
                 </View>
             </SafeAreaView>
         </ScrollView>
@@ -323,8 +374,7 @@ const styles = StyleSheet.create({
         width: '80%',
         maxWidth: 500,
         justifyContent: "center",
-        alignItems: "center",
-
+        alignItems: "center"
     },
     textInputDateContainer: {
         width: '100%',

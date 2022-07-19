@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, Alert, FlatList, RefreshControl } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, Alert, FlatList, RefreshControl, ActivityIndicator } from "react-native";
 import { HeaderLogout, DropdownList } from "../Components/indexComponents";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -6,6 +6,7 @@ import { useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { useEffect } from "react";
 import { useSelector } from 'react-redux';
+
 
 const History = (props) => {
     const [openDateIni, setOpenDateIni] = useState(false);
@@ -24,6 +25,8 @@ const History = (props) => {
     const [idEstado, setIdEstado] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
     const [today, setToday] = useState(new Date());
+    const [page, setPage] = useState(1);
+    const [isLoading, setIsLoading] = useState(false);
 
     const onchangeIni = (event, selectedDate) => {
         const currentDate = selectedDate.getFullYear() + '-' + (selectedDate.getMonth() + 1) + '-' + selectedDate.getDate();
@@ -59,7 +62,7 @@ const History = (props) => {
             const inicio = ini.getFullYear() + '-' + (ini.getMonth() + 1) + '-' + ini.getDate();
             const final = fin.getFullYear() + '-' + (fin.getMonth() + 1) + '-' + fin.getDate();
             console.log('Usuario: ' + user + '/' + inicio + '/' + final);
-            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + inicio + '/' + final);
+            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + inicio + '/' + final + '/' + page + '/10');
             let data = await request.json()
             setHistorialJSON(data)
             setShowHistorialJSON(data)
@@ -70,10 +73,11 @@ const History = (props) => {
 
     const HistorialFiltrado = async () => {
         try {
-            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin);
+            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10');
             let data = await request.json()
-            setHistorialJSON(data)
-            setShowHistorialJSON(data)
+            setHistorialJSON(historialJSON.concat(data))
+            setShowHistorialJSON(showHistorialJSON.concat(data))
+            setIsLoading(false)
         } catch (error) {
             console.log('Historial no filtrado')
         }
@@ -93,15 +97,25 @@ const History = (props) => {
     }, [idEstado])
 
     useEffect(() => {
+        setPage(1)
+        setHistorialJSON([])
+        setShowHistorialJSON([])
         HistorialFiltrado()
     }, [dateIni, dateFin])
+
+    useEffect(() => {
+        HistorialFiltrado()
+    }, [page])
 
     useEffect(() => {
         onchange(showdateFin, showdateIni)
         Historial(showdateFin, showdateIni)
         llenarCategoria()
         llenarEstado()
+        setIsLoading(false)
     }, [])
+
+
 
     useEffect(() => {
         let array = ['Todos'];
@@ -167,6 +181,12 @@ const History = (props) => {
         const cambioFecha = (fecha) => {
             return fecha.substring(0, 10);
         };
+        const cambioFechahora = (fecha) => {
+            let date = fecha.substring(0, 10)
+            let hora = fecha.substring(11, 16)
+            let FechaHora = date + ' ' + hora
+            return FechaHora;
+        };
 
         const tipoGasto = (id) => {
             let categoria = '';
@@ -218,12 +238,33 @@ const History = (props) => {
                     <View style={{ width: '80%' }}>
                         <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.idEstado) }]}>Categoria: {tipoGasto(item.idCategoriaTipoGastoViaje)}</Text>
                         <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.idEstado) }]}>Valor: {item.valorFactura}</Text>
-                        <Text style={[styles.text, { color: EstadoColor(item.idEstado) }]}>Fecha Factura: {item.fechaCreacion}</Text>
+                        <Text style={[styles.text, { color: EstadoColor(item.idEstado) }]}>Fecha Creacion: {item.fechaCreacion}</Text>
                         <Text style={[styles.text, { color: EstadoColor(item.idEstado) }]}>Fecha Factura: {cambioFecha(item.fechaFactura)}</Text>
                     </View>
                 </TouchableOpacity>
             </View>
         );
+    }
+
+    const renderFooter = () => {
+        return (
+            isLoading &&
+            <View style={styles.loader}>
+                < ActivityIndicator size='large' />
+            </View >
+        )
+    }
+
+    const handleLoadMore = async () => {
+        setPage(page + 1)
+        setIsLoading(true)
+    }
+    const HistorialFiltradoRefresh = () => {
+        
+        setShowHistorialJSON([]);
+        setHistorialJSON([]);
+        setPage(1);
+        HistorialFiltrado();
     }
 
     return (
@@ -290,9 +331,11 @@ const History = (props) => {
                 keyExtractor={(item) => item.idGastoViajeDetalle.toString()}
                 renderItem={({ item }) => renderItem(item)}
                 refreshControl={
-                    <RefreshControl refreshing={refreshing} onRefresh={HistorialFiltrado} colors={['#069A8E']} />
+                    <RefreshControl refreshing={refreshing} onRefresh={HistorialFiltradoRefresh} colors={['#069A8E']} />
                 }
                 showsVerticalScrollIndicator={false}
+                onEndReached={handleLoadMore}
+                ListFooterComponent={renderFooter}
             />
         </View >
     )
@@ -349,6 +392,10 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 70,
         backgroundColor: '#fff'
+    },
+    loader: {
+        width: '100%',
+        alignItems: 'center'
     }
 })
 
