@@ -115,9 +115,21 @@ const Viaje = (props) => {
         let data = await request.json()
         setProveedoresJSON(data)
         console.log(data)
-        setmensajeAlerta('Lista de Proveedores llena')
+        let cont=0;
+        data.forEach(element=>{
+            cont = cont + 1
+        })
+        console.log(cont)
+        if (cont === 0) {
+            setmensajeAlerta('No se encontraron proveedores')
+            setTipoMensaje(false)           
+        } else {
+            setmensajeAlerta('Lista de Proveedores llena')
+            setTipoMensaje(true)
+        }
         setShowMensajeAlerta(true)
-        setTipoMensaje(true)
+        
+        
     };
 
     const onSelectTipo = (selectedItem, index) => {
