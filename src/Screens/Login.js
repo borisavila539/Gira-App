@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { StyleSheet, View, Image, TextInput, Pressable, Alert, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { Buttons, myAlert } from '../Components/indexComponents';
+import { Buttons, MyAlert } from '../Components/indexComponents';
 import { useDispatch, useSelector } from 'react-redux'
 import { iniciarSesion, mensajeLogin } from '../store/slices/usuarioSlice';
 
@@ -13,7 +13,10 @@ const Login = (props) => {
     const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
     const [viewPassword, setViewPassword] = useState(true);
-    const { mensaje } = useSelector(state => state.usuario)
+    const { mensaje } = useSelector(state => state.usuario);
+    const [mensajeAlerta, setmensajeAlerta] = useState('');
+    const [showMensajeAlerta, setShowMensajeAlerta] = useState(false);
+    const [tipoMensaje, setTipoMensaje] = useState(false);
 
     const onPressHandle = async () => {
         try {
@@ -41,11 +44,16 @@ const Login = (props) => {
             } else {
                 let menssage = result['Message']
                 dispatch(mensajeLogin({ mensaje: menssage }))
-                Alert.alert(result['Message'])
+                setmensajeAlerta(result['Message'])
+                setShowMensajeAlerta(true)
+                setTipoMensaje(false)
             }
         } catch (err) {
             console.log(err)
-            Alert.alert(mensaje)
+            
+            setmensajeAlerta(mensaje)
+            setShowMensajeAlerta(true)
+            setTipoMensaje(false)
         }
     }
     return (
@@ -106,8 +114,8 @@ const Login = (props) => {
                     </View>
                 </View>
             </LinearGradient>
+            <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
         </View>
-
     )
 }
 
@@ -116,7 +124,6 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         alignItems: 'center',
-
     },
     imagenContainer: {
         width: '100%',
@@ -142,7 +149,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         backgroundColor: '#FFF8F3',
         borderRadius: 40,
-
     },
     input: {
         flex: 3,

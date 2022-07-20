@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { Text, View, StyleSheet, Modal, Pressable } from "react-native"
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-const myAlert = (props) => {
+function MyAlert (props){
+    const [showMensajeAlerta, setShowMensajeAlerta] = useState(false)
     return (
-        <Modal visible={showMensajeAlerta} transparent={true}>
+        <Modal visible={props.visible} transparent={true}>
             <View style={styles.modal}>
                 <View style={{ width: '80%', backgroundColor: '#fff', alignItems: "center", borderRadius: 10, paddingVertical: 15 }} >
                     <FontAwesome5 name={props.tipoMensaje ? 'check' : 'exclamation-triangle'} size={80} color={props.tipoMensaje ? 'green' : 'orange'} />
@@ -31,4 +33,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default myAlert;
+export default MyAlert;

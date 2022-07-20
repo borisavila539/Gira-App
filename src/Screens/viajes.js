@@ -1,6 +1,6 @@
 import { StyleSheet, View, TouchableOpacity, SafeAreaView, Text, Alert, Image, Modal, Pressable } from "react-native";
 import { Buttons, HeaderLogout } from "../Components/indexComponents";
-import { TextInputContainer, DropdownList, myAlert } from "../Components/indexComponents";
+import { TextInputContainer, DropdownList, MyAlert } from "../Components/indexComponents";
 import { StatusBar } from "react-native";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { useState } from "react";
@@ -115,21 +115,19 @@ const Viaje = (props) => {
         let data = await request.json()
         setProveedoresJSON(data)
         console.log(data)
-        let cont=0;
-        data.forEach(element=>{
+        let cont = 0;
+        data.forEach(element => {
             cont = cont + 1
         })
         console.log(cont)
         if (cont === 0) {
             setmensajeAlerta('No se encontraron proveedores')
-            setTipoMensaje(false)           
+            setTipoMensaje(false)
         } else {
             setmensajeAlerta('Lista de Proveedores llena')
             setTipoMensaje(true)
         }
         setShowMensajeAlerta(true)
-        
-        
     };
 
     const onSelectTipo = (selectedItem, index) => {
@@ -398,18 +396,7 @@ const Viaje = (props) => {
                         }
                     </View >
                     <Buttons title={'Enviar'} onPressFunction={EnviarGasto}></Buttons>
-
-                    <Modal visible={showMensajeAlerta} transparent={true}>
-                        <View style={styles.modal}>
-                            <View style={{ width: '80%', backgroundColor: '#fff', alignItems: "center", borderRadius: 10, paddingVertical: 15 }} >
-                                <FontAwesome5 name={tipoMensaje ? 'check' : 'exclamation-triangle'} size={80} color={tipoMensaje ? 'green' : 'orange'} />
-                                <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 10 }}>{mensajeAlerta}</Text>
-                                <Pressable onPress={() => setShowMensajeAlerta(false)} style={{ backgroundColor: '#0078AA', paddingVertical: 7, paddingHorizontal: 20, borderRadius: 5, marginTop: 15 }}>
-                                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#fff' }}>Ok</Text>
-                                </Pressable>
-                            </View>
-                        </View>
-                    </Modal>
+                    <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
                 </View>
             </SafeAreaView>
         </ScrollView>
