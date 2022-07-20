@@ -39,6 +39,7 @@ const Viaje = (props) => {
     const [RTN, setRTN] = useState('');
     const [proveedoresJSON, setProveedoresJSON] = useState([]);
     const [proveedores, setProveedores] = useState([]);
+    const [proveedor, setProveedor] = useState('');
     const dataAlimentos = [{ label: 'Desayuno' }, { label: 'Almuerzo' }, { label: 'Cena' }]
     const [idAlimentos, setIdAlimentos] = useState(null);
     const [tipoAlimento, setTipoAlimento] = useState('');
@@ -139,6 +140,15 @@ const Viaje = (props) => {
         })
     };
 
+    const onSelectProveedor= (selectedItem, index) =>{
+        proveedoresJSON.forEach(element=>{
+            let elem = element['Identificacion'] + ' - ' + element['Nombre'];
+            if(elem == selectedItem){
+                setProveedor(element['CodigoProveedor'])
+            }
+        })
+    }
+
     const onSelectCategoria = (selectedItem, index) => {
         resultCategoriaJSON.forEach(element => {
             if (element['nombre'] == selectedItem) {
@@ -170,6 +180,13 @@ const Viaje = (props) => {
 
         if (IdCategoria == null) {
             setmensajeAlerta('Debe seleccionar una categoria')
+            setShowMensajeAlerta(true)
+            setTipoMensaje(false)
+            return
+        }
+
+        if(proveedor==''){
+            setmensajeAlerta('Debe Seleccionar un proveedor')
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
             return
@@ -242,7 +259,7 @@ const Viaje = (props) => {
                 body: JSON.stringify({
                     idCategoriaTipoGastoViaje: IdCategoria,
                     usuarioAsesor: user,
-                    proveedor: "1234",
+                    proveedor: proveedor,
                     noFactura: nFactura,
                     descripcion: descripion,
                     valorFactura: valor,
@@ -355,7 +372,7 @@ const Viaje = (props) => {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <DropdownList defaultButtonText='Seleccione Proveedor' data={proveedores} onSelect={() => console.log('seleccccionado')} search={true} searchPlaceHolder={'Buscar por nombre'} />
+                    <DropdownList defaultButtonText='Seleccione Proveedor' data={proveedores} onSelect={onSelectProveedor} search={true} searchPlaceHolder={'Buscar por nombre'} />
                     <TextInputContainer title={'No. Factura:'} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
                     <TextInputContainer title='Descripcion: ' multiline={true} maxLength={300} Justify={true} height={60} onChangeText={(value) => setDescripcion(value)} value={descripion} />
                     <TextInputContainer title={'Valor:'} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(parseFloat(value))} value={valor.toString()} />
