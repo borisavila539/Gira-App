@@ -9,7 +9,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useEffect } from "react";
 import { useSelector } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
-import RadioButtonRN from "radio-buttons-react-native";
+import RadioButtonRN from 'radio-buttons-react-native';
 
 
 const Viaje = (props) => {
@@ -19,12 +19,13 @@ const Viaje = (props) => {
     const [openDate, SetOpenDate] = useState(false);
     const [date, setDate] = useState('');
     const [showdate, setShowDate] = useState(new Date());
-    const { empresa, user } = useSelector(state => state.usuario);
+    const { empresa, user, nombre } = useSelector(state => state.usuario);
     const [resultTipo, setResultTipo] = useState([]);
     const [resultCategoria, setResultCategoria] = useState([]);
     const [resultTipoJSON, setResultTipoJSON] = useState([]);
     const [resultCategoriaJSON, setResultCategoriaJSON] = useState([]);
     const [IdCategoria, setIdCategoria] = useState(null);
+    const [nombreCategoria, setNombreCategoria] = useState('')
     const [enviado, setEnviado] = useState(false);
     const [imagen, setImagen] = useState(null);
     const [modalVisible, SetModalVisible] = useState(false);
@@ -32,7 +33,6 @@ const Viaje = (props) => {
     const [today, setToday] = useState(new Date());
     const [alimentacionIsSelected, setAlimentacionIsSelected] = useState(false);
     const [alimento, setAlimento] = useState('');
-    const [descripcionGasto, setDescripcionGasto] = useState('');
     const [mensajeAlerta, setmensajeAlerta] = useState('');
     const [showMensajeAlerta, setShowMensajeAlerta] = useState(false);
     const [tipoMensaje, setTipoMensaje] = useState(false);
@@ -40,8 +40,8 @@ const Viaje = (props) => {
     const [proveedoresJSON, setProveedoresJSON] = useState([]);
     const [proveedores, setProveedores] = useState([]);
     const dataAlimentos = [{ label: 'Desayuno' }, { label: 'Almuerzo' }, { label: 'Cena' }]
-
-
+    const [idAlimentos, setIdAlimentos] = useState(null);
+    const [tipoAlimento, setTipoAlimento] = useState('')
     let result;
 
     const pickImage = async () => {
@@ -142,6 +142,7 @@ const Viaje = (props) => {
         resultCategoriaJSON.forEach(element => {
             if (element['nombre'] == selectedItem) {
                 setIdCategoria((element['idCategoriaTipoGastoViaje']))
+                setNombreCategoria(element['nombre'])
                 console.log('categoria ' + element['idCategoriaTipoGastoViaje'])
             }
         })
@@ -172,6 +173,23 @@ const Viaje = (props) => {
             setTipoMensaje(false)
             return
         }
+
+        let messageAX = '1';
+
+        var weekOfYear = function(todayhoy){
+            var d = new Date(+todayhoy);
+            d.setHours(0,0,0);
+            d.setDate(d.getDate()+4-(d.getDay()||7));
+            return Math.ceil((((d-new Date(d.getFullYear(),0,1))/8.64e7)+1)/7);
+        }
+        let semana = weekOfYear(today)
+        if (IdCategoria == idAlimentos) {
+            console.log(tipoAlimento['label'])
+            messageAX = tipoAlimento['label'] + ' sem ' + semana +' ' + nombre;
+        } else {
+            messageAX = nombreCategoria + ' sem '+ semana + ' '+ nombre;
+        }
+
         if (facturaObligatoria) {
             if (nFactura == '') {
                 setmensajeAlerta('Debe llenar el numero de factura')
@@ -230,7 +248,7 @@ const Viaje = (props) => {
                     fechaFactura: showdate,
                     fechaCreacion: hoy,
                     imagen: imagen,
-                    descripcionGasto: descripcionGasto
+                    descripcionGasto: messageAX
                 })
             })
             const result = await request.json();
@@ -258,6 +276,7 @@ const Viaje = (props) => {
         if (resultTipoJSON) {
             resultTipoJSON.forEach(element => {
                 array.push(element['nombre'])
+                
             });
             setResultTipo(array)
         }
@@ -268,6 +287,9 @@ const Viaje = (props) => {
         if (resultCategoriaJSON) {
             resultCategoriaJSON.forEach(element => {
                 array.push(element['nombre'])
+                if (element['nombre'] == 'Alimentacion') {
+                    setIdAlimentos(element['idCategoriaTipoGastoViaje'])
+                }
             });
             setResultCategoria(array)
         }
@@ -316,7 +338,7 @@ const Viaje = (props) => {
                             boxStyle={{ flex: 1, alignItems: 'center', marginHorizontal: 0, paddingHorizontal: 10 }}
                             textStyle={{ color: '#000', fontSize: 16 }}
                             initial={1}
-                            selectedBtn={value => console.log(value)}
+                            selectedBtn={(value) => setTipoAlimento(value)}
                             box={false}
                             textColor={'#000'}
                             icon={<FontAwesome5 name="check" size={15} color={'#005555'} />}
