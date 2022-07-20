@@ -32,6 +32,7 @@ const DropdownList = (props) => {
                 searchPlaceHolder={props.searchPlaceHolder}
                 renderSearchInputLeftIcon={iconFind}
                 disableAutoScroll={true}
+                disabled={props.disabled}
                 
             />
         </View>

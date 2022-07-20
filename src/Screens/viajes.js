@@ -41,7 +41,8 @@ const Viaje = (props) => {
     const [proveedores, setProveedores] = useState([]);
     const dataAlimentos = [{ label: 'Desayuno' }, { label: 'Almuerzo' }, { label: 'Cena' }]
     const [idAlimentos, setIdAlimentos] = useState(null);
-    const [tipoAlimento, setTipoAlimento] = useState('')
+    const [tipoAlimento, setTipoAlimento] = useState('');
+    const [disabledDropDown, setDisabledDropDown] = useState(true)
     let result;
 
     const pickImage = async () => {
@@ -133,6 +134,7 @@ const Viaje = (props) => {
         resultTipoJSON.forEach(element => {
             if (element['nombre'] == selectedItem) {
                 llenarCategoria(element['idTipoGastoViaje'])
+                setDisabledDropDown(false)
             }
         })
     };
@@ -329,7 +331,7 @@ const Viaje = (props) => {
                 <View style={styles.formulario}>
                     <StatusBar style="auto" />
                     <DropdownList data={resultTipo} defaultButtonText='Seleccione Tipo' onSelect={onSelectTipo} />
-                    <DropdownList data={resultCategoria} defaultButtonText='Seleccione Categoria' onSelect={onSelectCategoria} />
+                    <DropdownList data={resultCategoria} defaultButtonText='Seleccione Categoria' onSelect={onSelectCategoria} disabled={disabledDropDown}/>
                     {
                         alimentacionIsSelected &&
                         <RadioButtonRN data={dataAlimentos}
