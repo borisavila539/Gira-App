@@ -52,7 +52,6 @@ const Viaje = (props) => {
             quality: 1
         });
         if (!result.cancelled) {
-            console.log(result.base64)
             setImagen(result.base64);
             setModalCameraUpload(false);
         }
