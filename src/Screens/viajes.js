@@ -1,4 +1,4 @@
-import { StyleSheet, View, TouchableOpacity, SafeAreaView, Text, Alert, Image, Modal, Pressable } from "react-native";
+import { StyleSheet, View, TouchableOpacity, SafeAreaView, Text, Image, Modal, Pressable } from "react-native";
 import { Buttons, HeaderLogout } from "../Components/indexComponents";
 import { TextInputContainer, DropdownList, MyAlert } from "../Components/indexComponents";
 import { StatusBar } from "react-native";
@@ -50,10 +50,13 @@ const Viaje = (props) => {
         result = await ImagePicker.launchCameraAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images = "Images",
             base64: true,
-            allowsEditing: true,
+            //allowsEditing: true,
             quality: 1
         });
         if (!result.cancelled) {
+            let base64 = result.base64;
+            console.log(base64)
+            console.log(base64.substring(0,10000));
             setImagen(result.base64);
             setModalCameraUpload(false);
         }
@@ -67,6 +70,7 @@ const Viaje = (props) => {
             quality: 1
         });
         if (!result.cancelled) {
+            console.log(result.base64)
             setImagen(result.base64);
             setModalCameraUpload(false);
         }
@@ -95,7 +99,9 @@ const Viaje = (props) => {
                 setDate(currentDate)
                 setShowDate(selectedDate)
             } else {
-                Alert.alert('Debe seleccionar una fecha correcta')
+                setmensajeAlerta('Debe seleccionar una fecha correcta')
+                setShowMensajeAlerta(true)
+                setTipoMensaje(false)
             }
         }
     };
@@ -210,10 +216,19 @@ const Viaje = (props) => {
 
         if (facturaObligatoria) {
             if (nFactura == '') {
-                setmensajeAlerta('Debe llenar el numero de factura')
-                setShowMensajeAlerta(true)
-                setTipoMensaje(false)
-                return
+                if(empresa=='IMHN'){
+                    if(nFactura.length != 18){
+                        setmensajeAlerta('Numero de factura incompleto')
+                        setShowMensajeAlerta(true)
+                        setTipoMensaje(false)
+                        return
+                    }
+                }else{
+                    setmensajeAlerta('Debe llenar el numero de factura')
+                    setShowMensajeAlerta(true)
+                    setTipoMensaje(false)
+                    return
+                }
             }
         }
         if (descripcionObligatoria) {
@@ -366,7 +381,7 @@ const Viaje = (props) => {
                     <View style={styles.textInputDateContainer}>
                         <Text style={styles.text}>RTN:</Text>
                         <View style={styles.inputIconContainer}>
-                            <TextInput style={styles.input} keyboardType={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={RTN} onChangeText={(value) => setRTN(value)} />
+                            <TextInput style={styles.input} keyboardType={'default'} value={RTN} onChangeText={(value) => setRTN(value)} />
                             <TouchableOpacity onPress={llenarProveedor}>
                                 <FontAwesome5 name="search" size={20} color={'#1A4D2E'} />
                             </TouchableOpacity>

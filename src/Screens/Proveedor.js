@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, SafeAreaView, ScrollView, Modal, Pressable, TouchableOpacity, Image } from "react-native";
-import { HeaderLogout, TextInputContainer, Buttons } from "../Components/indexComponents";
+import { HeaderLogout, TextInputContainer, Buttons, MyAlert } from "../Components/indexComponents";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import * as ImagePicker from 'expo-image-picker';
 import { StatusBar } from "react-native";
@@ -12,6 +12,9 @@ const Proveedor = (props) => {
     const [modalVisible, SetModalVisible] = useState(false);
     const [imagen, setImagen] = useState(null);
     const [modalCameraUpload, setModalCameraUpload] = useState(false);
+    const [mensajeAlerta, setmensajeAlerta] = useState('');
+    const [showMensajeAlerta, setShowMensajeAlerta] = useState(false);
+    const [tipoMensaje, setTipoMensaje] = useState(false);
 
     let result;
     const pickImage = async () => {
@@ -40,6 +43,47 @@ const Proveedor = (props) => {
         }
     };
 
+    const EnviarSolicitud = async () => {
+        if(nombre == ''){
+            setmensajeAlerta('Debe llenar el nombre del proveedor')
+            setShowMensajeAlerta(true)
+            setTipoMensaje(false)
+            return
+        }
+
+        if(RTN == ''){
+            setmensajeAlerta('Debe llenar el RTN')
+            setShowMensajeAlerta(true)
+            setTipoMensaje(false)
+            return
+        }
+
+        if(descripcion == ''){
+            setmensajeAlerta('Debe llenar la descripcion')
+            setShowMensajeAlerta(true)
+            setTipoMensaje(false)
+            return
+        }
+
+        if(imagen == null){
+            setmensajeAlerta('Debe subir una imagen de la factura con RTN del Proveedor Solicitado')
+            setShowMensajeAlerta(true)
+            setTipoMensaje(false)
+            return
+        }
+
+        setmensajeAlerta('Solicitud Enviada')
+        setShowMensajeAlerta(true)
+        setTipoMensaje(true)
+        setnombre('')
+        setRTN('')
+        setDescripcion('')
+        setImagen(null)
+
+
+    }
+
+
     return (
         <ScrollView backgroundColor={'#fff'}>
             <StatusBar style="auto" />
@@ -48,7 +92,7 @@ const Proveedor = (props) => {
                 <View style={styles.formulario}>
                     <TextInputContainer title={'Nombre:'} placeholder={'Nombre'} onChangeText={value => setnombre(value)} value={nombre} />
                     <TextInputContainer title={'RTN:'} placeholder={'RTN'} onChangeText={value => setRTN(value)} value={RTN} />
-                    <TextInputContainer title={'Descripcion:'} multiline={true} maxLength={300} Justify={true} height={60} onChangeText={value => setDescripcion(value)} value={descripcion} />
+                    <TextInputContainer title={'Descripcion:'} multiline={true} maxLength={300} Justify={true} height={80} onChangeText={value => setDescripcion(value)} value={descripcion} />
 
                     <View style={styles.containerImage}>
                         <Modal animationType="fade" transparent={true} visible={modalVisible} onRequestClose={() => SetModalVisible(!modalVisible)}>
@@ -96,7 +140,8 @@ const Proveedor = (props) => {
                             </Pressable>
                         }
                     </View >
-                    <Buttons title='Enviar'></Buttons>
+                    <Buttons title='Enviar' onPressFunction={EnviarSolicitud}></Buttons>
+                    <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
                 </View>
 
             </SafeAreaView>
