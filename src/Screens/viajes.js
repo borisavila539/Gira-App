@@ -44,6 +44,7 @@ const Viaje = (props) => {
     const [idAlimentos, setIdAlimentos] = useState(null);
     const [tipoAlimento, setTipoAlimento] = useState('');
     const [disabledDropDown, setDisabledDropDown] = useState(true)
+    const [disableProveedor, setDiasableProveedor] = useState(true)
     let result;
 
     const pickImage = async () => {
@@ -107,8 +108,14 @@ const Viaje = (props) => {
     };
 
     const onScreenLoad = async () => {
-        const request = await fetch('http://10.100.1.27:5055/api/TipoGastoViaje/' + empresa);
-        setResultTipoJSON(await request.json())
+        try {
+            const request = await fetch('http://10.100.1.27:5055/api/TipoGastoViaje/' + empresa);
+            setResultTipoJSON(await request.json())
+        } catch (error) {
+            setmensajeAlerta('No hay onexion con el servidor intente mas tarde...')
+            setShowMensajeAlerta(true)
+            setTipoMensaje(false)
+        }
     };
 
     const llenarCategoria = async (id) => {
@@ -130,9 +137,11 @@ const Viaje = (props) => {
         if (cont === 0) {
             setmensajeAlerta('No se encontraron proveedores')
             setTipoMensaje(false)
+            setDiasableProveedor(true)
         } else {
             setmensajeAlerta('Lista de Proveedores llena')
             setTipoMensaje(true)
+            setDiasableProveedor(false)
         }
         setShowMensajeAlerta(true)
     };
@@ -198,7 +207,7 @@ const Viaje = (props) => {
             return
         }
 
-        let messageAX = '1';
+        let messageAX = '';
 
         var weekOfYear = function(todayhoy){
             var d = new Date(+todayhoy);
@@ -387,7 +396,7 @@ const Viaje = (props) => {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <DropdownList defaultButtonText='Seleccione Proveedor' data={proveedores} onSelect={onSelectProveedor} search={true} searchPlaceHolder={'Buscar por nombre'} />
+                    <DropdownList defaultButtonText='Seleccione Proveedor' data={proveedores} onSelect={onSelectProveedor} search={true} searchPlaceHolder={'Buscar por nombre'} disabled={disableProveedor}/>
                     <TextInputContainer title={'No. Factura:'} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
                     <TextInputContainer title='Descripcion: ' multiline={true} maxLength={300} Justify={true} height={60} onChangeText={(value) => setDescripcion(value)} value={descripion} />
                     <TextInputContainer title={'Valor:'} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(parseFloat(value))} value={valor.toString()} />

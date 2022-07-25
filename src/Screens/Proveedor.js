@@ -4,6 +4,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import * as ImagePicker from 'expo-image-picker';
 import { StatusBar } from "react-native";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const Proveedor = (props) => {
     const [nombre, setnombre] = useState('')
@@ -15,6 +16,7 @@ const Proveedor = (props) => {
     const [mensajeAlerta, setmensajeAlerta] = useState('');
     const [showMensajeAlerta, setShowMensajeAlerta] = useState(false);
     const [tipoMensaje, setTipoMensaje] = useState(false);
+    const {user} = useSelector(state => state.usuario);
 
     let result;
     const pickImage = async () => {
@@ -72,13 +74,35 @@ const Proveedor = (props) => {
             return
         }
 
-        setmensajeAlerta('Solicitud Enviada')
-        setShowMensajeAlerta(true)
-        setTipoMensaje(true)
-        setnombre('')
-        setRTN('')
-        setDescripcion('')
-        setImagen(null)
+        try{
+            const request = await fetch('http://10.100.1.27:5055/api/Usuarios',{
+                method: 'POST',
+                headers:{
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    usuario : user,
+                    detalle: descripcion,
+                    nombre: nombre,
+                    rtn: RTN,
+                    imagen: imagen
+                })
+            })
+            const result = await request.json();
+            console.log(result);
+            if(result=='Correo Enviado'){
+                setmensajeAlerta('Solicitud Enviada')
+                setShowMensajeAlerta(true)
+                setTipoMensaje(true)
+                setnombre('')
+                setRTN('')
+                setDescripcion('')
+                setImagen(null)
+            }
+        }catch(err){
+            console.log('no se envio el correo'+err)
+        }
 
 
     }
