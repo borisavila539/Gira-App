@@ -16,7 +16,7 @@ const Proveedor = (props) => {
     const [mensajeAlerta, setmensajeAlerta] = useState('');
     const [showMensajeAlerta, setShowMensajeAlerta] = useState(false);
     const [tipoMensaje, setTipoMensaje] = useState(false);
-    const {user} = useSelector(state => state.usuario);
+    const { user } = useSelector(state => state.usuario);
 
     let result;
     const pickImage = async () => {
@@ -46,43 +46,43 @@ const Proveedor = (props) => {
     };
 
     const EnviarSolicitud = async () => {
-        if(nombre == ''){
+        if (nombre == '') {
             setmensajeAlerta('Debe llenar el nombre del proveedor')
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
             return
         }
 
-        if(RTN == ''){
+        if (RTN == '') {
             setmensajeAlerta('Debe llenar el RTN')
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
             return
         }
 
-        if(descripcion == ''){
+        if (descripcion == '') {
             setmensajeAlerta('Debe llenar la descripcion')
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
             return
         }
 
-        if(imagen == null){
+        if (imagen == null) {
             setmensajeAlerta('Debe subir una imagen de la factura con RTN del Proveedor Solicitado')
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
             return
         }
 
-        try{
-            const request = await fetch('http://10.100.1.27:5055/api/Usuarios',{
+        try {
+            const request = await fetch('http://10.100.1.27:5055/api/Usuarios', {
                 method: 'POST',
-                headers:{
+                headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    usuario : user,
+                    usuario: user,
                     detalle: descripcion,
                     nombre: nombre,
                     rtn: RTN,
@@ -90,7 +90,7 @@ const Proveedor = (props) => {
                 })
             })
             const result = await request.json();
-            if(result=='Correo Enviado'){
+            if (result == 'Correo Enviado') {
                 setmensajeAlerta('Solicitud Enviada')
                 setShowMensajeAlerta(true)
                 setTipoMensaje(true)
@@ -99,8 +99,8 @@ const Proveedor = (props) => {
                 setDescripcion('')
                 setImagen(null)
             }
-        }catch(err){
-            console.log('no se envio el correo'+err)
+        } catch (err) {
+            console.log('no se envio el correo' + err)
         }
 
 

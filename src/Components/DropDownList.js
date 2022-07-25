@@ -8,7 +8,7 @@ function Icon() {
         <FontAwesome5 name='caret-down' size={20} color={'#1A4D2E'} />
     )
 }
-function iconFind(){
+function iconFind() {
     return (
         <FontAwesome5 name='search' size={20} color={'#1A4D2E'} />
     )
@@ -33,7 +33,7 @@ const DropdownList = (props) => {
                 renderSearchInputLeftIcon={iconFind}
                 disableAutoScroll={true}
                 disabled={props.disabled}
-                
+
             />
         </View>
     )

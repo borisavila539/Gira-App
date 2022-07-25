@@ -32,7 +32,6 @@ const NoSync = (props) => {
             const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + idEstado + '/' + (page + 1) + '/8');
             let data = await request.json();
             setHistorialJSON(historialJSON.concat(data))
-            console.log(data)
             setIsLoading(false)
             setPage(page + 1)
         } catch (error) {
@@ -121,8 +120,8 @@ const NoSync = (props) => {
                     <View style={{ width: '80%' }}>
                         <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.idEstado) }]}>Categoria: {tipoGasto(item.idCategoriaTipoGastoViaje)}</Text>
                         <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.idEstado) }]}>Valor: {item.valorFactura}</Text>
-                        <Text style={[styles.text, { color: EstadoColor(item.idEstado) }]}>Fecha Creacion: {item.fechaCreacion}</Text>
-                        <Text style={[styles.text, { color: EstadoColor(item.idEstado) }]}>Fecha Factura: {cambioFecha(item.fechaFactura)}</Text>
+                        <Text style={[styles.text, { textAlign: 'right', color: EstadoColor(item.idEstado) }]}>Fecha Creacion: {item.fechaCreacion}</Text>
+                        <Text style={[styles.text, { textAlign: 'right', color: EstadoColor(item.idEstado) }]}>Fecha Factura: {cambioFecha(item.fechaFactura)}</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -204,7 +203,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 16,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     }
 })
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Text, View, StyleSheet, Modal, Pressable } from "react-native"
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-function MyAlert (props){
+function MyAlert(props) {
     const [showMensajeAlerta, setShowMensajeAlerta] = useState(false)
     return (
         <Modal visible={props.visible} transparent={true}>
@@ -15,7 +15,6 @@ function MyAlert (props){
                 </View>
             </View>
         </Modal>
-            //() => setShowMensajeAlerta(false)
     )
 }
 

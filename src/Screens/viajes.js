@@ -46,7 +46,7 @@ const Viaje = (props) => {
     const [disabledDropDown, setDisabledDropDown] = useState(true)
     const [disableProveedor, setDiasableProveedor] = useState(true)
     let result;
-    
+
 
     const pickImage = async () => {
         result = await ImagePicker.launchCameraAsync({
@@ -106,7 +106,7 @@ const Viaje = (props) => {
     };
 
     const onScreenLoad = async () => {
-        
+
         try {
             const request = await fetch('http://10.100.1.27:5055/api/TipoGastoViaje/' + empresa);
             setResultTipoJSON(await request.json())

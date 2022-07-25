@@ -16,7 +16,6 @@ const TextInputContainer = (props) => {
                 maxLength={props.maxLength}
             ></TextInput>
         </View>
-
     )
 }
 
@@ -25,10 +24,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         width: '30%',
         fontWeight: 'bold',
-        color:'#005555'
+        color: '#005555'
     },
     textInput: {
-        
+
         width: '100%',
         padding: 5,
     },
