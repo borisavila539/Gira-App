@@ -104,11 +104,9 @@ const HistoyDetalle = (props) => {
                     valor != '' &&
                     <View style={styles.containerDetalle2}>
                         {
-                            imagen == '' ?
+                            imagen == null ?
                                 <View>
-                                    <Pressable onPress={() => SetModalVisible(!modalVisible)}>
-                                        <Image source={require('../../assets/No-Image.png')} style={styles.image} />
-                                    </Pressable>
+                                    <Image source={require('../../assets/No-Image.png')} style={styles.image} />
                                 </View>
                                 :
                                 <View>
@@ -118,17 +116,17 @@ const HistoyDetalle = (props) => {
                                 </View>
                         }
                         <View style={styles.containerInfo}>
-                            <Text style={styles.text}>Asesor: <Text style={{fontWeight:'normal'}}>{nombre}</Text></Text> 
-                            <Text style={styles.text}>Categoria:<Text style={{fontWeight:'normal'}}> {categoria}</Text></Text>
-                            <Text style={styles.text}>Fecha Envio: <Text style={{fontWeight:'normal'}}>{fechaCreacion}</Text></Text>
-                            <Text style={styles.text}>Fecha Factura: <Text style={{fontWeight:'normal'}}>{fechaFactura}</Text></Text>
-                            <Text style={styles.text}>Proveedor: <Text style={{fontWeight:'normal'}}>{proveedor}</Text></Text>
-                            <Text style={styles.text}>No. Factura: <Text style={{fontWeight:'normal'}}>{noFactura}</Text></Text>
-                            <Text style={styles.text}>Descripcion: <Text style={{fontWeight:'normal'}}>{descripcionAsesor}</Text></Text>
-                            <Text style={styles.text}>Valor: <Text style={{fontWeight:'normal'}}>{valor}</Text></Text>
+                            <Text style={styles.text}>Asesor: <Text style={{ fontWeight: 'normal' }}>{nombre}</Text></Text>
+                            <Text style={styles.text}>Categoria:<Text style={{ fontWeight: 'normal' }}> {categoria}</Text></Text>
+                            <Text style={styles.text}>Fecha Envio: <Text style={{ fontWeight: 'normal' }}>{fechaCreacion}</Text></Text>
+                            <Text style={styles.text}>Fecha Factura: <Text style={{ fontWeight: 'normal' }}>{fechaFactura}</Text></Text>
+                            <Text style={styles.text}>Proveedor: <Text style={{ fontWeight: 'normal' }}>{proveedor}</Text></Text>
+                            <Text style={styles.text}>No. Factura: <Text style={{ fontWeight: 'normal' }}>{noFactura}</Text></Text>
+                            <Text style={styles.text}>Descripcion: <Text style={{ fontWeight: 'normal' }}>{descripcionAsesor}</Text></Text>
+                            <Text style={styles.text}>Valor: <Text style={{ fontWeight: 'normal' }}>{valor}</Text></Text>
                             {
                                 descripcionAdmin &&
-                                <Text style={styles.text}>Descripcion Admin: <Text style={{fontWeight:'normal'}}>{descripcionAdmin}</Text></Text>
+                                <Text style={styles.text}>Descripcion Admin: <Text style={{ fontWeight: 'normal' }}>{descripcionAdmin}</Text></Text>
                             }
                         </View>
                     </View>
@@ -155,7 +153,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 16,
         fontWeight: 'bold',
-        
+
     },
     containerDetalle: {
         flex: 1,
@@ -164,13 +162,13 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         padding: 10,
     },
-    containerDetalle2:{
+    containerDetalle2: {
         width: '100%',
         alignItems: "center",
         justifyContent: "center",
         padding: 10,
-        borderWidth:1,
-        borderRadius:20,
+        borderWidth: 1,
+        borderRadius: 20,
         borderColor: '#069A8E'
     },
     containerInfo: {
