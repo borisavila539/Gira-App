@@ -90,7 +90,6 @@ const Proveedor = (props) => {
                 })
             })
             const result = await request.json();
-            console.log(result);
             if(result=='Correo Enviado'){
                 setmensajeAlerta('Solicitud Enviada')
                 setShowMensajeAlerta(true)

@@ -20,7 +20,7 @@ const Login = (props) => {
 
     const onPressHandle = async () => {
         try {
-            const request = await fetch("http://190.109.203.183:9080/api/authentication", {
+            const request = await fetch("http://190.109.203.183:9080/api/authentication/movil", {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -38,7 +38,7 @@ const Login = (props) => {
                 let nombre = data['Nombre'];
                 let empresa = data['Empresa'];
                 let usuario = data['Usuario'];
-                let nombreUsuario = usuario['IdUsuario']
+                let nombreUsuario = usuario['IdUsuario'];
 
                 dispatch(iniciarSesion({ user: nombreUsuario, nombre, empresa }));
             } else {

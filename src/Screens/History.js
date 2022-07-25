@@ -73,15 +73,17 @@ const History = (props) => {
 
     const HistorialFiltrado = async () => {
         try {
-            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10');
+            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + (page+1) + '/10');
             let data = await request.json()
             setHistorialJSON(historialJSON.concat(data))
             setShowHistorialJSON(showHistorialJSON.concat(data))
             setIsLoading(false)
+            setPage(page+1)
         } catch (error) {
             console.log('Historial no filtrado')
         }
     }
+
     useEffect(() => {
         if (idEstado == 0) {
             setShowHistorialJSON(historialJSON)
@@ -100,12 +102,7 @@ const History = (props) => {
         setPage(1)
         setHistorialJSON([])
         setShowHistorialJSON([])
-        HistorialFiltrado()
     }, [dateIni, dateFin])
-
-    useEffect(() => {
-        HistorialFiltrado()
-    }, [page])
 
     useEffect(() => {
         onchange(showdateFin, showdateIni)
@@ -114,8 +111,6 @@ const History = (props) => {
         llenarEstado()
         setIsLoading(false)
     }, [])
-
-
 
     useEffect(() => {
         let array = ['Todos'];
@@ -255,16 +250,15 @@ const History = (props) => {
         )
     }
 
-    const handleLoadMore = async () => {
-        setPage(page + 1)
-        setIsLoading(true)
-    }
-    const HistorialFiltradoRefresh = () => {
-        
-        setShowHistorialJSON([]);
-        setHistorialJSON([]);
-        setPage(1);
+    const handleLoadMore =  () => {
+        setIsLoading(true);
         HistorialFiltrado();
+    }
+    const HistorialFiltradoRefresh = async() => {
+        await setShowHistorialJSON([]);
+        await setHistorialJSON([]);
+        await setPage(1);
+        Historial(showdateFin, showdateIni)
     }
 
     return (

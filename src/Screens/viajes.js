@@ -46,18 +46,17 @@ const Viaje = (props) => {
     const [disabledDropDown, setDisabledDropDown] = useState(true)
     const [disableProveedor, setDiasableProveedor] = useState(true)
     let result;
+    
 
     const pickImage = async () => {
         result = await ImagePicker.launchCameraAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images = "Images",
             base64: true,
-            //allowsEditing: true,
+            allowsEditing: true,
             quality: 1
         });
         if (!result.cancelled) {
             let base64 = result.base64;
-            console.log(base64)
-            console.log(base64.substring(0,10000));
             setImagen(result.base64);
             setModalCameraUpload(false);
         }
@@ -71,7 +70,6 @@ const Viaje = (props) => {
             quality: 1
         });
         if (!result.cancelled) {
-            console.log(result.base64)
             setImagen(result.base64);
             setModalCameraUpload(false);
         }
@@ -108,6 +106,7 @@ const Viaje = (props) => {
     };
 
     const onScreenLoad = async () => {
+        
         try {
             const request = await fetch('http://10.100.1.27:5055/api/TipoGastoViaje/' + empresa);
             setResultTipoJSON(await request.json())
@@ -125,6 +124,7 @@ const Viaje = (props) => {
     };
 
     const llenarProveedor = async () => {
+        console.log('http://190.109.223.244:8083/api/proveedores/' + RTN + '/' + empresa)
         const request = await fetch('http://190.109.223.244:8083/api/proveedores/' + RTN + '/' + empresa);
         let data = await request.json()
         setProveedoresJSON(data)
@@ -155,10 +155,10 @@ const Viaje = (props) => {
         })
     };
 
-    const onSelectProveedor= (selectedItem, index) =>{
-        proveedoresJSON.forEach(element=>{
+    const onSelectProveedor = (selectedItem, index) => {
+        proveedoresJSON.forEach(element => {
             let elem = element['Identificacion'] + ' - ' + element['Nombre'];
-            if(elem == selectedItem){
+            if (elem == selectedItem) {
                 setProveedor(element['CodigoProveedor'])
             }
         })
@@ -200,39 +200,42 @@ const Viaje = (props) => {
             return
         }
 
+        /*
         if(proveedor==''){
             setmensajeAlerta('Debe Seleccionar un proveedor')
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
             return
         }
+        */
 
         let messageAX = '';
 
-        var weekOfYear = function(todayhoy){
+        var weekOfYear = function (todayhoy) {
             var d = new Date(+todayhoy);
-            d.setHours(0,0,0);
-            d.setDate(d.getDate()+4-(d.getDay()||7));
-            return Math.ceil((((d-new Date(d.getFullYear(),0,1))/8.64e7)+1)/7);
+            d.setHours(0, 0, 0);
+            d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+            return Math.ceil((((d - new Date(d.getFullYear(), 0, 1)) / 8.64e7) + 1) / 7);
         }
         let semana = weekOfYear(today)
         if (IdCategoria == idAlimentos) {
             console.log(tipoAlimento['label'])
-            messageAX = tipoAlimento['label'] + ' sem ' + semana +' ' + nombre;
+            messageAX = tipoAlimento['label'] + ' sem ' + semana + ' ' + nombre;
         } else {
-            messageAX = nombreCategoria + ' sem '+ semana + ' '+ nombre;
+            messageAX = nombreCategoria + ' sem ' + semana + ' ' + nombre;
         }
 
         if (facturaObligatoria) {
-            if (nFactura == '') {
-                if(empresa=='IMHN'){
-                    if(nFactura.length != 18){
-                        setmensajeAlerta('Numero de factura incompleto')
-                        setShowMensajeAlerta(true)
-                        setTipoMensaje(false)
-                        return
-                    }
-                }else{
+
+            if (empresa == 'IMHN') {
+                if (nFactura.length != 19) {
+                    setmensajeAlerta('Numero de factura incompleto')
+                    setShowMensajeAlerta(true)
+                    setTipoMensaje(false)
+                    return
+                }
+            } else {
+                if (nFactura == '') {
                     setmensajeAlerta('Debe llenar el numero de factura')
                     setShowMensajeAlerta(true)
                     setTipoMensaje(false)
@@ -318,7 +321,7 @@ const Viaje = (props) => {
         if (resultTipoJSON) {
             resultTipoJSON.forEach(element => {
                 array.push(element['nombre'])
-                
+
             });
             setResultTipo(array)
         }
@@ -372,7 +375,7 @@ const Viaje = (props) => {
                 <View style={styles.formulario}>
                     <StatusBar style="auto" />
                     <DropdownList data={resultTipo} defaultButtonText='Seleccione Tipo' onSelect={onSelectTipo} />
-                    <DropdownList data={resultCategoria} defaultButtonText='Seleccione Categoria' onSelect={onSelectCategoria} disabled={disabledDropDown}/>
+                    <DropdownList data={resultCategoria} defaultButtonText='Seleccione Categoria' onSelect={onSelectCategoria} disabled={disabledDropDown} />
                     {
                         alimentacionIsSelected &&
                         <RadioButtonRN data={dataAlimentos}
@@ -396,10 +399,10 @@ const Viaje = (props) => {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <DropdownList defaultButtonText='Seleccione Proveedor' data={proveedores} onSelect={onSelectProveedor} search={true} searchPlaceHolder={'Buscar por nombre'} disabled={disableProveedor}/>
+                    <DropdownList defaultButtonText='Seleccione Proveedor' data={proveedores} onSelect={onSelectProveedor} search={true} searchPlaceHolder={'Buscar por nombre'} disabled={disableProveedor} />
                     <TextInputContainer title={'No. Factura:'} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
                     <TextInputContainer title='Descripcion: ' multiline={true} maxLength={300} Justify={true} height={60} onChangeText={(value) => setDescripcion(value)} value={descripion} />
-                    <TextInputContainer title={'Valor:'} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(parseFloat(value))} value={valor.toString()} />
+                    <TextInputContainer title={'Valor:'} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(value != '' ? parseFloat(value) : '')} value={valor.toString()} />
                     <TouchableOpacity onPress={() => SetOpenDate(true)}>
                         <View style={styles.textInputDateContainer}>
                             <Text style={styles.text}>Fecha Factura:</Text>
