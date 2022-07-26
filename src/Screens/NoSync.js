@@ -80,50 +80,23 @@ const NoSync = (props) => {
             }
             return categoria;
         }
-
-        const EstadoColor = (id) => {
-            let colorEstado = '#000';
-            if (resultEstadoJSON) {
-                resultEstadoJSON.forEach(element => {
-                    if (element['idEstado'] == id) {
-                        switch (element['nombre']) {
-                            case 'Pendiente':
-                                colorEstado = '#000';
-                                break;
-                            case 'Aprobado':
-                                colorEstado = '#0078AA';
-                                break;
-                            case 'Rechazado':
-                                colorEstado = '#F32424';
-                                break;
-                            case 'PendienteAX':
-                                colorEstado = '#FF9F29'
-                                break;
-                            default:
-                                colorEstado = '#000';
-                        }
-                    }
-                })
-            }
-            return colorEstado;
-        }
         return (
-            <View style={{ borderWidth: 1, width: "98%", flexDirection: 'row', margin: 5, padding: 3, borderRadius: 10, borderColor: EstadoColor(item.idEstado) }}>
-                <TouchableOpacity style={{ width: '100%', flexDirection: 'row' }} onPress={() => { props.navigation.navigate('ScreenHistoryDetalle', { ID: item.idGastoViajeDetalle }) }}>
-                    <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ borderWidth: 1, width: "98%", flexDirection: 'row', margin: 5, padding: 3, borderRadius: 10, borderColor: '#000' }}>
+                <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
+                    <TouchableOpacity>
                         <FontAwesome5
-                            name='file-invoice-dollar'
-                            style={{ color: EstadoColor(item.idEstado) }}
+                            name='sync-alt'
+                            style={{ color: '#000' }}
                             size={40}
                             solid />
-                    </View>
-                    <View style={{ width: '80%' }}>
-                        <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.idEstado) }]}>Categoria: {tipoGasto(item.idCategoriaTipoGastoViaje)}</Text>
-                        <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.idEstado) }]}>Valor: {item.valorFactura}</Text>
-                        <Text style={[styles.text, { textAlign: 'right', color: EstadoColor(item.idEstado) }]}>Fecha Creacion: {item.fechaCreacion}</Text>
-                        <Text style={[styles.text, { textAlign: 'right', color: EstadoColor(item.idEstado) }]}>Fecha Factura: {cambioFecha(item.fechaFactura)}</Text>
-                    </View>
-                </TouchableOpacity>
+                    </TouchableOpacity>
+                </View>
+                <View style={{ width: '80%' }}>
+                    <Text style={[styles.text, { textAlign: 'left', color: '#000' }]}>Categoria: {tipoGasto(item.idCategoriaTipoGastoViaje)}</Text>
+                    <Text style={[styles.text, { textAlign: 'left', color: '#000' }]}>Valor: {item.valorFactura}</Text>
+                    <Text style={[styles.text, { textAlign: 'right', color: '#000' }]}>Fecha Creacion: {cambioFecha(item.fechaCreacion)}</Text>
+                    <Text style={[styles.text, { textAlign: 'right', color: '#000' }]}>Fecha Factura: {cambioFecha(item.fechaFactura)}</Text>
+                </View>
             </View>
         );
     }

@@ -124,16 +124,13 @@ const Viaje = (props) => {
     };
 
     const llenarProveedor = async () => {
-        console.log('http://190.109.223.244:8083/api/proveedores/' + RTN + '/' + empresa)
         const request = await fetch('http://190.109.223.244:8083/api/proveedores/' + RTN + '/' + empresa);
         let data = await request.json()
         setProveedoresJSON(data)
-        console.log(data)
         let cont = 0;
         data.forEach(element => {
             cont = cont + 1
         })
-        console.log(cont)
         if (cont === 0) {
             setmensajeAlerta('No se encontraron proveedores')
             setTipoMensaje(false)
@@ -169,7 +166,6 @@ const Viaje = (props) => {
             if (element['nombre'] == selectedItem) {
                 setIdCategoria((element['idCategoriaTipoGastoViaje']))
                 setNombreCategoria(element['nombre'])
-                console.log('categoria ' + element['idCategoriaTipoGastoViaje'])
             }
         })
         if (selectedItem == 'Alimentacion') {
@@ -194,17 +190,13 @@ const Viaje = (props) => {
         }
 
         if (IdCategoria == null) {
-            setmensajeAlerta('Debe seleccionar una categoria')
-            setShowMensajeAlerta(true)
-            setTipoMensaje(false)
+            alertas('Debe seleccionar una categoria', true, false)
             return
         }
 
         /*
         if(proveedor==''){
-            setmensajeAlerta('Debe Seleccionar un proveedor')
-            setShowMensajeAlerta(true)
-            setTipoMensaje(false)
+            alertas('Debe Seleccionar un proveedor', true, false)
             return
         }
         */
@@ -219,7 +211,6 @@ const Viaje = (props) => {
         }
         let semana = weekOfYear(today)
         if (IdCategoria == idAlimentos) {
-            console.log(tipoAlimento['label'])
             messageAX = tipoAlimento['label'] + ' sem ' + semana + ' ' + nombre;
         } else {
             messageAX = nombreCategoria + ' sem ' + semana + ' ' + nombre;
@@ -229,48 +220,36 @@ const Viaje = (props) => {
 
             if (empresa == 'IMHN') {
                 if (nFactura.length != 19) {
-                    setmensajeAlerta('Numero de factura incompleto')
-                    setShowMensajeAlerta(true)
-                    setTipoMensaje(false)
+                    alertas('Numero de factura incompleto', true, false)
                     return
                 }
             } else {
                 if (nFactura == '') {
-                    setmensajeAlerta('Debe llenar el numero de factura')
-                    setShowMensajeAlerta(true)
-                    setTipoMensaje(false)
+                    alertas('Debe llenar el numero de factura', true, false)
                     return
                 }
             }
         }
         if (descripcionObligatoria) {
             if (descripion == '') {
-                setmensajeAlerta('Debe llenar la descripcion')
-                setShowMensajeAlerta(true)
-                setTipoMensaje(false)
+                alertas('Debe llenar la descripcion', true, false)
                 return
             }
         }
 
         if (valor == 0) {
-            setmensajeAlerta('Debe ingresar el valor del gasto')
-            setShowMensajeAlerta(true)
-            setTipoMensaje(false)
+            alertas('Debe ingresar el valor del gasto', true, false)
             return
         }
 
         if (date == '') {
-            setmensajeAlerta('Debe seleccionar la fecha de la factura')
-            setShowMensajeAlerta(true)
-            setTipoMensaje(false)
+            alertas('Debe seleccionar la fecha de la factura', true, false)
             return
         }
 
         if (imagenObligatoria) {
             if (imagen == null) {
-                setmensajeAlerta('Debe subir una imagen de la factura')
-                setShowMensajeAlerta(true)
-                setTipoMensaje(false)
+                alertas('Debe subir una imagen de la factura', true, false)
                 return
             }
         }
@@ -298,17 +277,20 @@ const Viaje = (props) => {
             })
             const result = await request.json();
             if (result['idEstado']) {
-                console.log(result)
                 setEnviado(true)
             } else {
-                setmensajeAlerta('Gasto no enviado')
-                setShowMensajeAlerta(true)
-                setTipoMensaje(false)
+                alertas('Gasto no enviado', true, false)
             }
 
         } catch (err) {
             console.log('no se envio: ' + err)
         }
+    }
+
+    const alertas = (mensaje, show, tipo) => {
+        setmensajeAlerta(mensaje)
+        setShowMensajeAlerta(show)
+        setTipoMensaje(tipo)
     }
 
 
@@ -366,8 +348,6 @@ const Viaje = (props) => {
 
     }, [enviado])
 
-
-
     return (
         <ScrollView backgroundColor={'#fff'}>
             <HeaderLogout />
@@ -394,7 +374,7 @@ const Viaje = (props) => {
                         <Text style={styles.text}>RTN:</Text>
                         <View style={styles.inputIconContainer}>
                             <TextInput style={styles.input} keyboardType={'default'} value={RTN} onChangeText={(value) => setRTN(value)} />
-                            <TouchableOpacity onPress={llenarProveedor}>
+                            <TouchableOpacity onPress={RTN != '' ? llenarProveedor : null}>
                                 <FontAwesome5 name="search" size={20} color={'#1A4D2E'} />
                             </TouchableOpacity>
                         </View>

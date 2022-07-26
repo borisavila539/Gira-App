@@ -233,7 +233,7 @@ const History = (props) => {
                     <View style={{ width: '80%' }}>
                         <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.idEstado) }]}>Categoria: {tipoGasto(item.idCategoriaTipoGastoViaje)}</Text>
                         <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.idEstado) }]}>Valor: {item.valorFactura}</Text>
-                        <Text style={[styles.text, { color: EstadoColor(item.idEstado) }]}>Fecha Creacion: {item.fechaCreacion}</Text>
+                        <Text style={[styles.text, { color: EstadoColor(item.idEstado) }]}>Fecha Creacion: {cambioFecha(item.fechaCreacion)}</Text>
                         <Text style={[styles.text, { color: EstadoColor(item.idEstado) }]}>Fecha Factura: {cambioFecha(item.fechaFactura)}</Text>
                     </View>
                 </TouchableOpacity>
@@ -255,9 +255,9 @@ const History = (props) => {
         HistorialFiltrado();
     }
     const HistorialFiltradoRefresh = async () => {
-        await setShowHistorialJSON([]);
-        await setHistorialJSON([]);
-        await setPage(1);
+        setShowHistorialJSON([]);
+        setHistorialJSON([]);
+        setPage(1);
         Historial(showdateFin, showdateIni)
     }
 

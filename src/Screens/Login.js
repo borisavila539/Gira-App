@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { StyleSheet, View, Image, TextInput, Pressable, Alert, Text } from 'react-native';
+import { StyleSheet, View, Image, TextInput, Pressable, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Buttons, MyAlert } from '../Components/indexComponents';
@@ -32,7 +32,6 @@ const Login = (props) => {
                 })
             })
             const result = await request.json();
-            console.log(result);
             if (result['Data']) {
                 let data = result['Data'];
                 let nombre = data['Nombre'];
@@ -50,7 +49,6 @@ const Login = (props) => {
             }
         } catch (err) {
             console.log(err)
-
             setmensajeAlerta(mensaje)
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
@@ -100,7 +98,7 @@ const Login = (props) => {
                         />
                         <Pressable onPress={() => setViewPassword(!viewPassword)}>
                             <FontAwesome5
-                                name={viewPassword ? 'eye' : 'eye-slash'}
+                                name={viewPassword? 'eye' : 'eye-slash'}
                                 style={styles.icons}
                                 solid
                             />
