@@ -8,6 +8,7 @@ const usuarioSlice = createSlice({
         token: "",
         empresa: "",
         mensaje: "",
+        documentoFiscal: "",
         logeado: false
     },
     reducers: {
@@ -20,6 +21,9 @@ const usuarioSlice = createSlice({
         mensajeLogin: (state, action) =>{
             state.mensaje = action.payload.mensaje;
         },
+        documentoMostrar: (state, action) =>{
+            state.documentoFiscal = action.payload.documentoFiscal;
+        },
         terminarSesion: (state) => {
             state.user = "";
             state.nombre = "";
@@ -31,5 +35,5 @@ const usuarioSlice = createSlice({
     }
 });
 
-export const { iniciarSesion, terminarSesion, mensajeLogin } = usuarioSlice.actions;
+export const { iniciarSesion, terminarSesion, mensajeLogin, documentoMostrar } = usuarioSlice.actions;
 export default usuarioSlice.reducer;

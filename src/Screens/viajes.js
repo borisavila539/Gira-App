@@ -7,12 +7,14 @@ import { useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useEffect } from "react";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import RadioButtonRN from 'radio-buttons-react-native';
+import { documentoMostrar } from '../store/slices/usuarioSlice';
 
 
 const Viaje = (props) => {
+    const dispatch = useDispatch();
     const [nFactura, setNFactura] = useState('');
     const [descripion, setDescripcion] = useState('');
     const [valor, setValor] = useState(0.00);
@@ -43,8 +45,9 @@ const Viaje = (props) => {
     const dataAlimentos = [{ label: 'Desayuno' }, { label: 'Almuerzo' }, { label: 'Cena' }]
     const [idAlimentos, setIdAlimentos] = useState(null);
     const [tipoAlimento, setTipoAlimento] = useState('');
-    const [disabledDropDown, setDisabledDropDown] = useState(true)
-    const [disableProveedor, setDiasableProveedor] = useState(true)
+    const [disabledDropDown, setDisabledDropDown] = useState(true);
+    const [disableProveedor, setDiasableProveedor] = useState(true);
+    const [ DocumentoFiscal, setDocumentoFiscal] = useState('');
     let result;
 
 
@@ -293,9 +296,25 @@ const Viaje = (props) => {
         setTipoMensaje(tipo)
     }
 
+    const documentoFiscalLoad = async () => {
+        try {
+            const request = await fetch('http://10.100.1.27:5055/api/Empresa/' + empresa);
+            const data = await request.json();
+            let documento = '';
+            data.forEach(element => {
+                documento = element['documento']
+            })
+            dispatch(documentoMostrar({documentoFiscal:documento}))
+            setDocumentoFiscal(documento);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 
     useEffect(() => {
         onScreenLoad();
+        documentoFiscalLoad();
     }, [])
 
     useEffect(() => {
@@ -371,7 +390,7 @@ const Viaje = (props) => {
                         />
                     }
                     <View style={styles.textInputDateContainer}>
-                        <Text style={styles.text}>RTN:</Text>
+                        <Text style={styles.text}>{DocumentoFiscal}:</Text>
                         <View style={styles.inputIconContainer}>
                             <TextInput style={styles.input} keyboardType={'default'} value={RTN} onChangeText={(value) => setRTN(value)} />
                             <TouchableOpacity onPress={RTN != '' ? llenarProveedor : null}>
