@@ -120,7 +120,6 @@ const HistoyDetalle = (props) => {
                             <Text style={styles.text}>Categoria:<Text style={{ fontWeight: 'normal' }}> {categoria}</Text></Text>
                             <Text style={styles.text}>Fecha Envio: <Text style={{ fontWeight: 'normal' }}>{fechaCreacion}</Text></Text>
                             <Text style={styles.text}>Fecha Factura: <Text style={{ fontWeight: 'normal' }}>{fechaFactura}</Text></Text>
-                            <Text style={styles.text}>Proveedor: <Text style={{ fontWeight: 'normal' }}>{proveedor}</Text></Text>
                             <Text style={styles.text}>No. Factura: <Text style={{ fontWeight: 'normal' }}>{noFactura}</Text></Text>
                             <Text style={styles.text}>Descripcion: <Text style={{ fontWeight: 'normal' }}>{descripcionAsesor}</Text></Text>
                             <Text style={styles.text}>Valor: <Text style={{ fontWeight: 'normal' }}>{valor}</Text></Text>

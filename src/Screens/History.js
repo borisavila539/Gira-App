@@ -62,7 +62,7 @@ const History = (props) => {
             const inicio = ini.getFullYear() + '-' + (ini.getMonth() + 1) + '-' + ini.getDate();
             const final = fin.getFullYear() + '-' + (fin.getMonth() + 1) + '-' + fin.getDate();
             console.log('Usuario: ' + user + '/' + inicio + '/' + final);
-            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + inicio + '/' + final + '/' + '1/10');
+            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + inicio + '/' + final + '/1/10');
             let data = await request.json()
             setHistorialJSON(data)
             setShowHistorialJSON(data)
@@ -76,7 +76,12 @@ const History = (props) => {
         try {
             console.log(page)
             const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10');
-            let data = await request.json()
+            let data = await request.json();
+            if(data.length == 0){
+                setIsLoading(false)
+                return
+            }
+            console.log('datos'+data.length)
             setHistorialJSON(historialJSON.concat(data))
             setShowHistorialJSON(showHistorialJSON.concat(data))
             setIsLoading(false)
@@ -101,10 +106,8 @@ const History = (props) => {
     }, [idEstado])
 
     useEffect(() => {
-        setPage(1);
-        setHistorialJSON([]);
-        setShowHistorialJSON([]);
-    }, [dateIni, dateFin])
+        HistorialFiltradoRefresh()
+    }, [showdateIni, showdateFin])
 
     useEffect(() => {
         onchange(showdateFin, showdateIni)
@@ -324,6 +327,7 @@ const History = (props) => {
 
             <FlatList
                 data={showHistorialJSON}
+                
                 keyExtractor={(item) => item.idGastoViajeDetalle.toString()}
                 renderItem={({ item }) => renderItem(item)}
                 refreshControl={

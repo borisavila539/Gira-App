@@ -28,18 +28,19 @@ const Navegador = (props) => {
                 tabBarActiveBackgroundColor: '#fff',
                 tabBarInactiveBackgroundColor: '#069A8E',
                 tabBarStyle: { height: 70 },
-                tabBarLabelStyle: { paddingBottom: 15 },
+                tabBarLabelStyle: { paddingBottom: 15, fontWeight: 'bold' },
                 tabBarIconStyle: { marginTop: 5 },
                 headerShown:false,
-                tabBarHideOnKeyboard:true
-                
+                tabBarHideOnKeyboard:true,
+                tabBarLabelPosition: 'below-icon',   
+                          
             })}
 
         >
             <Tab.Screen name='Gastos de Viaje' component={Viaje}></Tab.Screen>
             <Tab.Screen name='Historial' component={History}></Tab.Screen>
             <Tab.Screen name='Solicitar Proveedor' component={Proveedor}></Tab.Screen>
-            <Tab.Screen name='No Sincronizado' component={NoSync}></Tab.Screen>
+            <Tab.Screen name='No Sincronizado' component={NoSync} options={({route})=>({tabBarBadge:'3', tabBarBadgeStyle:{backgroundColor:'#1A4D2E'}})}></Tab.Screen>
         </Tab.Navigator>
         
     )

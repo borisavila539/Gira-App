@@ -114,7 +114,7 @@ const Proveedor = (props) => {
             <SafeAreaView style={styles.container}>
                 <View style={styles.formulario}>
                     <TextInputContainer title={'Nombre:'} placeholder={'Nombre'} onChangeText={value => setnombre(value)} value={nombre} />
-                    <TextInputContainer title={documentoFiscal+':'} placeholder={'RTN'} onChangeText={value => setRTN(value)} value={RTN} />
+                    <TextInputContainer title={documentoFiscal+':'} placeholder={documentoFiscal} onChangeText={value => setRTN(value)} value={RTN} />
                     <TextInputContainer title={'Descripcion:'} multiline={true} maxLength={300} Justify={true} height={80} onChangeText={value => setDescripcion(value)} value={descripcion} />
 
                     <View style={styles.containerImage}>
