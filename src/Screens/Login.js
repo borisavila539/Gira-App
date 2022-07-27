@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Buttons, MyAlert } from '../Components/indexComponents';
 import { useDispatch, useSelector } from 'react-redux'
-import { iniciarSesion, mensajeLogin } from '../store/slices/usuarioSlice';
+import { iniciarSesion, mensajeLogin, noSincronizado } from '../store/slices/usuarioSlice';
 
 
 const Login = (props) => {

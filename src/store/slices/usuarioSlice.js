@@ -9,6 +9,7 @@ const usuarioSlice = createSlice({
         empresa: "",
         mensaje: "",
         documentoFiscal: "",
+        nosync: 0,
         logeado: false
     },
     reducers: {
@@ -24,6 +25,9 @@ const usuarioSlice = createSlice({
         documentoMostrar: (state, action) =>{
             state.documentoFiscal = action.payload.documentoFiscal;
         },
+        noSincronizado: (state, action) =>{
+            state.nosync = action.payload.nosync;
+        },
         terminarSesion: (state) => {
             state.user = "";
             state.nombre = "";
@@ -35,5 +39,5 @@ const usuarioSlice = createSlice({
     }
 });
 
-export const { iniciarSesion, terminarSesion, mensajeLogin, documentoMostrar } = usuarioSlice.actions;
+export const { iniciarSesion, terminarSesion, mensajeLogin, documentoMostrar, noSincronizado } = usuarioSlice.actions;
 export default usuarioSlice.reducer;

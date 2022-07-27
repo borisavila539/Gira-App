@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import RadioButtonRN from 'radio-buttons-react-native';
-import { documentoMostrar } from '../store/slices/usuarioSlice';
+import { documentoMostrar, noSincronizado } from '../store/slices/usuarioSlice';
 
 
 const Viaje = (props) => {
@@ -21,7 +21,7 @@ const Viaje = (props) => {
     const [openDate, SetOpenDate] = useState(false);
     const [date, setDate] = useState('');
     const [showdate, setShowDate] = useState(new Date());
-    const { empresa, user, nombre } = useSelector(state => state.usuario);
+    const { empresa, user, nombre, nosync } = useSelector(state => state.usuario);
     const [resultTipo, setResultTipo] = useState([]);
     const [resultCategoria, setResultCategoria] = useState([]);
     const [resultTipoJSON, setResultTipoJSON] = useState([]);
@@ -119,6 +119,17 @@ const Viaje = (props) => {
             setTipoMensaje(false)
         }
     };
+
+    const cantidadNoSync = async ()=>{
+        let num = 0;
+        try {
+            const request = await fetch("http://10.100.1.27:5055/api/GastoViajeDetalle/"+user+'/4');
+           num = await request.json();
+        } catch (error) {
+            console.log('No hay sincronizados')
+        }
+        dispatch(noSincronizado({nosync:num}))
+    }
 
     const llenarCategoria = async (id) => {
         const request = await fetch('http://10.100.1.27:5055/api/CategoriaTipoGastoViaje/' + id);
@@ -271,7 +282,7 @@ const Viaje = (props) => {
                     proveedor: proveedor,
                     noFactura: nFactura,
                     descripcion: descripion,
-                    valorFactura: valor,
+                    valorFactura: parseFloat(valor),
                     fechaFactura: showdate,
                     fechaCreacion: hoy,
                     imagen: imagen,
@@ -282,6 +293,7 @@ const Viaje = (props) => {
             if (result['idEstado']) {
                 setEnviado(true)
             } else {
+                console.log(result)
                 alertas('Gasto no enviado', true, false)
             }
 
@@ -315,6 +327,7 @@ const Viaje = (props) => {
     useEffect(() => {
         onScreenLoad();
         documentoFiscalLoad();
+        cantidadNoSync();
     }, [])
 
     useEffect(() => {
@@ -401,7 +414,7 @@ const Viaje = (props) => {
                     <DropdownList defaultButtonText='Seleccione Proveedor' data={proveedores} onSelect={onSelectProveedor} search={true} searchPlaceHolder={'Buscar por nombre'} disabled={disableProveedor} />
                     <TextInputContainer title={'No. Factura:'} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
                     <TextInputContainer title='Descripcion: ' multiline={true} maxLength={300} Justify={true} height={60} onChangeText={(value) => setDescripcion(value)} value={descripion} />
-                    <TextInputContainer title={'Valor:'} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(value != '' ? parseFloat(value) : '')} value={valor.toString()} />
+                    <TextInputContainer title={'Valor:'} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(value)} value={valor.toString()} />
                     <TouchableOpacity onPress={() => SetOpenDate(true)}>
                         <View style={styles.textInputDateContainer}>
                             <Text style={styles.text}>Fecha Factura:</Text>

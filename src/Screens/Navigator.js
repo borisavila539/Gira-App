@@ -1,10 +1,12 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Viaje, History, Proveedor, NoSync } from "../Screens/indexScreens";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { useSelector, } from 'react-redux';
+
 const Tab = createBottomTabNavigator();
 
 const Navegador = (props) => {
-
+    const { nosync } = useSelector(state => state.usuario)
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -40,7 +42,7 @@ const Navegador = (props) => {
             <Tab.Screen name='Gastos de Viaje' component={Viaje}></Tab.Screen>
             <Tab.Screen name='Historial' component={History}></Tab.Screen>
             <Tab.Screen name='Solicitar Proveedor' component={Proveedor}></Tab.Screen>
-            <Tab.Screen name='No Sincronizado' component={NoSync} options={({route})=>({tabBarBadge:'3', tabBarBadgeStyle:{backgroundColor:'#1A4D2E'}})}></Tab.Screen>
+            <Tab.Screen name='No Sincronizado' component={NoSync} options={({route})=>({tabBarBadge: nosync!=0?nosync:null, tabBarBadgeStyle:{backgroundColor:'#F94C66', color:'#fff',fontWeight:'bold'},})}></Tab.Screen>
         </Tab.Navigator>
         
     )
