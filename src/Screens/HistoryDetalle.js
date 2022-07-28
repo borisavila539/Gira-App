@@ -63,9 +63,9 @@ const HistoyDetalle = (props) => {
                 let id = Element['idCategoriaTipoGastoViaje'];
                 setCategoria(categoriaGasto(id));
                 let fechac = (Element['fechaCreacion']).toString();
-                setFechaCreacion(fechac.substring(0, 10));
+                setFechaCreacion(fechac.replace('T',' ').substring(0,19).replace('-','/').replace('-','/'));
                 let fechaf = (Element['fechaFactura']).toString();
-                setFechaFactura(fechaf.substring(0, 10));
+                setFechaFactura(fechaf.substring(0, 10).replace('-','/').replace('-','/'));
                 let prov = Element['proveedor'];
                 setProveedor(prov);
                 let factura = Element['noFactura'];

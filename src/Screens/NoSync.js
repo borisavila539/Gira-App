@@ -14,7 +14,7 @@ const NoSync = (props) => {
 
     const historial = async () => {
         try {
-            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/4/' + page + '/8');
+            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/4/' + page + '/10');
             let data = await request.json();
             setHistorialJSON(data)
             setIsLoading(false)
@@ -27,7 +27,7 @@ const NoSync = (props) => {
     const historialMas = async () => {
         try {
 
-            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/4/' + (page + 1) + '/8');
+            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/4/' + page  + '/10');
             let data = await request.json();
             setHistorialJSON(historialJSON.concat(data))
             setIsLoading(false)
@@ -61,7 +61,7 @@ const NoSync = (props) => {
                 <View style={{ width: '80%' }}>
                     <Text style={[styles.text, { textAlign: 'left', color: '#000' }]}>Categoria: {item.categoria}</Text>
                     <Text style={[styles.text, { textAlign: 'left', color: '#000' }]}>Valor: {item.valorFactura}</Text>
-                    <Text style={[styles.text, { textAlign: 'right', color: '#000' }]}>Fecha Creacion: {cambioFecha(item.fechaCreacion)}</Text>
+                    <Text style={[styles.text, { textAlign: 'right', color: '#000' }]}>Fecha Creacion: {item.fechaCreacion.replace('T',' ').substring(0,19).replace('-','/').replace('-','/')}</Text>
                     <Text style={[styles.text, { textAlign: 'right', color: '#000' }]}>Fecha Factura: {cambioFecha(item.fechaFactura)}</Text>
                 </View>
             </View>

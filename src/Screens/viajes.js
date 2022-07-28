@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import RadioButtonRN from 'radio-buttons-react-native';
 import { documentoMostrar, noSincronizado } from '../store/slices/usuarioSlice';
+import moment from "moment";
 
 
 const Viaje = (props) => {
@@ -204,19 +205,63 @@ const Viaje = (props) => {
         }
 
         if (IdCategoria == null) {
-            alertas('Debe seleccionar una categoria', true, false)
+            alertas('Debe seleccionar una Categoria...', true, false)
             return
         }
 
         /*
         if(proveedor==''){
-            alertas('Debe Seleccionar un proveedor', true, false)
+            alertas('Debe Seleccionar un proveedor...', true, false)
             return
         }
         */
 
-        let messageAX = '';
 
+        if (facturaObligatoria) {
+
+            if (empresa == 'IMHN') {
+                if (nFactura.length == 0) {
+                    alertas('El campo No.Factura es obligatorio.', true, false)
+                    return
+                }else if(nFactura.length !=19){
+                    alertas('El campo No.Factura esta incompleto.', true, false)
+                    return
+                }
+            } else {
+                if (nFactura == '') {
+                    alertas('El campo No.Factura es obligatorio.', true, false)
+                    return
+                }
+            }
+        }
+        if (descripcionObligatoria) {
+            if (descripion == '') {
+                alertas('El campo Descripcion es obligatorio.', true, false)
+                return
+            }
+        }
+
+        if (valor == 0) {
+            alertas('El campo Valor es obligatorio.', true, false)
+            return
+        }
+
+        if (date == '') {
+            alertas('El campo Fecha Factura es obligatorio.', true, false)
+            return
+        }
+
+        if (imagenObligatoria) {
+            if (imagen == null) {
+                alertas('La imagen de la factura es obligatoria.', true, false)
+                return
+            }
+        }
+
+        let hoy = moment().format();
+
+        //Creacion de mensaje que se enviara a AX
+        let messageAX = '';
         var weekOfYear = function (todayhoy) {
             var d = new Date(+todayhoy);
             d.setHours(0, 0, 0);
@@ -230,45 +275,6 @@ const Viaje = (props) => {
             messageAX = nombreCategoria + ' sem ' + semana + ' ' + nombre;
         }
 
-        if (facturaObligatoria) {
-
-            if (empresa == 'IMHN') {
-                if (nFactura.length != 19) {
-                    alertas('Numero de factura incompleto', true, false)
-                    return
-                }
-            } else {
-                if (nFactura == '') {
-                    alertas('Debe llenar el numero de factura', true, false)
-                    return
-                }
-            }
-        }
-        if (descripcionObligatoria) {
-            if (descripion == '') {
-                alertas('Debe llenar la descripcion', true, false)
-                return
-            }
-        }
-
-        if (valor == 0) {
-            alertas('Debe ingresar el valor del gasto', true, false)
-            return
-        }
-
-        if (date == '') {
-            alertas('Debe seleccionar la fecha de la factura', true, false)
-            return
-        }
-
-        if (imagenObligatoria) {
-            if (imagen == null) {
-                alertas('Debe subir una imagen de la factura', true, false)
-                return
-            }
-        }
-
-        let hoy = new Date();
         try {
             const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle', {
                 method: 'POST',

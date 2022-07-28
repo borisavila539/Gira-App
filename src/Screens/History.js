@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, TouchableOpacity, TextInput, Alert, FlatList, RefreshControl, ActivityIndicator } from "react-native";
-import { HeaderLogout, DropdownList } from "../Components/indexComponents";
+import { HeaderLogout, DropdownList, MyAlert } from "../Components/indexComponents";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useState } from "react";
@@ -18,15 +18,17 @@ const History = (props) => {
     const [historialJSON, setHistorialJSON] = useState([]);
     const [showHistorialJSON, setShowHistorialJSON] = useState([]);
     const { user } = useSelector(state => state.usuario);
-    const [resultCategoriaJSON, setResultCategoriaJSON] = useState([]);
     const [resultEstadoJSON, setResultEstadoJSON] = useState([]);
     const [resultEstado, setresultEstado] = useState([]);
-    const [EstadoFiltrado, setEstadoFiltrado] = useState('Todos');
-    const [idEstado, setIdEstado] = useState(null);
+    const [estadoID, setEstadoID] = useState(0);
     const [refreshing, setRefreshing] = useState(false);
     const [today, setToday] = useState(new Date());
     const [isLoading, setIsLoading] = useState(false);
     const [page, setPage] = useState(1);
+    const [mensajeAlerta, setmensajeAlerta] = useState('');
+    const [showMensajeAlerta, setShowMensajeAlerta] = useState(false);
+    const [tipoMensaje, setTipoMensaje] = useState(false);
+    let cont = 0;
 
     const onchangeIni = (event, selectedDate) => {
         const currentDate = selectedDate.getFullYear() + '-' + (selectedDate.getMonth() + 1) + '-' + selectedDate.getDate();
@@ -37,7 +39,9 @@ const History = (props) => {
                     setDateIni(currentDate)
                     setShowDateIni(selectedDate)
                 } else {
-                    Alert.alert('La fecha inicial debe ser menor o igual que fecha final')
+                    setmensajeAlerta('La fecha inicial debe ser menor o igual que fecha final')
+                    setShowMensajeAlerta(true)
+                    setTipoMensaje(false)
                 }
             } else {
                 setDateIni(currentDate)
@@ -47,9 +51,27 @@ const History = (props) => {
         console.log(event)
     }
 
+    const onchangeFIn = (event, selectedDate) => {
+        const currentDate = selectedDate.getFullYear() + '-' + (selectedDate.getMonth() + 1) + '-' + selectedDate.getDate();
+        setOpenDateFin(false)
+        if (event.type === 'set') {
+            if (showdateIni) {
+                if (selectedDate >= showdateIni && selectedDate <= today) {
+                    setDateFin(currentDate)
+                    setShowDateFin(selectedDate)
+                } else {
+                    setmensajeAlerta('La fecha final debe ser mayor o igual que fecha inicial y deber ser una fecha igual o menor a la actual')
+                    setShowMensajeAlerta(true)
+                    setTipoMensaje(false)
+                }
+            } else {
+                setDateFin(currentDate)
+                setShowDateFin(selectedDate)
+            }
+        }
+    }
+
     const onchange = (fin, ini) => {
-        setShowDateIni(ini)
-        setShowDateFin(fin)
         ini.setMonth(ini.getMonth() - 1)
         const inicio = ini.getFullYear() + '-' + (ini.getMonth() + 1) + '-' + ini.getDate();
         const final = fin.getFullYear() + '-' + (fin.getMonth() + 1) + '-' + fin.getDate();
@@ -57,15 +79,15 @@ const History = (props) => {
         setDateFin(final)
     }
 
-    const Historial = async (fin, ini) => {
+    const Historial = async () => {
         try {
-            const inicio = ini.getFullYear() + '-' + (ini.getMonth() + 1) + '-' + ini.getDate();
-            const final = fin.getFullYear() + '-' + (fin.getMonth() + 1) + '-' + fin.getDate();
-            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + inicio + '/' + final + '/1/10');
+            console.log('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/1/10/' + estadoID)
+            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/1/10/' + estadoID);
             let data = await request.json()
             setHistorialJSON(data)
             setShowHistorialJSON(data)
             setPage(2);
+            cont++;
         } catch (error) {
             console.log('No se obtuvo el Historial')
         }
@@ -73,7 +95,8 @@ const History = (props) => {
 
     const HistorialFiltrado = async () => {
         try {
-            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10');
+            console.log('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10/' + estadoID)
+            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10/' + estadoID);
             let data = await request.json();
             if (data.length == 0) {
                 setIsLoading(false)
@@ -88,58 +111,6 @@ const History = (props) => {
         }
     }
 
-    useEffect(() => {
-        if (idEstado == 0) {
-            setShowHistorialJSON(historialJSON)
-        } else {
-            let array = [];
-            historialJSON.forEach(element => {
-                if (element['idEstado'] == idEstado) {
-                    array.push(element)
-                }
-            })
-            setShowHistorialJSON(array)
-        }
-    }, [idEstado])
-
-    useEffect(() => {
-        HistorialFiltradoRefresh()
-    }, [showdateIni, showdateFin])
-
-    useEffect(() => {
-        onchange(showdateFin, showdateIni)
-        Historial(showdateFin, showdateIni)
-        llenarEstado()
-        setIsLoading(false)
-    }, [])
-
-    useEffect(() => {
-        let array = ['Todos'];
-        if (resultEstadoJSON) {
-            resultEstadoJSON.forEach(element => {
-                array.push(element['nombre'])
-            })
-        }
-        setresultEstado(array)
-    }, [resultEstadoJSON])
-
-    const onchangeFIn = (event, selectedDate) => {
-        const currentDate = selectedDate.getFullYear() + '-' + (selectedDate.getMonth() + 1) + '-' + selectedDate.getDate();
-        setOpenDateFin(false)
-        if (event.type === 'set') {
-            if (showdateIni) {
-                if (selectedDate >= showdateIni && selectedDate <= today) {
-                    setDateFin(currentDate)
-                    setShowDateFin(selectedDate)
-                } else {
-                    Alert.alert('La fecha final debe ser mayor o igual que fecha inicial y deber ser una fecha igual o menor a la actual')
-                }
-            } else {
-                setDateFin(currentDate)
-                setShowDateFin(selectedDate)
-            }
-        }
-    }
     const llenarEstado = async () => {
         try {
             const request = await fetch('http://10.100.1.27:5055/api/Estado');
@@ -149,24 +120,14 @@ const History = (props) => {
             console.log('No se obtuvo el estado')
         }
     }
-    const onSelectEstado = (selectedItem) => {
-        if (selectedItem == 'Todos') {
-            setEstadoFiltrado('Todos')
-            setIdEstado(0)
-        } else {
-            resultEstadoJSON.forEach(element => {
-                if (element['nombre'] == selectedItem) {
-                    let id = element['idEstado'];
-                    setIdEstado(id);
-                }
-            })
-        }
+    const onSelectEstado = (selectedItem, index) => {
+        setEstadoID(index)
     }
 
 
     const renderItem = (item) => {
         const cambioFecha = (fecha) => {
-            return fecha.substring(0, 10);
+            return fecha.substring(0, 10).replace('-', '/').replace('-', '/');
         };
 
         const EstadoColor = (estado) => {
@@ -200,14 +161,22 @@ const History = (props) => {
                             solid />
                     </View>
                     <View style={{ width: '80%' }}>
-                        <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.estado) }]}>Categoria: {item.categoria}</Text>
-                        <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.estado) }]}>Valor: {item.valorFactura}</Text>
-                        <Text style={[styles.text, { color: EstadoColor(item.estado) }]}>Fecha Creacion: {cambioFecha(item.fechaCreacion)}</Text>
-                        <Text style={[styles.text, { color: EstadoColor(item.estado) }]}>Fecha Factura: {cambioFecha(item.fechaFactura)}</Text>
+                        <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.estado) }]}>
+                            <Text style={styles.text2}>Categoria:</Text> {item.categoria}
+                        </Text>
+                        <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.estado) }]}>
+                            <Text style={styles.text2}>Valor:</Text> {item.valorFactura}
+                        </Text>
+                        <Text style={[styles.text, { color: EstadoColor(item.estado) }]}>
+                            <Text style={styles.text2}>Fecha Creacion:</Text> {item.fechaCreacion.replace('T', ' ').substring(0, 16).replace('-', '/').replace('-', '/')}
+                        </Text>
+                        <Text style={[styles.text, { color: EstadoColor(item.estado) }]}>
+                            <Text style={styles.text2}>Fecha Factura:</Text> {cambioFecha(item.fechaFactura)}
+                        </Text>
                     </View>
                 </TouchableOpacity>
             </View>
-        );
+        )
     }
 
     const renderFooter = () => {
@@ -224,11 +193,30 @@ const History = (props) => {
         HistorialFiltrado();
 
     }
-    const HistorialFiltradoRefresh = async () => {
-        setShowHistorialJSON([]);
-        setHistorialJSON([]);
-        Historial(showdateFin, showdateIni)
-    }
+
+    useEffect(() => {
+        onchange(showdateFin, showdateIni)
+        llenarEstado()
+        setIsLoading(false)
+    }, [])
+
+    useEffect(() => {
+        if (dateIni != '' && dateFin != '') {
+            Historial()
+            console.log(cont)
+        }
+        console.log('recargado')
+    }, [dateIni, dateFin, estadoID])
+
+    useEffect(() => {
+        let array = ['Todos'];
+        if (resultEstadoJSON) {
+            resultEstadoJSON.forEach(element => {
+                array.push(element['nombre'])
+            })
+        }
+        setresultEstado(array)
+    }, [resultEstadoJSON])
 
     return (
         <View style={styles.container}>
@@ -295,12 +283,13 @@ const History = (props) => {
                 keyExtractor={(item) => item.idGastoViajeDetalle.toString()}
                 renderItem={({ item }) => renderItem(item)}
                 refreshControl={
-                    <RefreshControl refreshing={refreshing} onRefresh={HistorialFiltradoRefresh} colors={['#069A8E']} />
+                    <RefreshControl refreshing={refreshing} onRefresh={Historial} colors={['#069A8E']} />
                 }
                 showsVerticalScrollIndicator={false}
                 onEndReached={handleLoadMore}
                 ListFooterComponent={renderFooter}
             />
+            <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
         </View >
     )
 }
@@ -323,8 +312,14 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 16,
         textAlign: "right",
-        fontWeight: 'bold',
-        color: '#005555'
+        fontStyle: "italic"
+    },
+    text2: {
+        fontSize: 16,
+        textAlign: "right",
+        fontStyle: "italic",
+        fontWeight: "bold",
+        fontStyle: "normal"
     },
     inputIconContainer: {
         flexDirection: 'row',
