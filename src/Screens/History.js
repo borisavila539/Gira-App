@@ -151,7 +151,7 @@ const History = (props) => {
             return colorEstado;
         }
         return (
-            <View style={{ borderBottomWidth:1, width: "98%", flexDirection: 'row', paddingHorizontal: 3, borderRadius: 0, borderColor: '#000', backgroundColor: '#f0f0f0' }}>
+            <View style={{ borderBottomWidth:1.5, width: "100%", flexDirection: 'row', paddingHorizontal: 10, paddingVertical:5, borderRadius: 0, borderColor: '#A2B5BB', backgroundColor: '#f0f0f0' }}>
                 <TouchableOpacity style={{ width: '100%', flexDirection: 'row' }} onPress={() => { props.navigation.navigate('ScreenHistoryDetalle', { ID: item.idGastoViajeDetalle }) }}>
                     <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
                         <FontAwesome5
@@ -183,6 +183,7 @@ const History = (props) => {
         return (
             isLoading &&
             <View style={styles.loader}>
+                <Text style={styles.text}>Cargando...</Text>
                 < ActivityIndicator size='large' />
             </View >
         )

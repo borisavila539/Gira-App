@@ -14,7 +14,7 @@ const NoSync = (props) => {
 
     const historial = async () => {
         try {
-            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/4/' + page + '/10');
+            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/4/1/10');
             let data = await request.json();
             setHistorialJSON(data)
             setIsLoading(false)
@@ -27,7 +27,7 @@ const NoSync = (props) => {
     const historialMas = async () => {
         try {
 
-            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/4/' + page  + '/10');
+            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/4/' + page + '/10');
             let data = await request.json();
             setHistorialJSON(historialJSON.concat(data))
             setIsLoading(false)
@@ -48,7 +48,7 @@ const NoSync = (props) => {
             return FechaHora;
         };
         return (
-            <View style={{ borderBottomWidth:1, width: "98%", flexDirection: 'row', paddingHorizontal: 3, borderRadius: 0, borderColor: '#000', backgroundColor: '#f0f0f0' }}>
+            <View style={{ borderBottomWidth: 1, width: "100%", flexDirection: 'row', paddingHorizontal: 3, borderRadius: 0, borderColor: '#000', backgroundColor: '#f0f0f0' }}>
                 <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
                     <TouchableOpacity>
                         <FontAwesome5
@@ -59,18 +59,18 @@ const NoSync = (props) => {
                     </TouchableOpacity>
                 </View>
                 <View style={{ width: '80%' }}>
-                        <Text style={[styles.text, { textAlign: 'left'}]}>
-                            <Text style={styles.text2}>Categoria:</Text> {item.categoria}
-                        </Text>
-                        <Text style={[styles.text, { textAlign: 'left' }]}>
-                            <Text style={styles.text2}>Valor:</Text> {item.valorFactura}
-                        </Text>
-                        <Text style={styles.text}>
-                            <Text style={styles.text2}>Fecha Creacion:</Text> {item.fechaCreacion.replace('T', ' ').substring(0, 16).replace('-', '/').replace('-', '/')}
-                        </Text>
-                        <Text style={styles.text}>
-                            <Text style={styles.text2}>Fecha Factura:</Text> {cambioFecha(item.fechaFactura)}
-                        </Text>
+                    <Text style={[styles.text, { textAlign: 'left' }]}>
+                        <Text style={styles.text2}>Categoria:</Text> {item.categoria}
+                    </Text>
+                    <Text style={[styles.text, { textAlign: 'left' }]}>
+                        <Text style={styles.text2}>Valor:</Text> {item.valorFactura}
+                    </Text>
+                    <Text style={styles.text}>
+                        <Text style={styles.text2}>Fecha Creacion:</Text> {item.fechaCreacion.replace('T', ' ').substring(0, 16).replace('-', '/').replace('-', '/')}
+                    </Text>
+                    <Text style={styles.text}>
+                        <Text style={styles.text2}>Fecha Factura:</Text> {cambioFecha(item.fechaFactura)}
+                    </Text>
                 </View>
             </View>
         );
@@ -85,6 +85,7 @@ const NoSync = (props) => {
         return (
             isLoading &&
             <View style={styles.loader}>
+                <Text style={styles.text}>Cargando...</Text>
                 < ActivityIndicator size='large' />
             </View >
         )
