@@ -5,5 +5,4 @@ import Proveedor from "./Proveedor";
 import NoSync from "./NoSync";
 import HistoyDetalle from "./HistoryDetalle";
 
-
 export { Login, Viaje, History, Proveedor, NoSync, HistoyDetalle };
