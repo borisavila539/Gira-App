@@ -6,21 +6,19 @@ import { useSelector } from 'react-redux';
 
 const NoSync = (props) => {
 
-    const [resultCategoriaJSON, setResultCategoriaJSON] = useState([]);
-    const [resultEstadoJSON, setResultEstadoJSON] = useState([]);
     const [page, setPage] = useState(1);
     const [historialJSON, setHistorialJSON] = useState([]);
-    const [idEstado, setIdEstado] = useState('')
     const { user } = useSelector(state => state.usuario);
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     const historial = async () => {
         try {
-            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + idEstado + '/' + page + '/8');
+            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/4/' + page + '/8');
             let data = await request.json();
             setHistorialJSON(data)
             setIsLoading(false)
+            setPage(2)
         } catch (error) {
             console.log('no cargo el historial ' + error)
         }
@@ -29,33 +27,13 @@ const NoSync = (props) => {
     const historialMas = async () => {
         try {
 
-            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + idEstado + '/' + (page + 1) + '/8');
+            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/4/' + (page + 1) + '/8');
             let data = await request.json();
             setHistorialJSON(historialJSON.concat(data))
             setIsLoading(false)
             setPage(page + 1)
         } catch (error) {
             console.log('no cargo el historial ' + error)
-        }
-    }
-
-    const llenarEstado = async () => {
-        try {
-            const request = await fetch('http://10.100.1.27:5055/api/Estado');
-            let data = await request.json();
-            setResultEstadoJSON(data)
-        } catch (error) {
-            console.log('No se obtuvo el estado')
-        }
-    }
-
-    const llenarCategoria = async () => {
-        try {
-            const request = await fetch('http://10.100.1.27:5055/api/CategoriaTipoGastoViaje/');
-            let data = await request.json();
-            setResultCategoriaJSON(data)
-        } catch (error) {
-            console.log('No se lleno la Categoria')
         }
     }
 
@@ -69,17 +47,6 @@ const NoSync = (props) => {
             let FechaHora = date + ' ' + hora
             return FechaHora;
         };
-
-        const tipoGasto = (id) => {
-            let categoria = '';
-            if (resultCategoriaJSON) {
-                resultCategoriaJSON.forEach(element => {
-                    if (element['idCategoriaTipoGastoViaje'] == id)
-                        categoria = element['nombre'];
-                });
-            }
-            return categoria;
-        }
         return (
             <View style={{ borderWidth: 1, width: "98%", flexDirection: 'row', margin: 5, padding: 3, borderRadius: 10, borderColor: '#000' }}>
                 <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
@@ -92,7 +59,7 @@ const NoSync = (props) => {
                     </TouchableOpacity>
                 </View>
                 <View style={{ width: '80%' }}>
-                    <Text style={[styles.text, { textAlign: 'left', color: '#000' }]}>Categoria: {tipoGasto(item.idCategoriaTipoGastoViaje)}</Text>
+                    <Text style={[styles.text, { textAlign: 'left', color: '#000' }]}>Categoria: {item.categoria}</Text>
                     <Text style={[styles.text, { textAlign: 'left', color: '#000' }]}>Valor: {item.valorFactura}</Text>
                     <Text style={[styles.text, { textAlign: 'right', color: '#000' }]}>Fecha Creacion: {cambioFecha(item.fechaCreacion)}</Text>
                     <Text style={[styles.text, { textAlign: 'right', color: '#000' }]}>Fecha Factura: {cambioFecha(item.fechaFactura)}</Text>
@@ -101,13 +68,8 @@ const NoSync = (props) => {
         );
     }
 
-    const HistorialFiltradoRefresh = async () => {
-        setPage(1);
-        await setHistorialJSON([]);
-        historial();
-    }
     const handleLoadMore = async () => {
-        setIsLoading(false);
+        setIsLoading(true);
         historialMas();
     }
 
@@ -121,32 +83,8 @@ const NoSync = (props) => {
     }
 
     useEffect(() => {
-        if (resultEstadoJSON) {
-            resultEstadoJSON.forEach(element => {
-                if (element['nombre'] == 'PendienteAX') {
-                    setIdEstado(element['idEstado'])
-                }
-            })
-        }
-    }, [resultEstadoJSON])
-
-    useEffect(() => {
-        llenarEstado();
-        llenarCategoria();
         historial();
     }, [])
-
-    useEffect(() => {
-        historial();
-    }, [idEstado])
-
-    useEffect(() => {
-        if (page == 1) {
-            historial();
-        }
-    }, [page])
-
-
 
     return (
         <View style={styles.container}>
@@ -156,7 +94,7 @@ const NoSync = (props) => {
                 keyExtractor={(item) => item.idGastoViajeDetalle.toString()}
                 renderItem={({ item }) => renderItem(item)}
                 refreshControl={
-                    <RefreshControl refreshing={refreshing} onRefresh={HistorialFiltradoRefresh} colors={['#069A8E']} />
+                    <RefreshControl refreshing={refreshing} onRefresh={historial} colors={['#069A8E']} />
                 }
                 showsVerticalScrollIndicator={false}
                 onEndReached={handleLoadMore}
