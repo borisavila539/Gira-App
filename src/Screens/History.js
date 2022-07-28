@@ -61,7 +61,6 @@ const History = (props) => {
         try {
             const inicio = ini.getFullYear() + '-' + (ini.getMonth() + 1) + '-' + ini.getDate();
             const final = fin.getFullYear() + '-' + (fin.getMonth() + 1) + '-' + fin.getDate();
-            console.log('Usuario: ' + user + '/' + inicio + '/' + final);
             const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + inicio + '/' + final + '/1/10');
             let data = await request.json()
             setHistorialJSON(data)
@@ -74,14 +73,12 @@ const History = (props) => {
 
     const HistorialFiltrado = async () => {
         try {
-            console.log(page)
             const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10');
             let data = await request.json();
-            if(data.length == 0){
+            if (data.length == 0) {
                 setIsLoading(false)
                 return
             }
-            console.log('datos'+data.length)
             setHistorialJSON(historialJSON.concat(data))
             setShowHistorialJSON(showHistorialJSON.concat(data))
             setIsLoading(false)
@@ -112,7 +109,6 @@ const History = (props) => {
     useEffect(() => {
         onchange(showdateFin, showdateIni)
         Historial(showdateFin, showdateIni)
-        llenarCategoria()
         llenarEstado()
         setIsLoading(false)
     }, [])
@@ -144,15 +140,6 @@ const History = (props) => {
             }
         }
     }
-    const llenarCategoria = async () => {
-        try {
-            const request = await fetch('http://10.100.1.27:5055/api/CategoriaTipoGastoViaje/');
-            let data = await request.json();
-            setResultCategoriaJSON(data)
-        } catch (error) {
-            console.log('No se lleno la Categoria')
-        }
-    }
     const llenarEstado = async () => {
         try {
             const request = await fetch('http://10.100.1.27:5055/api/Estado');
@@ -181,65 +168,42 @@ const History = (props) => {
         const cambioFecha = (fecha) => {
             return fecha.substring(0, 10);
         };
-        const cambioFechahora = (fecha) => {
-            let date = fecha.substring(0, 10)
-            let hora = fecha.substring(11, 16)
-            let FechaHora = date + ' ' + hora
-            return FechaHora;
-        };
 
-        const tipoGasto = (id) => {
-            let categoria = '';
-            if (resultCategoriaJSON) {
-                resultCategoriaJSON.forEach(element => {
-                    if (element['idCategoriaTipoGastoViaje'] == id)
-                        categoria = element['nombre'];
-                });
-            }
-            return categoria;
-        }
-
-        const EstadoColor = (id) => {
+        const EstadoColor = (estado) => {
             let colorEstado = '#000';
-            if (resultEstadoJSON) {
-                resultEstadoJSON.forEach(element => {
-                    if (element['idEstado'] == id) {
-                        switch (element['nombre']) {
-                            case 'Pendiente':
-                                colorEstado = '#000';
-                                break;
-                            case 'Aprobado':
-                                colorEstado = '#0078AA';
-                                break;
-                            case 'Rechazado':
-                                colorEstado = '#F32424';
-                                break;
-                            case 'PendienteAX':
-                                colorEstado = '#FF9F29'
-                                break;
-                            default:
-                                colorEstado = '#000';
-                        }
-                    }
-                })
+            switch (estado) {
+                case 'Pendiente':
+                    colorEstado = '#000';
+                    break;
+                case 'Aprobado':
+                    colorEstado = '#0078AA';
+                    break;
+                case 'Rechazado':
+                    colorEstado = '#F32424';
+                    break;
+                case 'PendienteAX':
+                    colorEstado = '#FF9F29'
+                    break;
+                default:
+                    colorEstado = '#000';
             }
             return colorEstado;
         }
         return (
-            <View style={{ borderWidth: 1, width: "98%", flexDirection: 'row', margin: 5, padding: 3, borderRadius: 10, borderColor: EstadoColor(item.idEstado) }}>
+            <View style={{ borderWidth: 1, width: "98%", flexDirection: 'row', margin: 5, padding: 3, borderRadius: 10, borderColor: EstadoColor(item.estado) }}>
                 <TouchableOpacity style={{ width: '100%', flexDirection: 'row' }} onPress={() => { props.navigation.navigate('ScreenHistoryDetalle', { ID: item.idGastoViajeDetalle }) }}>
                     <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
                         <FontAwesome5
                             name='file-invoice-dollar'
-                            style={{ color: EstadoColor(item.idEstado) }}
+                            style={{ color: EstadoColor(item.estado) }}
                             size={40}
                             solid />
                     </View>
                     <View style={{ width: '80%' }}>
-                        <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.idEstado) }]}>Categoria: {tipoGasto(item.idCategoriaTipoGastoViaje)}</Text>
-                        <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.idEstado) }]}>Valor: {item.valorFactura}</Text>
-                        <Text style={[styles.text, { color: EstadoColor(item.idEstado) }]}>Fecha Creacion: {cambioFecha(item.fechaCreacion)}</Text>
-                        <Text style={[styles.text, { color: EstadoColor(item.idEstado) }]}>Fecha Factura: {cambioFecha(item.fechaFactura)}</Text>
+                        <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.estado) }]}>Categoria: {item.categoria}</Text>
+                        <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.estado) }]}>Valor: {item.valorFactura}</Text>
+                        <Text style={[styles.text, { color: EstadoColor(item.estado) }]}>Fecha Creacion: {cambioFecha(item.fechaCreacion)}</Text>
+                        <Text style={[styles.text, { color: EstadoColor(item.estado) }]}>Fecha Factura: {cambioFecha(item.fechaFactura)}</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -327,7 +291,7 @@ const History = (props) => {
 
             <FlatList
                 data={showHistorialJSON}
-                
+
                 keyExtractor={(item) => item.idGastoViajeDetalle.toString()}
                 renderItem={({ item }) => renderItem(item)}
                 refreshControl={
