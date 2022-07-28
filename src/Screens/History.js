@@ -151,7 +151,7 @@ const History = (props) => {
             return colorEstado;
         }
         return (
-            <View style={{ borderWidth: 1, width: "98%", flexDirection: 'row', margin: 5, padding: 3, borderRadius: 10, borderColor: EstadoColor(item.estado) }}>
+            <View style={{ borderBottomWidth:1, width: "98%", flexDirection: 'row', paddingHorizontal: 3, borderRadius: 0, borderColor: '#000', backgroundColor: '#f0f0f0' }}>
                 <TouchableOpacity style={{ width: '100%', flexDirection: 'row' }} onPress={() => { props.navigation.navigate('ScreenHistoryDetalle', { ID: item.idGastoViajeDetalle }) }}>
                     <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
                         <FontAwesome5
@@ -279,7 +279,6 @@ const History = (props) => {
 
             <FlatList
                 data={showHistorialJSON}
-
                 keyExtractor={(item) => item.idGastoViajeDetalle.toString()}
                 renderItem={({ item }) => renderItem(item)}
                 refreshControl={
@@ -288,6 +287,7 @@ const History = (props) => {
                 showsVerticalScrollIndicator={false}
                 onEndReached={handleLoadMore}
                 ListFooterComponent={renderFooter}
+                style={{backgroundColor:'#fff'}}
             />
             <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
         </View >
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         alignItems: "center",
-        backgroundColor: '#fff',
+        backgroundColor: '#f0f0f0',
         borderRadius: 5,
         borderWidth: 1,
         borderColor: '#30475E',
@@ -334,7 +334,6 @@ const styles = StyleSheet.create({
     input: {
         width: 130,
         fontSize: 16,
-        backgroundColor: '#fff',
         height: 35,
         borderRightWidth: 1,
         borderColor: '#30475E',

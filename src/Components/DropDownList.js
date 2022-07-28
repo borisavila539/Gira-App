@@ -42,13 +42,13 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         flexDirection: 'row',
-        padding: 5
+        padding: 5,
     },
     button: {
         borderRadius: 5,
-        borderWidth: 1,
+        borderWidth: 1.5,
         borderColor: '#30475E',
-        backgroundColor: '#fff',
+        backgroundColor: '#f0f0f0',
         height: 35,
         width: '100%',
     }

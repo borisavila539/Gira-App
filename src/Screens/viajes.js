@@ -35,7 +35,6 @@ const Viaje = (props) => {
     const [modalCameraUpload, setModalCameraUpload] = useState(false);
     const [today, setToday] = useState(new Date());
     const [alimentacionIsSelected, setAlimentacionIsSelected] = useState(false);
-    const [alimento, setAlimento] = useState('');
     const [mensajeAlerta, setmensajeAlerta] = useState('');
     const [showMensajeAlerta, setShowMensajeAlerta] = useState(false);
     const [tipoMensaje, setTipoMensaje] = useState(false);
@@ -507,7 +506,6 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 16,
-        width: '30%',
         fontWeight: 'bold',
         color: '#005555',
     },
@@ -515,9 +513,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         alignItems: "center",
-        backgroundColor: '#fff',
+        backgroundColor: '#f0f0f0',
         borderRadius: 5,
-        borderWidth: 1,
+        borderWidth: 1.5,
         borderColor: '#30475E',
         paddingHorizontal: 5,
     },
@@ -525,7 +523,6 @@ const styles = StyleSheet.create({
         flex: 1,
         maxHeight: 100,
         fontSize: 16,
-        backgroundColor: '#fff',
         height: 35,
         borderRightWidth: 1,
         borderColor: '#30475E',
@@ -539,10 +536,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginVertical: 10,
-        borderWidth: 1,
+        borderWidth: 1.5,
         borderColor: '#30475E',
         borderRadius: 10,
-        backgroundColor: '#fff',
+        backgroundColor: '#f0f0f0',
         padding: 5,
     },
     image: {
@@ -559,8 +556,6 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         padding: 10,
-        backgroundColor: '#fff',
-
         borderBottomWidth: 1,
         marginBottom: 5,
     },
