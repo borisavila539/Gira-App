@@ -2,10 +2,6 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { StyleSheet, View, Text, Image, Modal, Pressable, ScrollView, SafeAreaView } from "react-native";
 import HeaderLogout from "../Components/headerLogout";
-import { useDispatch, useSelector, } from 'react-redux';
-
-
-
 
 const HistoyDetalle = (props) => {
     const [modalVisible, SetModalVisible] = useState(false);
