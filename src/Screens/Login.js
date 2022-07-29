@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Buttons, MyAlert } from '../Components/indexComponents';
 import { useDispatch, useSelector } from 'react-redux'
-import { iniciarSesion, mensajeLogin, noSincronizado } from '../store/slices/usuarioSlice';
+import { iniciarSesion, mensajeLogin, documentoMostrar } from '../store/slices/usuarioSlice';
 
 
 const Login = (props) => {
@@ -40,6 +40,18 @@ const Login = (props) => {
                 let nombreUsuario = usuario['IdUsuario'];
 
                 dispatch(iniciarSesion({ user: nombreUsuario, nombre, empresa }));
+                try {
+                    const request = await fetch('http://10.100.1.27:5055/api/Empresa/' + empresa);
+                    const data = await request.json();
+                    let documento = '';
+                    data.forEach(element => {
+                        documento = element['documento']
+                    })
+                    dispatch(documentoMostrar({documentoFiscal:documento}))
+                    setDocumentoFiscal(documento);
+                } catch (error) {
+                    console.log(error)
+                }
             } else {
                 let menssage = result['Message']
                 dispatch(mensajeLogin({ mensaje: menssage }))

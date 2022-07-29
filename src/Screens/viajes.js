@@ -22,7 +22,7 @@ const Viaje = (props) => {
     const [openDate, SetOpenDate] = useState(false);
     const [date, setDate] = useState('');
     const [showdate, setShowDate] = useState(new Date());
-    const { empresa, user, nombre, nosync } = useSelector(state => state.usuario);
+    const { empresa, user, nombre, documentoFiscal } = useSelector(state => state.usuario);
     const [resultTipo, setResultTipo] = useState([]);
     const [resultCategoria, setResultCategoria] = useState([]);
     const [resultTipoJSON, setResultTipoJSON] = useState([]);
@@ -47,7 +47,6 @@ const Viaje = (props) => {
     const [tipoAlimento, setTipoAlimento] = useState('');
     const [disabledDropDown, setDisabledDropDown] = useState(true);
     const [disableProveedor, setDiasableProveedor] = useState(true);
-    const [ DocumentoFiscal, setDocumentoFiscal] = useState('');
     let result;
 
 
@@ -322,7 +321,7 @@ const Viaje = (props) => {
                 documento = element['documento']
             })
             dispatch(documentoMostrar({documentoFiscal:documento}))
-            setDocumentoFiscal(documento);
+            //setDocumentoFiscal(documento);
         } catch (error) {
             console.log(error)
         }
@@ -331,7 +330,7 @@ const Viaje = (props) => {
 
     useEffect(() => {
         onScreenLoad();
-        documentoFiscalLoad();
+        //documentoFiscalLoad();
         cantidadNoSync();
     }, [])
 
@@ -408,7 +407,7 @@ const Viaje = (props) => {
                         />
                     }
                     <View style={styles.textInputDateContainer}>
-                        <Text style={styles.text}>{DocumentoFiscal}:</Text>
+                        <Text style={styles.text}>{documentoFiscal}:</Text>
                         <View style={styles.inputIconContainer}>
                             <TextInput style={styles.input} keyboardType={'default'} value={RTN} onChangeText={(value) => setRTN(value)} />
                             <TouchableOpacity onPress={RTN != '' ? llenarProveedor : null}>

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { StyleSheet, View, Text, Image, Modal, Pressable } from "react-native";
+import { StyleSheet, View, Text, Image, Modal, Pressable, ScrollView, SafeAreaView } from "react-native";
 import HeaderLogout from "../Components/headerLogout";
 import { useDispatch, useSelector, } from 'react-redux';
 
@@ -9,9 +9,9 @@ import { useDispatch, useSelector, } from 'react-redux';
 
 const HistoyDetalle = (props) => {
     const [modalVisible, SetModalVisible] = useState(false);
-    const { nombre } = useSelector(state => state.usuario);
     const [resultHistorialJSON, setResultHistorialJSON] = useState([]);
     const [resultCategoriaJSON, setResultCategoriaJSON] = useState([]);
+    const [tipo, setTipo] = useState('');
     const [categoria, setCategoria] = useState('');
     const [fechaCreacion, setFechaCreacion] = useState('');
     const [fechaFactura, setFechaFactura] = useState('');
@@ -31,41 +31,20 @@ const HistoyDetalle = (props) => {
             console.log('No hay historial: ' + error)
         }
     }
-    const llenarCategoria = async () => {
-        try {
-            const request = await fetch('http://10.100.1.27:5055/api/CategoriaTipoGastoViaje/');
-            let data = await request.json();
-            setResultCategoriaJSON(data)
-        } catch (error) {
-            console.log('No hay historial: ' + error)
-        }
-    }
-
-    const categoriaGasto = (id) => {
-        let nombre = '-';
-        resultCategoriaJSON.forEach(Element => {
-            if (Element['idCategoriaTipoGastoViaje'] == id) {
-                nombre = Element['nombre'];
-            }
-        })
-        return nombre;
-
-    }
 
     useEffect(() => {
         datosGasto()
-        llenarCategoria()
     }, [])
 
     useEffect(() => {
         if (resultHistorialJSON) {
             resultHistorialJSON.forEach(Element => {
-                let id = Element['idCategoriaTipoGastoViaje'];
-                setCategoria(categoriaGasto(id));
+                setTipo(Element['tipo'])
+                setCategoria(Element['categoria']);
                 let fechac = (Element['fechaCreacion']).toString();
-                setFechaCreacion(fechac.replace('T',' ').substring(0,19).replace('-','/').replace('-','/'));
+                setFechaCreacion(fechac.replace('T', ' ').substring(0, 16).replace('-', '/').replace('-', '/'));
                 let fechaf = (Element['fechaFactura']).toString();
-                setFechaFactura(fechaf.substring(0, 10).replace('-','/').replace('-','/'));
+                setFechaFactura(fechaf.substring(0, 10).replace('-', '/').replace('-', '/'));
                 let prov = Element['proveedor'];
                 setProveedor(prov);
                 let factura = Element['noFactura'];
@@ -82,62 +61,73 @@ const HistoyDetalle = (props) => {
         }
     }, [resultHistorialJSON, resultCategoriaJSON])
     return (
-        <View style={styles.body}>
+        <View style={{ flex: 1, width: '100%' }}>
             <HeaderLogout back={true} navegacion={props.navigation} />
-            <Modal
-                animationType="fade"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => SetModalVisible(!modalVisible)}
-            >
-                <View style={styles.modal}>
-                    <Pressable style={styles.hideimage} onPress={() => SetModalVisible(!modalVisible)}>
-                        <Image source={{ uri: 'data:image/jpeg;base64,' + imagen }} style={styles.imageModal} />
-                    </Pressable>
+            {
+                valor != '' &&
+                <ScrollView>
+                    <SafeAreaView style={styles.body}>
+                        <Modal
+                            animationType="fade"
+                            transparent={true}
+                            visible={modalVisible}
+                            onRequestClose={() => SetModalVisible(!modalVisible)}
+                        >
+                            <View style={styles.modal}>
+                                <Pressable style={styles.hideimage} onPress={() => SetModalVisible(!modalVisible)}>
+                                    <Image source={{ uri: 'data:image/jpeg;base64,' + imagen }} style={styles.imageModal} />
+                                </Pressable>
 
-                </View>
-            </Modal>
-
-
-            <View style={styles.containerDetalle}>
-                {
-                    valor != '' &&
-                    <View style={styles.containerDetalle2}>
-                        {
-                            imagen == null ?
-                                <View>
-                                    <Image source={require('../../assets/No-Image.png')} style={styles.image} />
+                            </View>
+                        </Modal>
+                        <View style={styles.containerDetalle}>
+                            <View style={styles.containerDetalle2}>
+                                {
+                                    imagen == null ?
+                                        <View>
+                                            <Image source={require('../../assets/No-Image.png')} style={styles.image} />
+                                        </View>
+                                        :
+                                        <View>
+                                            <Pressable onPress={() => SetModalVisible(!modalVisible)}>
+                                                <Image source={{ uri: 'data:image/jpeg;base64,' + imagen }} style={styles.image} />
+                                            </Pressable>
+                                        </View>
+                                }
+                                <View style={styles.containerInfo}>
+                                    <Text style={styles.text}>Tipo de Gasto:</Text>
+                                    <Text style={styles.text2}> {tipo}</Text><Text></Text>
+                                    <Text style={styles.text}>Categoria de Gasto:</Text>
+                                    <Text style={styles.text2}> {categoria}</Text><Text></Text>
+                                    <Text style={styles.text}>Fecha Envio: </Text>
+                                    <Text style={styles.text2}>{fechaCreacion}</Text><Text></Text>
+                                    <Text style={styles.text}>Fecha Factura: </Text>
+                                    <Text style={styles.text2}>{fechaFactura}</Text><Text></Text>
+                                    <Text style={styles.text}>No. Factura: </Text>
+                                    <Text style={styles.text2}>{noFactura}</Text><Text></Text>
+                                    <Text style={styles.text}>Descripcion: </Text>
+                                    <Text style={styles.text2}>{descripcionAsesor}</Text><Text></Text>
+                                    <Text style={styles.text}>Valor: </Text>
+                                    <Text style={styles.text2}>{valor}</Text><Text></Text>
+                                    {
+                                        descripcionAdmin &&
+                                        <>
+                                            <Text style={styles.text}>Descripcion Admin: </Text>
+                                            <Text style={styles.text2}>{descripcionAdmin}</Text>
+                                        </>
+                                    }
                                 </View>
-                                :
-                                <View>
-                                    <Pressable onPress={() => SetModalVisible(!modalVisible)}>
-                                        <Image source={{ uri: 'data:image/jpeg;base64,' + imagen }} style={styles.image} />
-                                    </Pressable>
-                                </View>
-                        }
-                        <View style={styles.containerInfo}>
-                            <Text style={styles.text}>Asesor: <Text style={{ fontWeight: 'normal' }}>{nombre}</Text></Text>
-                            <Text style={styles.text}>Categoria:<Text style={{ fontWeight: 'normal' }}> {categoria}</Text></Text>
-                            <Text style={styles.text}>Fecha Envio: <Text style={{ fontWeight: 'normal' }}>{fechaCreacion}</Text></Text>
-                            <Text style={styles.text}>Fecha Factura: <Text style={{ fontWeight: 'normal' }}>{fechaFactura}</Text></Text>
-                            <Text style={styles.text}>No. Factura: <Text style={{ fontWeight: 'normal' }}>{noFactura}</Text></Text>
-                            <Text style={styles.text}>Descripcion: <Text style={{ fontWeight: 'normal' }}>{descripcionAsesor}</Text></Text>
-                            <Text style={styles.text}>Valor: <Text style={{ fontWeight: 'normal' }}>{valor}</Text></Text>
-                            {
-                                descripcionAdmin &&
-                                <Text style={styles.text}>Descripcion Admin: <Text style={{ fontWeight: 'normal' }}>{descripcionAdmin}</Text></Text>
-                            }
+                            </View>
                         </View>
-                    </View>
-                }
-                {
-                    valor == '' &&
-                    <View style={styles.containerDetalle}>
-                        <Text style={[styles.text, { color: '#ddd' }]}>Cargando...</Text>
-                    </View>
-                }
-            </View>
-
+                    </SafeAreaView>
+                </ScrollView>
+            }
+            {
+                valor == '' &&
+                <View style={styles.containerDetalle}>
+                    <Text style={[styles.text, { color: '#ddd' }]}>Cargando...</Text>
+                </View>
+            }
         </View>
     )
 }
@@ -145,6 +135,7 @@ const HistoyDetalle = (props) => {
 const styles = StyleSheet.create({
     body: {
         flex: 1,
+        width: '100%',
         backgroundColor: '#ffff',
         alignItems: "center",
         justifyContent: "center",
@@ -152,7 +143,13 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 16,
         fontWeight: 'bold',
-
+        textAlign: "center"
+    },
+    text2: {
+        fontSize: 16,
+        fontWeight: "normal",
+        fontStyle: "italic",
+        textAlign: "center"
     },
     containerDetalle: {
         flex: 1,
@@ -171,8 +168,10 @@ const styles = StyleSheet.create({
         borderColor: '#069A8E'
     },
     containerInfo: {
-        width: '90%',
+        width: '70%',
         maxWidth: 500,
+        borderTopWidth: 1,
+        paddingVertical: 10
     },
     image: {
         width: 300,
