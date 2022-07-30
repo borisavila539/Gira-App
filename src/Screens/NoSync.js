@@ -8,7 +8,7 @@ const NoSync = (props) => {
 
     const [page, setPage] = useState(1);
     const [historialJSON, setHistorialJSON] = useState([]);
-    const { user } = useSelector(state => state.usuario);
+    const { user, monedaAbreviacion} = useSelector(state => state.usuario);
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -63,7 +63,7 @@ const NoSync = (props) => {
                         <Text style={styles.text2}>Categoria:</Text> {item.categoria}
                     </Text>
                     <Text style={[styles.text, { textAlign: 'left' }]}>
-                        <Text style={styles.text2}>Valor:</Text> {item.valorFactura}
+                        <Text style={styles.text2}>Valor: </Text>{monedaAbreviacion}{item.valorFactura}
                     </Text>
                     <Text style={styles.text}>
                         <Text style={styles.text2}>Fecha Creacion:</Text> {item.fechaCreacion.replace('T', ' ').substring(0, 16).replace('-', '/').replace('-', '/')}
@@ -85,7 +85,7 @@ const NoSync = (props) => {
         return (
             isLoading &&
             <View style={styles.loader}>
-                <Text style={styles.text}>Cargando...</Text>
+                <Text style={[styles.text,{color:'#ddd'}]}>Cargando...</Text>
                 < ActivityIndicator size='large' />
             </View >
         )

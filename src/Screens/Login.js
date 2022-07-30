@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Buttons, MyAlert } from '../Components/indexComponents';
 import { useDispatch, useSelector } from 'react-redux'
-import { iniciarSesion, mensajeLogin, documentoMostrar } from '../store/slices/usuarioSlice';
+import { iniciarSesion, mensajeLogin, documentoMostrar, tipoMoneda } from '../store/slices/usuarioSlice';
 
 
 const Login = (props) => {
@@ -40,6 +40,7 @@ const Login = (props) => {
                 let nombreUsuario = usuario['IdUsuario'];
 
                 dispatch(iniciarSesion({ user: nombreUsuario, nombre, empresa }));
+                //Consultar el Tipo de documento fiscal de cada pais
                 try {
                     const request = await fetch('http://10.100.1.27:5055/api/Empresa/' + empresa);
                     const data = await request.json();
@@ -47,10 +48,25 @@ const Login = (props) => {
                     data.forEach(element => {
                         documento = element['documento']
                     })
-                    dispatch(documentoMostrar({documentoFiscal:documento}))
-                    setDocumentoFiscal(documento);
+                    dispatch(documentoMostrar({ documentoFiscal: documento }))
                 } catch (error) {
                     console.log(error)
+                }
+
+                //Consultar Tipo de moneda de cada pais
+                try {
+                    const request = await fetch('http://10.100.1.27:5055/api/MaestroMoneda/' + empresa);
+                    const data = await request.json();
+                    let moneda = '';
+                    let abreviacion = '';
+                    data.forEach(element => {
+                        moneda = element['moneda']
+                        abreviacion = element['abreviacion']
+                    })
+                    
+                    dispatch(tipoMoneda({ monedaAbreviacion: abreviacion, moneda }))
+                }
+                catch (error) {
                 }
             } else {
                 let menssage = result['Message']
@@ -110,7 +126,7 @@ const Login = (props) => {
                         />
                         <Pressable onPress={() => setViewPassword(!viewPassword)}>
                             <FontAwesome5
-                                name={viewPassword? 'eye' : 'eye-slash'}
+                                name={viewPassword ? 'eye' : 'eye-slash'}
                                 style={styles.icons}
                                 solid
                             />
@@ -158,7 +174,7 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
         paddingHorizontal: 20,
         backgroundColor: '#FFF8F3',
-        borderRadius: 40,
+        borderRadius: 20,
     },
     input: {
         flex: 3,

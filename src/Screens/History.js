@@ -17,7 +17,7 @@ const History = (props) => {
     const [showdateFin, setShowDateFin] = useState(new Date());
     const [historialJSON, setHistorialJSON] = useState([]);
     const [showHistorialJSON, setShowHistorialJSON] = useState([]);
-    const { user } = useSelector(state => state.usuario);
+    const { user, monedaAbreviacion } = useSelector(state => state.usuario);
     const [resultEstadoJSON, setResultEstadoJSON] = useState([]);
     const [resultEstado, setresultEstado] = useState([]);
     const [estadoID, setEstadoID] = useState(0);
@@ -165,7 +165,7 @@ const History = (props) => {
                             <Text style={styles.text2}>Categoria:</Text> {item.categoria}
                         </Text>
                         <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.estado) }]}>
-                            <Text style={styles.text2}>Valor:</Text> {item.valorFactura}
+                            <Text style={styles.text2}>Valor: </Text>{monedaAbreviacion}{item.valorFactura}
                         </Text>
                         <Text style={[styles.text, { color: EstadoColor(item.estado) }]}>
                             <Text style={styles.text2}>Fecha Creacion:</Text> {item.fechaCreacion.replace('T', ' ').substring(0, 16).replace('-', '/').replace('-', '/')}
@@ -183,7 +183,7 @@ const History = (props) => {
         return (
             isLoading &&
             <View style={styles.loader}>
-                <Text style={styles.text}>Cargando...</Text>
+                <Text style={[styles.text,{color:'#ddd'}]}>Cargando...</Text>
                 < ActivityIndicator size='large' />
             </View >
         )

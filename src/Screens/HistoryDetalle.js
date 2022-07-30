@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { StyleSheet, View, Text, Image, Modal, Pressable, ScrollView, SafeAreaView } from "react-native";
 import HeaderLogout from "../Components/headerLogout";
+import { useSelector } from 'react-redux';
 
 const HistoyDetalle = (props) => {
     const [modalVisible, SetModalVisible] = useState(false);
@@ -17,6 +18,7 @@ const HistoyDetalle = (props) => {
     const [valor, setValor] = useState('')
     const [descripcionAdmin, setDescripcionAdmin] = useState('');
     const [imagen, setImagen] = useState(null);
+    const { monedaAbreviacion} = useSelector(state => state.usuario);
 
     const datosGasto = async () => {
         try {
@@ -37,22 +39,19 @@ const HistoyDetalle = (props) => {
             resultHistorialJSON.forEach(Element => {
                 setTipo(Element['tipo'])
                 setCategoria(Element['categoria']);
+
                 let fechac = (Element['fechaCreacion']).toString();
                 setFechaCreacion(fechac.replace('T', ' ').substring(0, 16).replace('-', '/').replace('-', '/'));
+
                 let fechaf = (Element['fechaFactura']).toString();
                 setFechaFactura(fechaf.substring(0, 10).replace('-', '/').replace('-', '/'));
-                let prov = Element['proveedor'];
-                setProveedor(prov);
-                let factura = Element['noFactura'];
-                setNoFactura(factura);
-                let descripA = Element['descripcion'];
-                setDescripcionAsesor(descripA);
-                let valorf = Element['valorFactura'];
-                setValor(valorf);
-                let descripAd = Element['descripcionAdmin'];
-                setDescripcionAdmin(descripAd);
-                let imagenBase64 = Element['imagen']
-                setImagen(imagenBase64)
+
+                setProveedor(Element['proveedor']);                
+                setNoFactura(Element['noFactura']);                
+                setDescripcionAsesor(Element['descripcion']);                
+                setValor(Element['valorFactura']);               
+                setDescripcionAdmin(Element['descripcionAdmin']);                
+                setImagen(Element['imagen']);
             })
         }
     }, [resultHistorialJSON, resultCategoriaJSON])
@@ -104,10 +103,11 @@ const HistoyDetalle = (props) => {
                                     <Text style={styles.text}>Descripcion: </Text>
                                     <Text style={styles.text2}>{descripcionAsesor}</Text><Text></Text>
                                     <Text style={styles.text}>Valor: </Text>
-                                    <Text style={styles.text2}>{valor}</Text><Text></Text>
+                                    <Text style={styles.text2}>{monedaAbreviacion}{valor}</Text>
                                     {
                                         descripcionAdmin &&
                                         <>
+                                            <Text></Text>
                                             <Text style={styles.text}>Descripcion Admin: </Text>
                                             <Text style={styles.text2}>{descripcionAdmin}</Text>
                                         </>

@@ -10,6 +10,8 @@ const usuarioSlice = createSlice({
         mensaje: "",
         documentoFiscal: "",
         nosync: 0,
+        monedaAbreviacion:"",
+        moneda:"",
         logeado: false
     },
     reducers: {
@@ -28,6 +30,10 @@ const usuarioSlice = createSlice({
         noSincronizado: (state, action) =>{
             state.nosync = action.payload.nosync;
         },
+        tipoMoneda:(state, action)=>{
+            state.monedaAbreviacion = action.payload.monedaAbreviacion;
+            state.moneda = action.payload.moneda;
+        },
         terminarSesion: (state) => {
             state.user = "";
             state.nombre = "";
@@ -35,9 +41,13 @@ const usuarioSlice = createSlice({
             state.token = "";
             state.empresa = "";
             state.mensaje = "";
+            state.documentoFiscal="",
+            state.nosync = 0,
+            state.monedaAbreviacion = "",
+            state.moneda = ""
         }
     }
 });
 
-export const { iniciarSesion, terminarSesion, mensajeLogin, documentoMostrar, noSincronizado } = usuarioSlice.actions;
+export const { iniciarSesion, terminarSesion, mensajeLogin, documentoMostrar, noSincronizado, tipoMoneda } = usuarioSlice.actions;
 export default usuarioSlice.reducer;
