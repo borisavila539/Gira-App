@@ -113,7 +113,7 @@ const Viaje = (props) => {
             const request = await fetch('http://10.100.1.27:5055/api/TipoGastoViaje/' + empresa);
             setResultTipoJSON(await request.json())
         } catch (error) {
-            setmensajeAlerta('No hay onexion con el servidor intente mas tarde...')
+            setmensajeAlerta('No hay conexion con el servidor intente mas tarde...')
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
         }
@@ -206,15 +206,12 @@ const Viaje = (props) => {
             alertas('Debe seleccionar una Categoria...', true, false)
             return
         }
-
-        /*
+        
         if(proveedor==''){
             alertas('Debe Seleccionar un proveedor...', true, false)
             return
         }
-        */
-
-
+        
         if (facturaObligatoria) {
 
             if (empresa == 'IMHN') {
@@ -321,7 +318,6 @@ const Viaje = (props) => {
                 documento = element['documento']
             })
             dispatch(documentoMostrar({documentoFiscal:documento}))
-            //setDocumentoFiscal(documento);
         } catch (error) {
             console.log(error)
         }
@@ -330,7 +326,6 @@ const Viaje = (props) => {
 
     useEffect(() => {
         onScreenLoad();
-        //documentoFiscalLoad();
         cantidadNoSync();
     }, [])
 
