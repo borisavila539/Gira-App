@@ -35,7 +35,7 @@ const Login = (props) => {
             if (result['Data']) {
                 let data = result['Data'];
                 let nombre = data['Nombre'];
-                let empresa = data['Empresa'];
+                let empresa = data['Empresa'].toUpperCase();
                 let usuario = data['Usuario'];
                 let nombreUsuario = usuario['IdUsuario'];
 
