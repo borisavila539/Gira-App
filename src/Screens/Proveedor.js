@@ -16,7 +16,7 @@ const Proveedor = (props) => {
     const [mensajeAlerta, setmensajeAlerta] = useState('');
     const [showMensajeAlerta, setShowMensajeAlerta] = useState(false);
     const [tipoMensaje, setTipoMensaje] = useState(false);
-    const { user, documentoFiscal } = useSelector(state => state.usuario);
+    const { user, documentoFiscal, APIURL } = useSelector(state => state.usuario);
 
     let result;
     const pickImage = async () => {
@@ -75,7 +75,7 @@ const Proveedor = (props) => {
         }
 
         try {
-            const request = await fetch('http://10.100.1.27:5055/api/Usuarios', {
+            const request = await fetch(APIURL + 'api/Usuarios', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -114,7 +114,7 @@ const Proveedor = (props) => {
             <SafeAreaView style={styles.container}>
                 <View style={styles.formulario}>
                     <TextInputContainer title={'Nombre:'} placeholder={'Nombre Proveedor'} onChangeText={value => setnombre(value)} value={nombre} />
-                    <TextInputContainer title={documentoFiscal+':'} placeholder={documentoFiscal} onChangeText={value => setRTN(value)} value={RTN} />
+                    <TextInputContainer title={documentoFiscal + ':'} placeholder={documentoFiscal} onChangeText={value => setRTN(value)} value={RTN} />
                     <TextInputContainer title={'Descripcion:'} multiline={true} maxLength={300} Justify={true} height={80} onChangeText={value => setDescripcion(value)} value={descripcion} />
 
                     <View style={styles.containerImage}>

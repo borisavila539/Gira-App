@@ -12,6 +12,7 @@ const usuarioSlice = createSlice({
         nosync: 0,
         monedaAbreviacion:"",
         moneda:"",
+        APIURL:"http://190.109.223.244:7106/",
         logeado: false
     },
     reducers: {

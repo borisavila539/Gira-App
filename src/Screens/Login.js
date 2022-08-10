@@ -13,7 +13,7 @@ const Login = (props) => {
     const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
     const [viewPassword, setViewPassword] = useState(true);
-    const { mensaje } = useSelector(state => state.usuario);
+    const { mensaje, APIURL } = useSelector(state => state.usuario);
     const [mensajeAlerta, setmensajeAlerta] = useState('');
     const [showMensajeAlerta, setShowMensajeAlerta] = useState(false);
     const [tipoMensaje, setTipoMensaje] = useState(false);
@@ -42,7 +42,7 @@ const Login = (props) => {
                 dispatch(iniciarSesion({ user: nombreUsuario, nombre, empresa }));
                 //Consultar el Tipo de documento fiscal de cada pais
                 try {
-                    const request = await fetch('http://10.100.1.27:5055/api/Empresa/' + empresa);
+                    const request = await fetch(APIURL + 'api/Empresa/' + empresa);
                     const data = await request.json();
                     let documento = '';
                     data.forEach(element => {
@@ -55,7 +55,7 @@ const Login = (props) => {
 
                 //Consultar Tipo de moneda de cada pais
                 try {
-                    const request = await fetch('http://10.100.1.27:5055/api/MaestroMoneda/' + empresa);
+                    const request = await fetch(APIURL + 'api/MaestroMoneda/' + empresa);
                     const data = await request.json();
                     let moneda = '';
                     let abreviacion = '';
@@ -63,7 +63,7 @@ const Login = (props) => {
                         moneda = element['moneda']
                         abreviacion = element['abreviacion']
                     })
-                    
+
                     dispatch(tipoMoneda({ monedaAbreviacion: abreviacion, moneda }))
                 }
                 catch (error) {

@@ -18,11 +18,11 @@ const HistoyDetalle = (props) => {
     const [valor, setValor] = useState('')
     const [descripcionAdmin, setDescripcionAdmin] = useState('');
     const [imagen, setImagen] = useState(null);
-    const { monedaAbreviacion} = useSelector(state => state.usuario);
+    const { monedaAbreviacion, APIURL } = useSelector(state => state.usuario);
 
     const datosGasto = async () => {
         try {
-            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + props.route.params.ID);
+            const request = await fetch(APIURL + 'api/GastoViajeDetalle/' + props.route.params.ID);
             let data = await request.json();
             setResultHistorialJSON(data)
         } catch (error) {
@@ -46,11 +46,11 @@ const HistoyDetalle = (props) => {
                 let fechaf = (Element['fechaFactura']).toString();
                 setFechaFactura(fechaf.substring(0, 10).replace('-', '/').replace('-', '/'));
 
-                setProveedor(Element['proveedor']);                
-                setNoFactura(Element['noFactura']);                
-                setDescripcionAsesor(Element['descripcion']);                
-                setValor(Element['valorFactura']);               
-                setDescripcionAdmin(Element['descripcionAdmin']);                
+                setProveedor(Element['proveedor']);
+                setNoFactura(Element['noFactura']);
+                setDescripcionAsesor(Element['descripcion']);
+                setValor(Element['valorFactura']);
+                setDescripcionAdmin(Element['descripcionAdmin']);
                 setImagen(Element['imagen']);
             })
         }

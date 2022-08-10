@@ -22,7 +22,7 @@ const Viaje = (props) => {
     const [openDate, SetOpenDate] = useState(false);
     const [date, setDate] = useState('');
     const [showdate, setShowDate] = useState(new Date());
-    const { empresa, user, nombre, documentoFiscal, moneda } = useSelector(state => state.usuario);
+    const { empresa, user, nombre, documentoFiscal, moneda, APIURL } = useSelector(state => state.usuario);
     const [resultTipo, setResultTipo] = useState([]);
     const [resultCategoria, setResultCategoria] = useState([]);
     const [resultTipoJSON, setResultTipoJSON] = useState([]);
@@ -110,7 +110,7 @@ const Viaje = (props) => {
     const onScreenLoad = async () => {
 
         try {
-            const request = await fetch('http://10.100.1.27:5055/api/TipoGastoViaje/' + empresa);
+            const request = await fetch(APIURL + 'api/TipoGastoViaje/' + empresa);
             setResultTipoJSON(await request.json())
         } catch (error) {
             setmensajeAlerta('No hay conexion con el servidor intente mas tarde...')
@@ -119,19 +119,19 @@ const Viaje = (props) => {
         }
     };
 
-    const cantidadNoSync = async ()=>{
+    const cantidadNoSync = async () => {
         let num = 0;
         try {
-            const request = await fetch("http://10.100.1.27:5055/api/GastoViajeDetalle/"+user+'/4');
-           num = await request.json();
+            const request = await fetch(APIURL + "api/GastoViajeDetalle/" + user + '/4');
+            num = await request.json();
         } catch (error) {
             console.log('No hay sincronizados')
         }
-        dispatch(noSincronizado({nosync:num}))
+        dispatch(noSincronizado({ nosync: num }))
     }
 
     const llenarCategoria = async (id) => {
-        const request = await fetch('http://10.100.1.27:5055/api/CategoriaTipoGastoViaje/' + id);
+        const request = await fetch(APIURL + 'api/CategoriaTipoGastoViaje/' + id);
         setResultCategoriaJSON(await request.json())
         setIdCategoria(null)
     };
@@ -206,19 +206,19 @@ const Viaje = (props) => {
             alertas('Debe seleccionar una Categoria...', true, false)
             return
         }
-        
-        if(proveedor==''){
+
+        if (proveedor == '') {
             alertas('Debe Seleccionar un proveedor...', true, false)
             return
         }
-        
+
         if (facturaObligatoria) {
 
             if (empresa == 'IMHN') {
                 if (nFactura.length == 0) {
                     alertas('El campo No.Factura es obligatorio.', true, false)
                     return
-                }else if(nFactura.length !=19){
+                } else if (nFactura.length != 19) {
                     alertas('El campo No.Factura esta incompleto.', true, false)
                     return
                 }
@@ -271,7 +271,7 @@ const Viaje = (props) => {
         }
 
         try {
-            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle', {
+            const request = await fetch(APIURL + 'api/GastoViajeDetalle', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -311,13 +311,13 @@ const Viaje = (props) => {
 
     const documentoFiscalLoad = async () => {
         try {
-            const request = await fetch('http://10.100.1.27:5055/api/Empresa/' + empresa);
+            const request = await fetch(APIURL + 'api/Empresa/' + empresa);
             const data = await request.json();
             let documento = '';
             data.forEach(element => {
                 documento = element['documento']
             })
-            dispatch(documentoMostrar({documentoFiscal:documento}))
+            dispatch(documentoMostrar({ documentoFiscal: documento }))
         } catch (error) {
             console.log(error)
         }
@@ -413,7 +413,7 @@ const Viaje = (props) => {
                     <DropdownList defaultButtonText='Seleccione Proveedor' data={proveedores} onSelect={onSelectProveedor} search={true} searchPlaceHolder={'Buscar por nombre'} disabled={disableProveedor} />
                     <TextInputContainer title={'No. Factura:'} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
                     <TextInputContainer title='Descripcion: ' multiline={true} maxLength={300} Justify={true} height={60} onChangeText={(value) => setDescripcion(value)} value={descripion} />
-                    <TextInputContainer title={'Valor en '+moneda+':'} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(value)} value={valor.toString()} />
+                    <TextInputContainer title={'Valor en ' + moneda + ':'} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(value)} value={valor.toString()} />
                     <TouchableOpacity onPress={() => SetOpenDate(true)}>
                         <View style={styles.textInputDateContainer}>
                             <Text style={styles.text}>Fecha Factura:</Text>

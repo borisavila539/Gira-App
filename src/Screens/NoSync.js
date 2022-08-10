@@ -8,13 +8,13 @@ const NoSync = (props) => {
 
     const [page, setPage] = useState(1);
     const [historialJSON, setHistorialJSON] = useState([]);
-    const { user, monedaAbreviacion} = useSelector(state => state.usuario);
+    const { user, monedaAbreviacion, APIURL } = useSelector(state => state.usuario);
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     const historial = async () => {
         try {
-            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/4/1/10');
+            const request = await fetch(APIURL + 'api/GastoViajeDetalle/' + user + '/4/1/10');
             let data = await request.json();
             setHistorialJSON(data)
             setIsLoading(false)
@@ -26,8 +26,7 @@ const NoSync = (props) => {
 
     const historialMas = async () => {
         try {
-
-            const request = await fetch('http://10.100.1.27:5055/api/GastoViajeDetalle/' + user + '/4/' + page + '/10');
+            const request = await fetch(APIURL + 'api/GastoViajeDetalle/' + user + '/4/' + page + '/10');
             let data = await request.json();
             setHistorialJSON(historialJSON.concat(data))
             setIsLoading(false)
@@ -85,7 +84,7 @@ const NoSync = (props) => {
         return (
             isLoading &&
             <View style={styles.loader}>
-                <Text style={[styles.text,{color:'#ddd'}]}>Cargando...</Text>
+                <Text style={[styles.text, { color: '#ddd' }]}>Cargando...</Text>
                 < ActivityIndicator size='large' />
             </View >
         )
