@@ -98,10 +98,21 @@ const HistoyDetalle = (props) => {
                                     <Text style={styles.text2}>{fechaCreacion}</Text><Text></Text>
                                     <Text style={styles.text}>Fecha Factura: </Text>
                                     <Text style={styles.text2}>{fechaFactura}</Text><Text></Text>
-                                    <Text style={styles.text}>No. Factura: </Text>
-                                    <Text style={styles.text2}>{noFactura}</Text><Text></Text>
-                                    <Text style={styles.text}>Descripcion: </Text>
-                                    <Text style={styles.text2}>{descripcionAsesor}</Text><Text></Text>
+                                    {
+                                        noFactura != '' &&
+                                        <>
+                                            <Text style={styles.text}>No. Factura: </Text>
+                                            <Text style={styles.text2}>{noFactura}</Text><Text></Text>
+                                        </>
+                                    }
+                                    {
+                                        descripcionAsesor != '' &&
+                                        <>
+                                            <Text style={styles.text}>Descripcion: </Text>
+                                            <Text style={styles.text2}>{descripcionAsesor}</Text><Text></Text>
+                                        </>
+
+                                    }
                                     <Text style={styles.text}>Valor: </Text>
                                     <Text style={styles.text2}>{monedaAbreviacion}{valor}</Text>
                                     {
