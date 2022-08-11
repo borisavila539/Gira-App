@@ -47,6 +47,7 @@ const Viaje = (props) => {
     const [tipoAlimento, setTipoAlimento] = useState('');
     const [disabledDropDown, setDisabledDropDown] = useState(true);
     const [disableProveedor, setDiasableProveedor] = useState(true);
+    const [enviando, setEnviando] = useState(false);
     let result;
 
 
@@ -189,6 +190,7 @@ const Viaje = (props) => {
     };
 
     const EnviarGasto = async () => {
+        setEnviando(true)
         let facturaObligatoria = false;
         let descripcionObligatoria = false;
         let imagenObligatoria = false;
@@ -204,11 +206,13 @@ const Viaje = (props) => {
 
         if (IdCategoria == null) {
             alertas('Debe seleccionar una Categoria...', true, false)
+            setEnviando(false)
             return
         }
 
         if (proveedor == '') {
             alertas('Debe Seleccionar un proveedor...', true, false)
+            setEnviando(false)
             return
         }
 
@@ -217,14 +221,17 @@ const Viaje = (props) => {
             if (empresa == 'IMHN') {
                 if (nFactura.length == 0) {
                     alertas('El campo No.Factura es obligatorio.', true, false)
+                    setEnviando(false)
                     return
                 } else if (nFactura.length != 19) {
                     alertas('El campo No.Factura esta incompleto.', true, false)
+                    setEnviando(false)
                     return
                 }
             } else {
                 if (nFactura == '') {
                     alertas('El campo No.Factura es obligatorio.', true, false)
+                    setEnviando(false)
                     return
                 }
             }
@@ -232,23 +239,27 @@ const Viaje = (props) => {
         if (descripcionObligatoria) {
             if (descripion == '') {
                 alertas('El campo Descripcion es obligatorio.', true, false)
+                setEnviando(false)
                 return
             }
         }
 
         if (valor == 0) {
             alertas('El campo Valor es obligatorio.', true, false)
+            setEnviando(false)
             return
         }
 
         if (date == '') {
             alertas('El campo Fecha Factura es obligatorio.', true, false)
+            setEnviando(false)
             return
         }
 
         if (imagenObligatoria) {
             if (imagen == null) {
                 alertas('La imagen de la factura es obligatoria.', true, false)
+                setEnviando(false)
                 return
             }
         }
@@ -301,6 +312,7 @@ const Viaje = (props) => {
         } catch (err) {
             console.log('no se envio: ' + err)
         }
+        setEnviando(false)
     }
 
     const alertas = (mensaje, show, tipo) => {
@@ -473,7 +485,7 @@ const Viaje = (props) => {
                             </Pressable>
                         }
                     </View >
-                    <Buttons title={'Enviar'} onPressFunction={EnviarGasto}></Buttons>
+                    <Buttons title={enviando?'Enviando..':'Enviar'} onPressFunction={EnviarGasto} disabled={enviando}></Buttons>
                     <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
                 </View>
             </SafeAreaView>

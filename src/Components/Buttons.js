@@ -13,6 +13,7 @@ const Buttons = (props) => {
       activeOpacity={0.5}
       onPress={props.onPressFunction}
       hitSlop={{ top: 10, bottom: 20, left: 20, right: 20 }}
+      disabled={props.disabled}
     >
       <View style={styles.button}>
         <Text style={[styles.text]}>{props.title}</Text>

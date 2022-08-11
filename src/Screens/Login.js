@@ -17,8 +17,10 @@ const Login = (props) => {
     const [mensajeAlerta, setmensajeAlerta] = useState('');
     const [showMensajeAlerta, setShowMensajeAlerta] = useState(false);
     const [tipoMensaje, setTipoMensaje] = useState(false);
+    const [enviando, setEnviando] = useState(false);
 
     const onPressHandle = async () => {
+        setEnviando(true)
         try {
             const request = await fetch("http://190.109.203.183:9080/api/authentication/movil", {
                 method: 'POST',
@@ -74,13 +76,16 @@ const Login = (props) => {
                 setmensajeAlerta(result['Message'])
                 setShowMensajeAlerta(true)
                 setTipoMensaje(false)
+                setEnviando(false)
             }
         } catch (err) {
             console.log(err)
             setmensajeAlerta(mensaje)
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
+            setEnviando(false)
         }
+        
     }
     return (
         <View style={{ flex: 1 }}>
@@ -134,8 +139,9 @@ const Login = (props) => {
                     </View>
                     <View style={{ width: '100%', marginTop: 10, alignItems: 'center' }}>
                         <Buttons
-                            title='Iniciar Sesion'
+                            title= {enviando?'Iniciando...':'Iniciar Sesion'}
                             onPressFunction={onPressHandle}
+                            disabled={enviando}
                         />
                     </View>
                 </View>

@@ -41,7 +41,11 @@ const HistoyDetalle = (props) => {
                 setCategoria(Element['categoria']);
 
                 let fechac = (Element['fechaCreacion']).toString();
-                setFechaCreacion(fechac.replace('T', ' ').substring(0, 16).replace('-', '/').replace('-', '/'));
+                let hora = fechac.substring(11, 13);
+                let tiempo = '';
+                tiempo = parseInt(hora) >= 12 ? 'PM' : 'AM';
+
+                setFechaCreacion(fechac.replace('T', ' ').substring(0, 16).replace('-', '/').replace('-', '/') + ' ' + tiempo);
 
                 let fechaf = (Element['fechaFactura']).toString();
                 setFechaFactura(fechaf.substring(0, 10).replace('-', '/').replace('-', '/'));
@@ -119,7 +123,7 @@ const HistoyDetalle = (props) => {
                                         descripcionAdmin &&
                                         <>
                                             <Text></Text>
-                                            <Text style={styles.text}>Descripcion Admin: </Text>
+                                            <Text style={styles.text}>Descripcion Rechazo: </Text>
                                             <Text style={styles.text2}>{descripcionAdmin}</Text>
                                         </>
                                     }

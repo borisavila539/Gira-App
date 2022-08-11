@@ -17,6 +17,7 @@ const Proveedor = (props) => {
     const [showMensajeAlerta, setShowMensajeAlerta] = useState(false);
     const [tipoMensaje, setTipoMensaje] = useState(false);
     const { user, documentoFiscal, APIURL } = useSelector(state => state.usuario);
+    const [enviando, setEnviando] = useState(false);
 
     let result;
     const pickImage = async () => {
@@ -46,10 +47,12 @@ const Proveedor = (props) => {
     };
 
     const EnviarSolicitud = async () => {
+        setEnviando(true)
         if (nombre == '') {
             setmensajeAlerta('Debe llenar el nombre del proveedor')
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
+            setEnviando(false)
             return
         }
 
@@ -57,6 +60,7 @@ const Proveedor = (props) => {
             setmensajeAlerta('Debe llenar el RTN')
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
+            setEnviando(false)
             return
         }
 
@@ -64,6 +68,7 @@ const Proveedor = (props) => {
             setmensajeAlerta('Debe llenar la descripcion')
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
+            setEnviando(false)
             return
         }
 
@@ -71,6 +76,7 @@ const Proveedor = (props) => {
             setmensajeAlerta('Debe subir una imagen de la factura con RTN del Proveedor Solicitado')
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
+            setEnviando(false)
             return
         }
 
@@ -102,6 +108,7 @@ const Proveedor = (props) => {
         } catch (err) {
             console.log('no se envio el correo' + err)
         }
+        setEnviando(false)
 
 
     }
@@ -163,7 +170,7 @@ const Proveedor = (props) => {
                             </Pressable>
                         }
                     </View >
-                    <Buttons title='Enviar' onPressFunction={EnviarSolicitud}></Buttons>
+                    <Buttons title={enviando?'Enviando..':'Enviar'} onPressFunction={EnviarSolicitud} disabled={enviando}></Buttons>
                     <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
                 </View>
 
