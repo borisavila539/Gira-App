@@ -69,7 +69,7 @@ const Viaje = (props) => {
         result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images = "Images",
             base64: true,
-            allowsEditing: true,
+            allowsEditing: false,
             quality: 1
         });
         if (!result.cancelled) {
