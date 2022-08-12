@@ -52,6 +52,7 @@ const Viaje = (props) => {
 
 
     const pickImage = async () => {
+        const permiso = await ImagePicker.requestCameraPermissionsAsync();
         result = await ImagePicker.launchCameraAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images = "Images",
             base64: true,
