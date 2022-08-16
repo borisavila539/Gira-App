@@ -45,7 +45,7 @@ const Login = (props) => {
                 await AsyncStorage.setItem('@usuario',nombreUsuario)
                 await AsyncStorage.setItem('@nombre',nombre)
                 await AsyncStorage.setItem('@empresa',empresa)
-                
+
                 dispatch(iniciarSesion({ user: nombreUsuario, nombre, empresa }));
                 //Consultar el Tipo de documento fiscal de cada pais
                 try {
@@ -108,7 +108,7 @@ const Login = (props) => {
                         source={require('../../assets/Logo.png')}
                         style={styles.imagen}
                     />
-                    <Text style={styles.text}>Bienvenido(a)</Text>
+                    <Text style={styles.text}>Login</Text>
                 </View>
 
                 <View style={styles.containerinputs}>
@@ -146,7 +146,7 @@ const Login = (props) => {
                             />
                         </Pressable>
                     </View>
-                    <View style={{ width: '100%', marginTop: 10, alignItems: 'center' }}>
+                    <View style={{ width: '100%', marginTop: 10, alignItems: 'center'}}>
                         <Buttons
                             title={enviando ? 'Iniciando...' : 'Iniciar Sesion'}
                             onPressFunction={onPressHandle}
@@ -183,8 +183,8 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     containerinputs: {
-        width: '90%',
-        maxWidth: 400,
+        width: '80%',
+        maxWidth: 600,
         alignItems: 'center',
         paddingVertical: 20,
         paddingHorizontal: 20,
@@ -197,6 +197,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         fontSize: 20,
         color: '#005555',
+        fontFamily: 'sans-serif'
     },
     textInputAlign: {
         flexDirection: 'row',
@@ -224,9 +225,10 @@ const styles = StyleSheet.create({
     },
     text: {
         color: '#F27281',
-        fontSize: 30,
+        fontSize: 40,
         marginBottom: 15,
         fontWeight: 'bold',
+        fontFamily: 'sans-serif'
     }
 })
 

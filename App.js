@@ -15,7 +15,7 @@ const Stack = createStackNavigator();
 const AppNavigation = () => {
   const dispatch = useDispatch();
   const { logeado } = useSelector(state => state.usuario);
-  const { mensaje, APIURL } = useSelector(state => state.usuario);
+  const { APIURL } = useSelector(state => state.usuario);
 
   const getData = async () => {
     let result = await AsyncStorage.getItem('@logeado');
@@ -24,7 +24,7 @@ const AppNavigation = () => {
       let nombreUsuario = await AsyncStorage.getItem('@usuario')
       let nombre = await AsyncStorage.getItem('@nombre')
       let empresa = await AsyncStorage.getItem('@empresa')
-      
+
       dispatch(iniciarSesion({ user: nombreUsuario, nombre, empresa }));
 
       //Consultar el Tipo de documento fiscal de cada pais
@@ -55,16 +55,7 @@ const AppNavigation = () => {
       }
       catch (error) {
       }
-    } else {
-      let menssage = result['Message']
-      dispatch(mensajeLogin({ mensaje: menssage }))
-      setmensajeAlerta(result['Message'])
-      setShowMensajeAlerta(true)
-      setTipoMensaje(false)
-      setEnviando(false)
-    }
-
-    console.log(result)
+    } 
   }
 
   useEffect(() => {

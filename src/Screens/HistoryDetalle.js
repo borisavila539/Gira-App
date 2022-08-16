@@ -154,13 +154,15 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 16,
         fontWeight: 'bold',
-        textAlign: "center"
+        textAlign: "center",
+        fontFamily: 'sans-serif'
     },
     text2: {
         fontSize: 16,
         fontWeight: "normal",
         fontStyle: "italic",
-        textAlign: "center"
+        textAlign: "center",
+        fontFamily: 'sans-serif'
     },
     containerDetalle: {
         flex: 1,

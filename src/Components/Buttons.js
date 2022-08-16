@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#fff',
     fontWeight: 'bold',
+    fontFamily: 'serif'
   },
 })
 

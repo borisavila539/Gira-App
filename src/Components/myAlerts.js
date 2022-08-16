@@ -7,9 +7,9 @@ function MyAlert(props) {
             <View style={styles.modal}>
                 <View style={{ width: '80%', backgroundColor: '#fff', alignItems: "center", borderRadius: 10, paddingVertical: 15 }} >
                     <FontAwesome5 name={props.tipoMensaje ? 'check' : 'exclamation-triangle'} size={80} color={props.tipoMensaje ? 'green' : 'orange'} />
-                    <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 10 }}>{props.mensajeAlerta}</Text>
+                    <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 10 ,fontFamily: 'serif'}}>{props.mensajeAlerta}</Text>
                     <Pressable onPress={props.onPress} style={{ backgroundColor: '#0078AA', paddingVertical: 7, paddingHorizontal: 20, borderRadius: 5, marginTop: 15 }}>
-                        <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#fff' }}>Ok</Text>
+                        <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#fff',fontFamily: 'serif' }}>Ok</Text>
                     </Pressable>
                 </View>
             </View>

@@ -314,14 +314,16 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 16,
         textAlign: "right",
-        fontStyle: "italic"
+        fontStyle: "italic",
+        fontFamily: 'sans-serif'
     },
     text2: {
         fontSize: 16,
         textAlign: "right",
         fontStyle: "italic",
         fontWeight: "bold",
-        fontStyle: "normal"
+        fontStyle: "normal",
+        fontFamily: 'sans-serif'
     },
     inputIconContainer: {
         flexDirection: 'row',
@@ -343,6 +345,7 @@ const styles = StyleSheet.create({
         color: '#121212',
         padding: 2,
         textAlign: "center",
+        fontFamily: 'sans-serif'
     },
     filters: {
         width: '100%',

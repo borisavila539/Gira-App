@@ -34,6 +34,7 @@ const HeaderLogout = (props) => {
 const styles = StyleSheet.create({
     header: {
         width: '100%',
+        height: '8%',
         alignItems: "center",
         flexDirection: 'row',
         backgroundColor: '#069A8E',
@@ -41,10 +42,11 @@ const styles = StyleSheet.create({
     },
     text: {
         flex: 3,
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: 'bold',
         color: '#fff',
         textAlign: "center",
+        
     },
 })
 

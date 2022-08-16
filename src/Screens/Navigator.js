@@ -29,13 +29,12 @@ const Navegador = (props) => {
                 tabBarInactiveTintColor: '#fff',
                 tabBarActiveBackgroundColor: '#fff',
                 tabBarInactiveBackgroundColor: '#069A8E',
-                tabBarStyle: { height: 70 },
-                tabBarLabelStyle: { paddingBottom: 15, fontWeight: 'bold' },
+                tabBarStyle: { height: '9%' },
+                tabBarLabelStyle: { paddingBottom: 15, fontWeight: 'bold', fontFamily: 'sans-serif' },
                 tabBarIconStyle: { marginTop: 5 },
                 headerShown: false,
                 tabBarHideOnKeyboard: true,
                 tabBarLabelPosition: 'below-icon',
-
             })}
         >
             <Tab.Screen name='Gastos de Viaje' component={Viaje} />

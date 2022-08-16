@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 16,
         fontWeight: 'bold',
-        color: '#005555'
+        color: '#005555',
+        fontFamily: 'sans-serif'
     },
     textInput: {
         width: '100%',
@@ -34,13 +35,14 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         maxHeight: 100,
-        fontSize: 16,
+        fontSize: 18,
         backgroundColor: '#f0f0f0',
         height: 35,
         borderWidth: 1.5,
         borderColor: '#30475E',
         color: '#121212',
         padding: 2,
+        fontFamily: 'sans-serif'
     }
 })
 

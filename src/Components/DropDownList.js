@@ -34,7 +34,8 @@ const DropdownList = (props) => {
                 disableAutoScroll={true}
                 disabled={props.disabled}
                 rowStyle={{height:60, flex:1}}
-                rowTextStyle={{}}
+                rowTextStyle={{fontFamily: 'sans-serif'}}
+                buttonTextStyle={{fontFamily: 'sans-serif'}}
                 
             />
         </View>
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
         borderColor: '#30475E',
         backgroundColor: '#f0f0f0',
         height: 35,
-        width: '100%',
+        width: '100%'
     }
 })
 

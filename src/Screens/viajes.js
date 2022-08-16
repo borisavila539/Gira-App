@@ -408,111 +408,112 @@ const Viaje = (props) => {
     }, [enviado])
 
     return (
-        <ScrollView backgroundColor={'#fff'}>
-            <HeaderLogout />
-            <SafeAreaView style={styles.container}>
-                <View style={styles.formulario}>
-                    <StatusBar style="auto" />
-                    <DropdownList data={resultTipo} defaultButtonText='Seleccione Tipo' onSelect={onSelectTipo} />
-                    <DropdownList data={resultCategoria} defaultButtonText='Seleccione Categoria' onSelect={onSelectCategoria} disabled={disabledDropDown} />
-                    {
-                        alimentacionIsSelected &&
-                        <RadioButtonRN data={dataAlimentos}
-                            style={{ flex: 1, width: '95%', }}
-                            boxStyle={{ flex: 1, alignItems: 'center', marginHorizontal: 0, paddingHorizontal: 10 }}
-                            textStyle={{ color: '#000', fontSize: 16 }}
-                            initial={1}
-                            selectedBtn={(value) => setTipoAlimento(value)}
-                            box={false}
-                            textColor={'#000'}
-                            icon={<FontAwesome5 name="check" size={15} color={'#005555'} />}
-                            circleSize={10}
-                        />
-                    }
-                    {
-                        !proveedorPredefinido ?
-                            <>
-                                <View style={styles.textInputDateContainer}>
-                                    <Text style={styles.text}>{documentoFiscal}:</Text>
-                                    <View style={styles.inputIconContainer}>
-                                        <TextInput style={styles.input} keyboardType={'default'} value={RTN} onChangeText={(value) => setRTN(value)} />
-                                        <TouchableOpacity onPress={RTN != '' ? llenarProveedor : null}>
-                                            <FontAwesome5 name="search" size={20} color={'#1A4D2E'} />
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                                <DropdownList defaultButtonText='Seleccione Proveedor' data={proveedores} onSelect={onSelectProveedor} search={true} searchPlaceHolder={'Buscar por nombre'} disabled={disableProveedor} />
-                            </>
-                            : null
-                    }
-
-                    <TextInputContainer title={'No. Factura:'} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
-                    <TextInputContainer title='Descripcion: ' multiline={true} maxLength={300} Justify={true} height={60} onChangeText={(value) => setDescripcion(value)} value={descripion} />
-                    <TextInputContainer title={'Valor en ' + moneda + ':'} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(value)} value={valor.toString()} />
-                    <TouchableOpacity onPress={() => SetOpenDate(true)}>
-                        <View style={styles.textInputDateContainer}>
-                            <Text style={styles.text}>Fecha Factura:</Text>
-                            <View style={styles.inputIconContainer}>
-                                <TextInput style={styles.input} placeholder={'01/01/2000'} editable={false} value={date} />
-                                <FontAwesome5 name="calendar-alt" size={20} color={'#1A4D2E'} />
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                    {
-                        openDate &&
-                        <DateTimePicker mode='date' value={showdate} onChange={onchange} onTouchCancel={() => console.log('Cancelado')} />
-                    }
-                    <View style={styles.containerImage}>
-                        <Modal animationType="fade" transparent={true} visible={modalVisible} onRequestClose={() => SetModalVisible(!modalVisible)}>
-                            <View style={styles.modal}>
-                                <Pressable style={styles.hideimage} onPress={() => SetModalVisible(!modalVisible)}>
-                                    <Image source={{ uri: 'data:image/jpeg;base64,' + imagen }} style={styles.imageModal} />
-                                </Pressable>
-                            </View>
-                        </Modal>
-                        <Modal animationType="fade" transparent={true} visible={modalCameraUpload} onRequestClose={() => setModalCameraUpload(!modalCameraUpload)}>
-                            <Pressable style={styles.modal} onPress={() => setModalCameraUpload(!modalCameraUpload)}>
-                                <View style={styles.containerIconModal}>
-                                    <View style={styles.containerIconItem}>
-                                        <Pressable style={{ width: '100%' }} onPress={pickImage} >
-                                            <View style={styles.button}>
-                                                <FontAwesome5 name="camera-retro" size={50} color={'#1A4D2E'} />
-                                                <Text style={styles.textFoto}>Tomar Foto</Text>
-                                            </View>
-                                        </Pressable>
-                                    </View>
-                                    <View style={styles.containerIconItem}>
-                                        <Pressable style={{ width: '100%' }} onPress={upLoadImage} >
-                                            <View style={styles.button}>
-                                                <FontAwesome5 name="file-upload" size={50} color={'#1A4D2E'} />
-                                                <Text style={styles.textFoto}>Subir Foto</Text>
-                                            </View>
-                                        </Pressable>
-                                    </View>
-                                </View>
-                            </Pressable>
-                        </Modal>
-                        <View style={styles.containerIcon}>
-                            <View style={styles.containerIconItem}>
-                                <TouchableOpacity style={{ width: '100%' }} onPress={() => setModalCameraUpload(true)} >
-                                    <View style={styles.button}>
-                                        <FontAwesome5 name="camera-retro" size={50} color={'#1A4D2E'} />
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+        <View><HeaderLogout />
+            <ScrollView backgroundColor={'#fff'} style={{height:'92%'}}>
+                <SafeAreaView style={styles.container}>
+                    <View style={styles.formulario}>
+                        <StatusBar style="auto" />
+                        <DropdownList data={resultTipo} defaultButtonText='Seleccione Tipo' onSelect={onSelectTipo} />
+                        <DropdownList data={resultCategoria} defaultButtonText='Seleccione Categoria' onSelect={onSelectCategoria} disabled={disabledDropDown} />
                         {
-                            imagen &&
-                            <Pressable onPress={() => SetModalVisible(true)}>
-                                <Image source={{ uri: 'data:image/jpeg;base64,' + imagen }} style={styles.image} />
-                            </Pressable>
+                            alimentacionIsSelected &&
+                            <RadioButtonRN data={dataAlimentos}
+                                style={{ flex: 1, width: '95%' }}
+                                boxStyle={{ flex: 1, alignItems: 'center', marginHorizontal: 0, paddingHorizontal: 10 }}
+                                textStyle={{ color: '#000', fontSize: 16, fontFamily:'sans-serif' }}
+                                initial={1}
+                                selectedBtn={(value) => setTipoAlimento(value)}
+                                box={false}
+                                textColor={'#000'}
+                                icon={<FontAwesome5 name="check" size={15} color={'#005555'} />}
+                                circleSize={10}
+                            />
                         }
-                    </View >
-                    <Buttons title={enviando ? 'Enviando..' : 'Enviar'} onPressFunction={EnviarGasto} disabled={enviando}></Buttons>
-                    <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
-                </View>
-            </SafeAreaView>
-        </ScrollView>
+                        {
+                            !proveedorPredefinido ?
+                                <>
+                                    <View style={styles.textInputDateContainer}>
+                                        <Text style={styles.text}>{documentoFiscal}:</Text>
+                                        <View style={styles.inputIconContainer}>
+                                            <TextInput style={styles.input} keyboardType={'default'} value={RTN} onChangeText={(value) => setRTN(value)} />
+                                            <TouchableOpacity onPress={RTN != '' ? llenarProveedor : null}>
+                                                <FontAwesome5 name="search" size={20} color={'#1A4D2E'} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                    <DropdownList defaultButtonText='Seleccione Proveedor' data={proveedores} onSelect={onSelectProveedor} search={true} searchPlaceHolder={'Buscar por nombre'} disabled={disableProveedor} />
+                                </>
+                                : null
+                        }
+
+                        <TextInputContainer title={'No. Factura:'} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
+                        <TextInputContainer title='Descripcion: ' multiline={true} maxLength={300} Justify={true} height={80} onChangeText={(value) => setDescripcion(value)} value={descripion} />
+                        <TextInputContainer title={'Valor en ' + moneda + ':'} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(value)} value={valor.toString()} />
+                        <TouchableOpacity onPress={() => SetOpenDate(true)}>
+                            <View style={styles.textInputDateContainer}>
+                                <Text style={styles.text}>Fecha Factura:</Text>
+                                <View style={styles.inputIconContainer}>
+                                    <TextInput style={styles.input} placeholder={'01/01/2000'} editable={false} value={date} />
+                                    <FontAwesome5 name="calendar-alt" size={20} color={'#1A4D2E'} />
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                        {
+                            openDate &&
+                            <DateTimePicker mode='date' value={showdate} onChange={onchange} onTouchCancel={() => console.log('Cancelado')} />
+                        }
+                        <View style={styles.containerImage}>
+                            <Modal animationType="fade" transparent={true} visible={modalVisible} onRequestClose={() => SetModalVisible(!modalVisible)}>
+                                <View style={styles.modal}>
+                                    <Pressable style={styles.hideimage} onPress={() => SetModalVisible(!modalVisible)}>
+                                        <Image source={{ uri: 'data:image/jpeg;base64,' + imagen }} style={styles.imageModal} />
+                                    </Pressable>
+                                </View>
+                            </Modal>
+                            <Modal animationType="fade" transparent={true} visible={modalCameraUpload} onRequestClose={() => setModalCameraUpload(!modalCameraUpload)}>
+                                <Pressable style={styles.modal} onPress={() => setModalCameraUpload(!modalCameraUpload)}>
+                                    <View style={styles.containerIconModal}>
+                                        <View style={styles.containerIconItem}>
+                                            <Pressable style={{ width: '100%' }} onPress={pickImage} >
+                                                <View style={styles.button}>
+                                                    <FontAwesome5 name="camera-retro" size={50} color={'#1A4D2E'} />
+                                                    <Text style={styles.textFoto}>Tomar Foto</Text>
+                                                </View>
+                                            </Pressable>
+                                        </View>
+                                        <View style={styles.containerIconItem}>
+                                            <Pressable style={{ width: '100%' }} onPress={upLoadImage} >
+                                                <View style={styles.button}>
+                                                    <FontAwesome5 name="file-upload" size={50} color={'#1A4D2E'} />
+                                                    <Text style={styles.textFoto}>Subir Foto</Text>
+                                                </View>
+                                            </Pressable>
+                                        </View>
+                                    </View>
+                                </Pressable>
+                            </Modal>
+                            <View style={styles.containerIcon}>
+                                <View style={styles.containerIconItem}>
+                                    <TouchableOpacity style={{ width: '100%' }} onPress={() => setModalCameraUpload(true)} >
+                                        <View style={styles.button}>
+                                            <FontAwesome5 name="camera-retro" size={50} color={'#1A4D2E'} />
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                            {
+                                imagen &&
+                                <Pressable onPress={() => SetModalVisible(true)}>
+                                    <Image source={{ uri: 'data:image/jpeg;base64,' + imagen }} style={styles.image} />
+                                </Pressable>
+                            }
+                        </View >
+                        <Buttons title={enviando ? 'Enviando..' : 'Enviar'} onPressFunction={EnviarGasto} disabled={enviando}></Buttons>
+                        <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
+                    </View>
+                </SafeAreaView>
+            </ScrollView>
+        </View>
     )
 }
 const styles = StyleSheet.create({
@@ -537,6 +538,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: '#005555',
+        fontFamily: 'sans-serif'
     },
     inputIconContainer: {
         flexDirection: 'row',
@@ -559,6 +561,7 @@ const styles = StyleSheet.create({
         color: '#121212',
         padding: 2,
         textAlign: "center",
+        fontFamily: 'sans-serif'
     },
     containerImage: {
         width: '100%',
@@ -623,7 +626,8 @@ const styles = StyleSheet.create({
     textFoto: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#1A4D2E'
+        color: '#1A4D2E',
+        fontFamily: 'sans-serif'
     }
 })
 
