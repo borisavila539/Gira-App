@@ -33,7 +33,9 @@ const DropdownList = (props) => {
                 renderSearchInputLeftIcon={iconFind}
                 disableAutoScroll={true}
                 disabled={props.disabled}
-
+                rowStyle={{height:60, flex:1}}
+                rowTextStyle={{}}
+                
             />
         </View>
     )

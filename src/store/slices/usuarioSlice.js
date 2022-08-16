@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+
 const usuarioSlice = createSlice({
     name: "usuarioSlice",
     initialState: {
@@ -12,7 +13,7 @@ const usuarioSlice = createSlice({
         nosync: 0,
         monedaAbreviacion:"",
         moneda:"",
-        APIURL:"http://190.109.223.244:7106/",
+        APIURL:"http://190.109.223.244:7106/", //http://190.109.223.244:7106/   http://10.100.1.27:5055
         logeado: false
     },
     reducers: {
@@ -42,10 +43,10 @@ const usuarioSlice = createSlice({
             state.token = "";
             state.empresa = "";
             state.mensaje = "";
-            state.documentoFiscal="",
-            state.nosync = 0,
-            state.monedaAbreviacion = "",
-            state.moneda = ""
+            state.documentoFiscal="";
+            state.nosync = 0;
+            state.monedaAbreviacion = "";
+            state.moneda = "";
         }
     }
 });

@@ -6,7 +6,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Buttons, MyAlert } from '../Components/indexComponents';
 import { useDispatch, useSelector } from 'react-redux'
 import { iniciarSesion, mensajeLogin, documentoMostrar, tipoMoneda } from '../store/slices/usuarioSlice';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = (props) => {
     const dispatch = useDispatch();
@@ -41,6 +41,11 @@ const Login = (props) => {
                 let usuario = data['Usuario'];
                 let nombreUsuario = usuario['IdUsuario'];
 
+                await AsyncStorage.setItem('@logeado','yes')
+                await AsyncStorage.setItem('@usuario',nombreUsuario)
+                await AsyncStorage.setItem('@nombre',nombre)
+                await AsyncStorage.setItem('@empresa',empresa)
+                
                 dispatch(iniciarSesion({ user: nombreUsuario, nombre, empresa }));
                 //Consultar el Tipo de documento fiscal de cada pais
                 try {
@@ -80,12 +85,16 @@ const Login = (props) => {
             }
         } catch (err) {
             console.log(err)
-            setmensajeAlerta(mensaje)
+            if(mensaje == ''){
+                setmensajeAlerta('No hay conexion con el servidor, intente mas tarde....')
+            }else{
+                setmensajeAlerta(mensaje)
+            }
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
             setEnviando(false)
         }
-        
+
     }
     return (
         <View style={{ flex: 1 }}>
@@ -139,7 +148,7 @@ const Login = (props) => {
                     </View>
                     <View style={{ width: '100%', marginTop: 10, alignItems: 'center' }}>
                         <Buttons
-                            title= {enviando?'Iniciando...':'Iniciar Sesion'}
+                            title={enviando ? 'Iniciando...' : 'Iniciar Sesion'}
                             onPressFunction={onPressHandle}
                             disabled={enviando}
                         />

@@ -3,11 +3,13 @@ import { View, StyleSheet, Text, Pressable } from "react-native"
 import { useDispatch, useSelector, } from 'react-redux';
 import { terminarSesion } from "../store/slices/usuarioSlice";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HeaderLogout = (props) => {
     const dispatch = useDispatch();
     const { nombre } = useSelector(state => state.usuario)
-    const handlePressLogout = () => {
+    const handlePressLogout = async () => {
+        await AsyncStorage.setItem('@logeado','no')
         dispatch(terminarSesion());
     }
     return (

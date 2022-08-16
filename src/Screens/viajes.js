@@ -48,21 +48,28 @@ const Viaje = (props) => {
     const [disabledDropDown, setDisabledDropDown] = useState(true);
     const [disableProveedor, setDiasableProveedor] = useState(true);
     const [enviando, setEnviando] = useState(false);
+    const [proveedorPredefinido, setProveedorPredefinido] = useState(false);
     let result;
 
 
     const pickImage = async () => {
         const permiso = await ImagePicker.requestCameraPermissionsAsync();
-        result = await ImagePicker.launchCameraAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images = "Images",
-            base64: true,
-            allowsEditing: true,
-            quality: 1
-        });
-        if (!result.cancelled) {
-            let base64 = result.base64;
-            setImagen(result.base64);
-            setModalCameraUpload(false);
+        console.log(permiso)
+        if (permiso.granted) {
+            result = await ImagePicker.launchCameraAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images = "Images",
+                base64: true,
+                allowsEditing: true,
+                quality: 1
+            });
+            if (!result.cancelled) {
+                setImagen(result.base64);
+                setModalCameraUpload(false);
+            }
+        } else {
+            setmensajeAlerta('Estado permisos de camara: ' + permiso.status)
+            setShowMensajeAlerta(true)
+            setTipoMensaje(false)
         }
     };
 
@@ -70,7 +77,7 @@ const Viaje = (props) => {
         result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images = "Images",
             base64: true,
-            allowsEditing: false,
+            allowsEditing: true,
             quality: 1
         });
         if (!result.cancelled) {
@@ -181,6 +188,14 @@ const Viaje = (props) => {
             if (element['nombre'] == selectedItem) {
                 setIdCategoria((element['idCategoriaTipoGastoViaje']))
                 setNombreCategoria(element['nombre'])
+                let proveedorPre = element['proveedorPredefinido']
+                if (proveedorPre.length > 0) {
+                    setProveedor(element['proveedorPredefinido'])
+                    setProveedorPredefinido(true)
+                } else {
+                    setProveedor('')
+                    setProveedorPredefinido(false)
+                }
             }
         })
         if (selectedItem == 'Alimentacion') {
@@ -414,16 +429,23 @@ const Viaje = (props) => {
                             circleSize={10}
                         />
                     }
-                    <View style={styles.textInputDateContainer}>
-                        <Text style={styles.text}>{documentoFiscal}:</Text>
-                        <View style={styles.inputIconContainer}>
-                            <TextInput style={styles.input} keyboardType={'default'} value={RTN} onChangeText={(value) => setRTN(value)} />
-                            <TouchableOpacity onPress={RTN != '' ? llenarProveedor : null}>
-                                <FontAwesome5 name="search" size={20} color={'#1A4D2E'} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                    <DropdownList defaultButtonText='Seleccione Proveedor' data={proveedores} onSelect={onSelectProveedor} search={true} searchPlaceHolder={'Buscar por nombre'} disabled={disableProveedor} />
+                    {
+                        !proveedorPredefinido ?
+                            <>
+                                <View style={styles.textInputDateContainer}>
+                                    <Text style={styles.text}>{documentoFiscal}:</Text>
+                                    <View style={styles.inputIconContainer}>
+                                        <TextInput style={styles.input} keyboardType={'default'} value={RTN} onChangeText={(value) => setRTN(value)} />
+                                        <TouchableOpacity onPress={RTN != '' ? llenarProveedor : null}>
+                                            <FontAwesome5 name="search" size={20} color={'#1A4D2E'} />
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                                <DropdownList defaultButtonText='Seleccione Proveedor' data={proveedores} onSelect={onSelectProveedor} search={true} searchPlaceHolder={'Buscar por nombre'} disabled={disableProveedor} />
+                            </>
+                            : null
+                    }
+
                     <TextInputContainer title={'No. Factura:'} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
                     <TextInputContainer title='Descripcion: ' multiline={true} maxLength={300} Justify={true} height={60} onChangeText={(value) => setDescripcion(value)} value={descripion} />
                     <TextInputContainer title={'Valor en ' + moneda + ':'} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(value)} value={valor.toString()} />
@@ -486,7 +508,7 @@ const Viaje = (props) => {
                             </Pressable>
                         }
                     </View >
-                    <Buttons title={enviando?'Enviando..':'Enviar'} onPressFunction={EnviarGasto} disabled={enviando}></Buttons>
+                    <Buttons title={enviando ? 'Enviando..' : 'Enviar'} onPressFunction={EnviarGasto} disabled={enviando}></Buttons>
                     <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
                 </View>
             </SafeAreaView>
