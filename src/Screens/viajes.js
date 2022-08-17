@@ -12,7 +12,7 @@ import * as ImagePicker from 'expo-image-picker';
 import RadioButtonRN from 'radio-buttons-react-native';
 import { documentoMostrar, noSincronizado } from '../store/slices/usuarioSlice';
 import moment from "moment";
-import { IconCamera, IconosBottomTab, IconSelect, ImageHeigth, ImageWidth, ObjectHeigth, TextoPantallas } from "../Components/constant";
+import { IconCamera, IconSelect, ImageHeigth, ImageWidth, ObjectHeigth, TextoPantallas } from "../Components/constant";
 
 
 const Viaje = (props) => {

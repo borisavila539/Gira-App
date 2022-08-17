@@ -4,12 +4,14 @@ import { StyleSheet, View, Text, FlatList, RefreshControl, ActivityIndicator, To
 import { HeaderLogout } from "../Components/indexComponents";
 import { useSelector } from 'react-redux';
 import { IconHeader } from "../Components/constant";
+import { noSincronizado } from '../store/slices/usuarioSlice';
+import { useDispatch } from 'react-redux';
 
 const NoSync = (props) => {
-
+    const dispatch = useDispatch();
     const [page, setPage] = useState(1);
     const [historialJSON, setHistorialJSON] = useState([]);
-    const { user, monedaAbreviacion, APIURL } = useSelector(state => state.usuario);
+    const { user, monedaAbreviacion, APIURL, APIURLSAV } = useSelector(state => state.usuario);
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -36,21 +38,41 @@ const NoSync = (props) => {
             console.log('no cargo el historial ' + error)
         }
     }
+    const cantidadNoSync = async () => {
+        let num = 0;
+        try {
+            const request = await fetch(APIURL + "api/GastoViajeDetalle/" + user + '/4');
+            num = await request.json();
+        } catch (error) {
+            console.log('No hay sincronizados')
+        }
+        dispatch(noSincronizado({ nosync: num }))
+    }
+
+    const  SincronizarAX= async (id) =>{
+        console.log(id)
+        /*
+        const request = await fetch(APIURLSAV+'/api/DatosEnviarAX/'+id)
+        if(request.data.content=='"OK"'){
+            const request2 = await fetch(APIURL+'/api/ActualizarEstadoGasto/'+id+'/2/-/-/-',{
+            method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                }
+            })
+        }*/
+        cantidadNoSync()
+    }
 
     const renderItem = (item) => {
         const cambioFecha = (fecha) => {
             return fecha.substring(0, 10);
         };
-        const cambioFechahora = (fecha) => {
-            let date = fecha.substring(0, 10)
-            let hora = fecha.substring(11, 16)
-            let FechaHora = date + ' ' + hora
-            return FechaHora;
-        };
         return (
             <View style={{ borderBottomWidth: 1, width: "100%", flexDirection: 'row', paddingHorizontal: 3, borderRadius: 0, borderColor: '#000', backgroundColor: '#f0f0f0' }}>
                 <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={()=>SincronizarAX(item.idGastoViajeDetalle)}>
                         <FontAwesome5
                             name='sync-alt'
                             style={{ color: '#000' }}
