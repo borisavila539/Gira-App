@@ -2,10 +2,13 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Viaje, History, Proveedor, NoSync } from "../Screens/indexScreens";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useSelector, } from 'react-redux';
+import {IconosBottomTab, LabelBottomTab, TabNumber, TextoPantallas} from "../Components/constant";
+
 
 const Tab = createBottomTabNavigator();
 
 const Navegador = (props) => {
+    console.log(IconosBottomTab)
     const { nosync } = useSelector(state => state.usuario)
     return (
         <Tab.Navigator
@@ -23,14 +26,14 @@ const Navegador = (props) => {
                         iconName = 'sync';
                     }
 
-                    return <FontAwesome5 name={iconName} size={30} color={color}></FontAwesome5>
+                    return <FontAwesome5 name={iconName} size={IconosBottomTab} color={color}></FontAwesome5>
                 },
                 tabBarActiveTintColor: '#069A8E',
                 tabBarInactiveTintColor: '#fff',
                 tabBarActiveBackgroundColor: '#fff',
                 tabBarInactiveBackgroundColor: '#069A8E',
                 tabBarStyle: { height: '9%' },
-                tabBarLabelStyle: { paddingBottom: 15, fontWeight: 'bold', fontFamily: 'sans-serif' },
+                tabBarLabelStyle: { paddingBottom: 15, fontWeight: 'bold', fontFamily: 'sans-serif', fontSize:LabelBottomTab },
                 tabBarIconStyle: { marginTop: 5 },
                 headerShown: false,
                 tabBarHideOnKeyboard: true,
@@ -42,7 +45,7 @@ const Navegador = (props) => {
             <Tab.Screen name='Solicitar Proveedor' component={Proveedor} />
             {
                 <Tab.Screen name='No Sincronizado' component={NoSync}
-                    options={({ route }) => ({ tabBarBadge: nosync != 0 ? nosync : null, tabBarBadgeStyle: { backgroundColor: '#F94C66', color: '#fff', fontWeight: 'bold' }, })} />
+                    options={({ route }) => ({ tabBarBadge: nosync != 0 ? nosync : null, tabBarBadgeStyle: { backgroundColor: '#F94C66', color: '#fff', fontWeight: 'bold', fontSize: TabNumber, alignItems: "center", alignContent: "center" }, })} />
             }
         </Tab.Navigator>
 

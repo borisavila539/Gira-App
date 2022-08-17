@@ -6,6 +6,7 @@ import { useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { useEffect } from "react";
 import { useSelector } from 'react-redux';
+import { IconHeader } from "../Components/constant";
 
 
 const History = (props) => {
@@ -157,7 +158,7 @@ const History = (props) => {
                         <FontAwesome5
                             name='file-invoice-dollar'
                             style={{ color: EstadoColor(item.estado) }}
-                            size={40}
+                            size={IconHeader}
                             solid />
                             <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.estado) }]}>{item.estado}</Text>
                     </View>

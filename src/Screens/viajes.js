@@ -12,6 +12,7 @@ import * as ImagePicker from 'expo-image-picker';
 import RadioButtonRN from 'radio-buttons-react-native';
 import { documentoMostrar, noSincronizado } from '../store/slices/usuarioSlice';
 import moment from "moment";
+import { IconCamera, IconosBottomTab, IconSelect, ImageHeigth, ImageWidth, ObjectHeigth, TextoPantallas } from "../Components/constant";
 
 
 const Viaje = (props) => {
@@ -176,7 +177,7 @@ const Viaje = (props) => {
 
     const onSelectProveedor = (selectedItem, index) => {
         proveedoresJSON.forEach(element => {
-            let elem = element['Identificacion'] + ' - ' + element['Nombre'];
+            let elem = element['Identificacion'] + '\n' + element['Nombre'];
             if (elem == selectedItem) {
                 setProveedor(element['CodigoProveedor'])
             }
@@ -385,7 +386,7 @@ const Viaje = (props) => {
         let array = [];
         if (proveedoresJSON) {
             proveedoresJSON.forEach(element => {
-                array.push(element['Identificacion'] + ' - ' + element['Nombre'])
+                array.push(element['Identificacion'] + '\n' + element['Nombre'])
             });
             setProveedores(array)
         }
@@ -437,7 +438,7 @@ const Viaje = (props) => {
                                         <View style={styles.inputIconContainer}>
                                             <TextInput style={styles.input} keyboardType={'default'} value={RTN} onChangeText={(value) => setRTN(value)} />
                                             <TouchableOpacity onPress={RTN != '' ? llenarProveedor : null}>
-                                                <FontAwesome5 name="search" size={20} color={'#1A4D2E'} />
+                                                <FontAwesome5 name="search" size={IconSelect} color={'#1A4D2E'} />
                                             </TouchableOpacity>
                                         </View>
                                     </View>
@@ -446,15 +447,15 @@ const Viaje = (props) => {
                                 : null
                         }
 
-                        <TextInputContainer title={'No. Factura:'} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
+                        <TextInputContainer title={'No. Factura:'} height={ObjectHeigth} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
                         <TextInputContainer title='Descripcion: ' multiline={true} maxLength={300} Justify={true} height={80} onChangeText={(value) => setDescripcion(value)} value={descripion} />
-                        <TextInputContainer title={'Valor en ' + moneda + ':'} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(value)} value={valor.toString()} />
+                        <TextInputContainer title={'Valor en ' + moneda + ':'} height={ObjectHeigth} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(value)} value={valor.toString()} />
                         <TouchableOpacity onPress={() => SetOpenDate(true)}>
                             <View style={styles.textInputDateContainer}>
                                 <Text style={styles.text}>Fecha Factura:</Text>
                                 <View style={styles.inputIconContainer}>
                                     <TextInput style={styles.input} placeholder={'01/01/2000'} editable={false} value={date} />
-                                    <FontAwesome5 name="calendar-alt" size={20} color={'#1A4D2E'} />
+                                    <FontAwesome5 name="calendar-alt" size={IconSelect} color={'#1A4D2E'} />
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -476,7 +477,7 @@ const Viaje = (props) => {
                                         <View style={styles.containerIconItem}>
                                             <Pressable style={{ width: '100%' }} onPress={pickImage} >
                                                 <View style={styles.button}>
-                                                    <FontAwesome5 name="camera-retro" size={50} color={'#1A4D2E'} />
+                                                    <FontAwesome5 name="camera-retro" size={IconCamera} color={'#1A4D2E'} />
                                                     <Text style={styles.textFoto}>Tomar Foto</Text>
                                                 </View>
                                             </Pressable>
@@ -484,7 +485,7 @@ const Viaje = (props) => {
                                         <View style={styles.containerIconItem}>
                                             <Pressable style={{ width: '100%' }} onPress={upLoadImage} >
                                                 <View style={styles.button}>
-                                                    <FontAwesome5 name="file-upload" size={50} color={'#1A4D2E'} />
+                                                    <FontAwesome5 name="file-upload" size={IconCamera} color={'#1A4D2E'} />
                                                     <Text style={styles.textFoto}>Subir Foto</Text>
                                                 </View>
                                             </Pressable>
@@ -496,7 +497,7 @@ const Viaje = (props) => {
                                 <View style={styles.containerIconItem}>
                                     <TouchableOpacity style={{ width: '100%' }} onPress={() => setModalCameraUpload(true)} >
                                         <View style={styles.button}>
-                                            <FontAwesome5 name="camera-retro" size={50} color={'#1A4D2E'} />
+                                            <FontAwesome5 name="camera-retro" size={IconCamera} color={'#1A4D2E'} />
                                         </View>
                                     </TouchableOpacity>
                                 </View>
@@ -526,7 +527,7 @@ const styles = StyleSheet.create({
     },
     formulario: {
         width: '80%',
-        maxWidth: 500,
+        maxWidth: 600,
         justifyContent: "center",
         alignItems: "center"
     },
@@ -535,7 +536,7 @@ const styles = StyleSheet.create({
         padding: 5,
     },
     text: {
-        fontSize: 16,
+        fontSize: TextoPantallas,
         fontWeight: 'bold',
         color: '#005555',
         fontFamily: 'sans-serif'
@@ -553,8 +554,8 @@ const styles = StyleSheet.create({
     input: {
         flex: 1,
         maxHeight: 100,
-        fontSize: 16,
-        height: 35,
+        fontSize: TextoPantallas,
+        height: ObjectHeigth,
         borderRightWidth: 1,
         borderColor: '#30475E',
         marginRight: 5,
@@ -575,8 +576,8 @@ const styles = StyleSheet.create({
         padding: 5,
     },
     image: {
-        width: 300,
-        height: 400,
+        width: ImageWidth,
+        height: ImageHeigth,
         marginBottom: 10,
         resizeMode: 'contain',
     },
@@ -624,7 +625,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     textFoto: {
-        fontSize: 18,
+        fontSize: TextoPantallas,
         fontWeight: 'bold',
         color: '#1A4D2E',
         fontFamily: 'sans-serif'

@@ -8,7 +8,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux'
 import { iniciarSesion, mensajeLogin, documentoMostrar, tipoMoneda } from './src/store/slices/usuarioSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { PixelRatio } from "react-native";
 
 const Stack = createStackNavigator();
 
@@ -18,6 +18,8 @@ const AppNavigation = () => {
   const { APIURL } = useSelector(state => state.usuario);
 
   const getData = async () => {
+    let dato = PixelRatio.getFontScale()
+    console.log(dato)
     let result = await AsyncStorage.getItem('@logeado');
 
     if (result == "yes") {

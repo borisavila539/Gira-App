@@ -5,6 +5,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { StatusBar } from "react-native";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { IconCamera } from "../Components/constant";
 
 const Proveedor = (props) => {
     const [nombre, setnombre] = useState('')
@@ -141,7 +142,7 @@ const Proveedor = (props) => {
                                         <View style={styles.containerIconItem}>
                                             <Pressable style={{ width: '100%' }} onPress={pickImage} >
                                                 <View style={styles.button}>
-                                                    <FontAwesome5 name="camera-retro" size={50} color={'#1A4D2E'} />
+                                                    <FontAwesome5 name="camera-retro" size={IconCamera} color={'#1A4D2E'} />
                                                     <Text style={styles.textFoto}>Tomar Foto</Text>
                                                 </View>
                                             </Pressable>
@@ -149,7 +150,7 @@ const Proveedor = (props) => {
                                         <View style={styles.containerIconItem}>
                                             <Pressable style={{ width: '100%' }} onPress={upLoadImage} >
                                                 <View style={styles.button}>
-                                                    <FontAwesome5 name="file-upload" size={50} color={'#1A4D2E'} />
+                                                    <FontAwesome5 name="file-upload" size={IconCamera} color={'#1A4D2E'} />
                                                     <Text style={styles.textFoto}>Subir Foto</Text>
                                                 </View>
                                             </Pressable>
@@ -161,7 +162,7 @@ const Proveedor = (props) => {
                                 <View style={styles.containerIconItem}>
                                     <TouchableOpacity style={{ width: '100%' }} onPress={() => setModalCameraUpload(true)} >
                                         <View style={styles.button}>
-                                            <FontAwesome5 name="camera-retro" size={50} color={'#1A4D2E'} />
+                                            <FontAwesome5 name="camera-retro" size={IconCamera} color={'#1A4D2E'} />
                                         </View>
                                     </TouchableOpacity>
                                 </View>
@@ -191,7 +192,7 @@ const styles = StyleSheet.create({
     },
     formulario: {
         width: '80%',
-        maxWidth: 500,
+        maxWidth: 600,
         justifyContent: "center",
         alignItems: "center"
     },
@@ -259,7 +260,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         color: '#1A4D2E',
-        fontFamily: 'serif'
+        fontFamily: 'sans-serif'
     }
 
 })

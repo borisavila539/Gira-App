@@ -3,6 +3,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { StyleSheet, View, Text, FlatList, RefreshControl, ActivityIndicator, TouchableOpacity } from "react-native";
 import { HeaderLogout } from "../Components/indexComponents";
 import { useSelector } from 'react-redux';
+import { IconHeader } from "../Components/constant";
 
 const NoSync = (props) => {
 
@@ -53,7 +54,7 @@ const NoSync = (props) => {
                         <FontAwesome5
                             name='sync-alt'
                             style={{ color: '#000' }}
-                            size={40}
+                            size={IconHeader}
                             solid />
                     </TouchableOpacity>
                 </View>

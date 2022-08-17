@@ -3,6 +3,7 @@ import { useState } from "react";
 import { StyleSheet, View, Text, Image, Modal, Pressable, ScrollView, SafeAreaView } from "react-native";
 import HeaderLogout from "../Components/headerLogout";
 import { useSelector } from 'react-redux';
+import { ImageHeigth, ImageWidth, TextoPantallas } from "../Components/constant";
 
 const HistoyDetalle = (props) => {
     const [modalVisible, SetModalVisible] = useState(false);
@@ -19,6 +20,7 @@ const HistoyDetalle = (props) => {
     const [descripcionAdmin, setDescripcionAdmin] = useState('');
     const [imagen, setImagen] = useState(null);
     const { monedaAbreviacion, APIURL } = useSelector(state => state.usuario);
+    const [administrador, setAdministrador] = useState('')
 
     const datosGasto = async () => {
         try {
@@ -56,6 +58,8 @@ const HistoyDetalle = (props) => {
                 setValor(Element['valorFactura']);
                 setDescripcionAdmin(Element['descripcionAdmin']);
                 setImagen(Element['imagen']);
+                setAdministrador(Element['admin'])
+
             })
         }
     }, [resultHistorialJSON, resultCategoriaJSON])
@@ -120,8 +124,18 @@ const HistoyDetalle = (props) => {
                                     <Text style={styles.text}>Valor: </Text>
                                     <Text style={styles.text2}>{monedaAbreviacion}{valor}</Text>
                                     {
+                                        administrador &&
+                                        <>
+                                            <Text></Text>
+                                            <Text style={styles.text}>Administrador: </Text>
+                                            <Text style={styles.text2}>{administrador}</Text>
+                                        </>
+
+                                    }
+                                    {
                                         descripcionAdmin &&
                                         <>
+
                                             <Text></Text>
                                             <Text style={styles.text}>Descripcion Rechazo: </Text>
                                             <Text style={styles.text2}>{descripcionAdmin}</Text>
@@ -152,13 +166,13 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     text: {
-        fontSize: 16,
+        fontSize: TextoPantallas,
         fontWeight: 'bold',
         textAlign: "center",
         fontFamily: 'sans-serif'
     },
     text2: {
-        fontSize: 16,
+        fontSize: TextoPantallas,
         fontWeight: "normal",
         fontStyle: "italic",
         textAlign: "center",
@@ -187,8 +201,8 @@ const styles = StyleSheet.create({
         paddingVertical: 10
     },
     image: {
-        width: 300,
-        height: 400,
+        width: ImageWidth,
+        height: ImageHeigth,
         marginBottom: 10,
         resizeMode: 'contain',
 

@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, View, Image, TextInput, Pressable, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -7,6 +7,7 @@ import { Buttons, MyAlert } from '../Components/indexComponents';
 import { useDispatch, useSelector } from 'react-redux'
 import { iniciarSesion, mensajeLogin, documentoMostrar, tipoMoneda } from '../store/slices/usuarioSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { IconSelect, TextButtons } from '../Components/constant';
 
 const Login = (props) => {
     const dispatch = useDispatch();
@@ -94,7 +95,7 @@ const Login = (props) => {
             setTipoMensaje(false)
             setEnviando(false)
         }
-
+        
     }
     return (
         <View style={{ flex: 1 }}>
@@ -184,6 +185,8 @@ const styles = StyleSheet.create({
     },
     containerinputs: {
         width: '80%',
+        height: '30%',
+        justifyContent:'space-around',
         maxWidth: 600,
         alignItems: 'center',
         paddingVertical: 20,
@@ -195,7 +198,7 @@ const styles = StyleSheet.create({
         flex: 3,
         padding: 5,
         marginLeft: 10,
-        fontSize: 20,
+        fontSize: TextButtons,
         color: '#005555',
         fontFamily: 'sans-serif'
     },
@@ -203,6 +206,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         width: '100%',
+        height:'20%',
         paddingHorizontal: 3,
         marginBottom: 15,
         backgroundColor: '#A1E3D8',
@@ -219,7 +223,7 @@ const styles = StyleSheet.create({
     },
     icons: {
         flex: 0,
-        fontSize: 20,
+        fontSize: IconSelect,
         marginLeft: 5,
         color: '#005555',
     },
