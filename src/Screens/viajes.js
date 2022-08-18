@@ -338,20 +338,6 @@ const Viaje = (props) => {
         setTipoMensaje(tipo)
     }
 
-    const documentoFiscalLoad = async () => {
-        try {
-            const request = await fetch(APIURL + 'api/Empresa/' + empresa);
-            const data = await request.json();
-            let documento = '';
-            data.forEach(element => {
-                documento = element['documento']
-            })
-            dispatch(documentoMostrar({ documentoFiscal: documento }))
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
 
     useEffect(() => {
         onScreenLoad();

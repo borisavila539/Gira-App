@@ -42,10 +42,8 @@ const Login = (props) => {
                 let usuario = data['Usuario'];
                 let nombreUsuario = usuario['IdUsuario'];
 
-                await AsyncStorage.setItem('@logeado','yes')
-                await AsyncStorage.setItem('@usuario',nombreUsuario)
-                await AsyncStorage.setItem('@nombre',nombre)
-                await AsyncStorage.setItem('@empresa',empresa)
+                const usuarioLogeado = { nombreUsuario, nombre, empresa };
+                await AsyncStorage.setItem("usuario", JSON.stringify(usuarioLogeado));
 
                 dispatch(iniciarSesion({ user: nombreUsuario, nombre, empresa }));
                 //Consultar el Tipo de documento fiscal de cada pais

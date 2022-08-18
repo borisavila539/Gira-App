@@ -8,7 +8,7 @@ import {IconosBottomTab, LabelBottomTab, TabNumber, TextoPantallas} from "../Com
 const Tab = createBottomTabNavigator();
 
 const Navegador = (props) => {
-    console.log(IconosBottomTab)
+    
     const { nosync } = useSelector(state => state.usuario)
     return (
         <Tab.Navigator

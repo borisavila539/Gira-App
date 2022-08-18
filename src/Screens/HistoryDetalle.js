@@ -23,9 +23,11 @@ const HistoyDetalle = (props) => {
     const [administrador, setAdministrador] = useState('')
 
     const datosGasto = async () => {
+        
         try {
             const request = await fetch(APIURL + 'api/GastoViajeDetalle/' + props.route.params.ID);
             let data = await request.json();
+
             setResultHistorialJSON(data)
         } catch (error) {
             console.log('No hay historial: ' + error)
@@ -124,7 +126,7 @@ const HistoyDetalle = (props) => {
                                     <Text style={styles.text}>Valor: </Text>
                                     <Text style={styles.text2}>{monedaAbreviacion}{valor}</Text>
                                     {
-                                        administrador &&
+                                        administrador !="" &&
                                         <>
                                             <Text></Text>
                                             <Text style={styles.text}>Administrador: </Text>
@@ -133,7 +135,7 @@ const HistoyDetalle = (props) => {
 
                                     }
                                     {
-                                        descripcionAdmin &&
+                                        descripcionAdmin != '' &&
                                         <>
 
                                             <Text></Text>

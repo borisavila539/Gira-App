@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { StyleSheet, View, Text, FlatList, RefreshControl, ActivityIndicator, TouchableOpacity } from "react-native";
-import { HeaderLogout } from "../Components/indexComponents";
+import { HeaderLogout, MyAlert } from "../Components/indexComponents";
 import { useSelector } from 'react-redux';
 import { IconHeader } from "../Components/constant";
 import { noSincronizado } from '../store/slices/usuarioSlice';
@@ -11,9 +11,14 @@ const NoSync = (props) => {
     const dispatch = useDispatch();
     const [page, setPage] = useState(1);
     const [historialJSON, setHistorialJSON] = useState([]);
-    const { user, monedaAbreviacion, APIURL, APIURLSAV } = useSelector(state => state.usuario);
+    const { user, monedaAbreviacion, APIURL, APIURLAVENTAS } = useSelector(state => state.usuario);
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [mensajeAlerta, setmensajeAlerta] = useState('');
+    const [showMensajeAlerta, setShowMensajeAlerta] = useState(false);
+    const [tipoMensaje, setTipoMensaje] = useState(false);
+    const [sincronizando, setSincronizando] = useState(false);
+    const [idSync, setIdSync] = useState('')
 
     const historial = async () => {
         try {
@@ -49,36 +54,65 @@ const NoSync = (props) => {
         dispatch(noSincronizado({ nosync: num }))
     }
 
-    const  SincronizarAX= async (id) =>{
+    const SincronizarAX = async (id) => {
         console.log(id)
-        /*
-        const request = await fetch(APIURLSAV+'/api/DatosEnviarAX/'+id)
-        if(request.data.content=='"OK"'){
-            const request2 = await fetch(APIURL+'/api/ActualizarEstadoGasto/'+id+'/2/-/-/-',{
-            method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                }
+        console.log(APIURLAVENTAS + 'api/DatosEnviarAX/' + id)
+        const request = await fetch(APIURLAVENTAS + 'api/DatosEnviarAX/' + id)
+        let result = await request.json()
+        console.log(result.Content)
+        if (result.Content == '"OK"') {
+            const request2 = await fetch(APIURLAVENTAS + 'api/ActualizarEstadoGasto/' + id + '/2/-/-/-', {
+                method: 'POST'
             })
-        }*/
+            const result2 = await request2.json();
+            console.log(result2)
+            if (result2 == 1) {
+                setmensajeAlerta('Gasto sincronizado con AX')
+                setShowMensajeAlerta(true)
+                setTipoMensaje(true)
+            }
+        } else {
+            setmensajeAlerta('Error: ' + result.Content + '\nEspere a que el administrador actualize el Cai para reintentar ')
+            setShowMensajeAlerta(true)
+            setTipoMensaje(false)
+        }
+        setSincronizando(false)
         cantidadNoSync()
+        historial()
     }
 
     const renderItem = (item) => {
         const cambioFecha = (fecha) => {
             return fecha.substring(0, 10);
         };
+        const icono = (id) =>{
+            if(id == idSync){
+                return 'spinner'
+            }else{
+                return 'sync-alt'
+            }
+        }
+        
         return (
             <View style={{ borderBottomWidth: 1, width: "100%", flexDirection: 'row', paddingHorizontal: 3, borderRadius: 0, borderColor: '#000', backgroundColor: '#f0f0f0' }}>
                 <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
-                    <TouchableOpacity onPress={()=>SincronizarAX(item.idGastoViajeDetalle)}>
-                        <FontAwesome5
-                            name='sync-alt'
-                            style={{ color: '#000' }}
-                            size={IconHeader}
-                            solid />
-                    </TouchableOpacity>
+                    {
+                        !sincronizando ?
+                            <TouchableOpacity onPress={() => {SincronizarAX(item.idGastoViajeDetalle); setSincronizando(true);setIdSync(item.idGastoViajeDetalle)}}>
+                                <FontAwesome5
+                                    name='sync-alt'
+                                    style={{ color: '#000' }}
+                                    size={IconHeader}
+                                    solid />
+                            </TouchableOpacity>
+                            :
+                            <FontAwesome5
+                                    name={icono(item.idGastoViajeDetalle)}
+                                    style={{ color: '#000' }}
+                                    size={IconHeader}
+                                    solid 
+                                    />
+                    }
                 </View>
                 <View style={{ width: '80%' }}>
                     <Text style={[styles.text, { textAlign: 'left' }]}>
@@ -94,6 +128,7 @@ const NoSync = (props) => {
                         <Text style={styles.text2}>Fecha Factura:</Text> {cambioFecha(item.fechaFactura)}
                     </Text>
                 </View>
+                <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
             </View>
         );
     }

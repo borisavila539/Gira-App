@@ -18,12 +18,11 @@ const AppNavigation = () => {
   const { APIURL } = useSelector(state => state.usuario);
 
   const getData = async () => {
-    let result = await AsyncStorage.getItem('@logeado');
+    
+    const usuario = await AsyncStorage.getItem("usuario");
 
-    if (result == "yes") {
-      let nombreUsuario = await AsyncStorage.getItem('@usuario')
-      let nombre = await AsyncStorage.getItem('@nombre')
-      let empresa = await AsyncStorage.getItem('@empresa')
+    if (usuario != null) {
+      const { nombreUsuario, nombre, empresa } = JSON.parse(usuario);
 
       dispatch(iniciarSesion({ user: nombreUsuario, nombre, empresa }));
 
@@ -55,7 +54,7 @@ const AppNavigation = () => {
       }
       catch (error) {
       }
-    } 
+    }
   }
 
   useEffect(() => {

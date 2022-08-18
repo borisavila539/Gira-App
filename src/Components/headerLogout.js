@@ -10,7 +10,7 @@ const HeaderLogout = (props) => {
     const dispatch = useDispatch();
     const { nombre } = useSelector(state => state.usuario)
     const handlePressLogout = async () => {
-        await AsyncStorage.setItem('@logeado','no')
+        await AsyncStorage.removeItem("usuario");
         dispatch(terminarSesion());
     }
     return (
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#fff',
         textAlign: "center",
-        
+
     },
 })
 
