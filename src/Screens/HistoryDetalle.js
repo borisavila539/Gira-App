@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { StyleSheet, View, Text, Image, Modal, Pressable, ScrollView, SafeAreaView } from "react-native";
-import HeaderLogout from "../Components/headerLogout";
+import HeaderLogout from "../Components/HeaderLogout";
 import { useSelector } from 'react-redux';
-import { ImageHeigth, ImageWidth, TextoPantallas } from "../Components/constant";
+import { ImageHeigth, ImageWidth, TextoPantallas } from "../Components/Constant";
 
 const HistoyDetalle = (props) => {
     const [modalVisible, SetModalVisible] = useState(false);

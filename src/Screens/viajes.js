@@ -1,4 +1,4 @@
-import { StyleSheet, View, TouchableOpacity, SafeAreaView, Text } from "react-native";
+import { StyleSheet, View, TouchableOpacity, SafeAreaView, Text, ActivityIndicator } from "react-native";
 import { Buttons, HeaderLogout } from "../Components/IndexComponents";
 import { TextInputContainer, DropdownList, MyAlert, ModalCameraUpload } from "../Components/IndexComponents";
 import { StatusBar } from "react-native";
@@ -431,7 +431,7 @@ const Viaje = (props) => {
                                                         <FontAwesome5 name="search" size={IconSelect} color={'#1A4D2E'} />
                                                     </TouchableOpacity>
                                                     :
-                                                    <FontAwesome5 name="spinner" size={IconSelect} color={'#1A4D2E'} />
+                                                    < ActivityIndicator size='small' color={'#000'}/>
                                             }
                                         </View>
                                     </View>

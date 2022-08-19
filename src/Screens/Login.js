@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, View, Image, TextInput, Pressable, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { Buttons, MyAlert } from '../Components/indexComponents';
+import { Buttons, MyAlert } from '../Components/IndexComponents';
 import { useDispatch, useSelector } from 'react-redux'
 import { iniciarSesion, mensajeLogin, documentoMostrar, tipoMoneda } from '../store/slices/usuarioSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { IconSelect, TextButtons } from '../Components/constant';
+import { IconSelect, TextButtons } from '../Components/Constant';
 
 const Login = (props) => {
     const dispatch = useDispatch();

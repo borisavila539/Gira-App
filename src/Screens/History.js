@@ -1,12 +1,12 @@
 import { StyleSheet, View, Text, TouchableOpacity, TextInput, FlatList, RefreshControl, ActivityIndicator } from "react-native";
-import { HeaderLogout, DropdownList, MyAlert } from "../Components/indexComponents";
+import { HeaderLogout, DropdownList, MyAlert } from "../Components/IndexComponents";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { useEffect } from "react";
 import { useSelector } from 'react-redux';
-import { IconHeader } from "../Components/constant";
+import { IconHeader } from "../Components/Constant";
 
 
 const History = (props) => {
@@ -299,24 +299,19 @@ const History = (props) => {
                     :
                     <View style={{ flex: 1, width: '100%', justifyContent: "center" }}>
                         <Text style={[styles.text, { textAlign: 'center' }]}>No se han encontrado gastos...</Text>
-                        <View style={{alignItems: "center"}}>
-                        <Text></Text>
+                        <View style={{ alignItems: "center" }}>
+                            <Text></Text>
                             {
                                 !recargando ?
-                                    <TouchableOpacity onPress={Historial} style={{alignItems: "center", width: IconHeader,}}>
+                                    <TouchableOpacity onPress={Historial} style={{ alignItems: "center", width: IconHeader, }}>
                                         <FontAwesome5
-                                            name='sync-alt'
-                                            style={{ color: '#000' }}
+                                            name='sync'
+                                            style={{ color: '#dde' }}
                                             size={IconHeader}
                                             solid />
                                     </TouchableOpacity>
                                     :
-                                    <FontAwesome5
-                                        name='spinner'
-                                        style={{ color: '#000' }}
-                                        size={IconHeader}
-                                        solid
-                                    />
+                                    < ActivityIndicator size='large' color={'#dde'} />
                             }
                         </View>
                     </View>

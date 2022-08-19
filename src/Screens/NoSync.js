@@ -111,12 +111,7 @@ const NoSync = (props) => {
                                     solid />
                             </TouchableOpacity>
                             :
-                            <FontAwesome5
-                                name={icono(item.idGastoViajeDetalle)}
-                                style={{ color: '#000' }}
-                                size={IconHeader}
-                                solid
-                            />
+                            < ActivityIndicator size='large' color={'#000'} />
                     }
                 </View>
                 <View style={{ width: '80%' }}>
@@ -182,18 +177,13 @@ const NoSync = (props) => {
                                 !recargando ?
                                     <TouchableOpacity onPress={historial} style={{ alignItems: "center", width: IconHeader, }}>
                                         <FontAwesome5
-                                            name='sync-alt'
-                                            style={{ color: '#000' }}
+                                            name='sync'
+                                            style={{ color: '#dde' }}
                                             size={IconHeader}
                                             solid />
                                     </TouchableOpacity>
                                     :
-                                    <FontAwesome5
-                                        name='spinner'
-                                        style={{ color: '#000' }}
-                                        size={IconHeader}
-                                        solid
-                                    />
+                                    < ActivityIndicator size='large' color={'#dde'} />
                             }
                         </View>
                     </View>}

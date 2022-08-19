@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Viaje, History, Proveedor, NoSync } from "../Screens/IndexScreens";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useSelector, } from 'react-redux';
-import {IconosBottomTab, LabelBottomTab, TabNumber, TextoPantallas} from "../Components/constant";
+import {IconosBottomTab, LabelBottomTab, TabNumber} from "../Components/Constant";
 
 
 const Tab = createBottomTabNavigator();

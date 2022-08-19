@@ -8,7 +8,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux'
 import { iniciarSesion, documentoMostrar, tipoMoneda } from './src/store/slices/usuarioSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { TextoPantallas } from './src/Components/constant';
+import { TextoPantallas } from './src/Components/Constant';
 import { View, Text, StyleSheet } from 'react-native';
 
 
