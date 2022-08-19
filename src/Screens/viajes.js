@@ -1,6 +1,6 @@
-import { StyleSheet, View, TouchableOpacity, SafeAreaView, Text, Image, Modal, Pressable } from "react-native";
-import { Buttons, HeaderLogout } from "../Components/indexComponents";
-import { TextInputContainer, DropdownList, MyAlert } from "../Components/indexComponents";
+import { StyleSheet, View, TouchableOpacity, SafeAreaView, Text } from "react-native";
+import { Buttons, HeaderLogout } from "../Components/IndexComponents";
+import { TextInputContainer, DropdownList, MyAlert, ModalCameraUpload } from "../Components/IndexComponents";
 import { StatusBar } from "react-native";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { useState } from "react";
@@ -10,10 +10,9 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import RadioButtonRN from 'radio-buttons-react-native';
-import { documentoMostrar, noSincronizado } from '../store/slices/usuarioSlice';
+import { noSincronizado } from '../store/slices/usuarioSlice';
 import moment from "moment";
-import { IconCamera, IconSelect, ImageHeigth, ImageWidth, ObjectHeigth, TextoPantallas } from "../Components/constant";
-
+import { IconSelect, ObjectHeigth, TextoPantallas } from "../Components/Constant";
 
 const Viaje = (props) => {
     const dispatch = useDispatch();
@@ -50,6 +49,7 @@ const Viaje = (props) => {
     const [disableProveedor, setDiasableProveedor] = useState(true);
     const [enviando, setEnviando] = useState(false);
     const [proveedorPredefinido, setProveedorPredefinido] = useState(false);
+    const [buscandoProveedor, setBuscandoProveedor] = useState(false);
     let result;
 
 
@@ -147,6 +147,7 @@ const Viaje = (props) => {
     };
 
     const llenarProveedor = async () => {
+        setBuscandoProveedor(true)
         const request = await fetch('http://190.109.223.244:8083/api/proveedores/' + RTN + '/' + empresa);
         let data = await request.json()
         setProveedoresJSON(data)
@@ -164,6 +165,7 @@ const Viaje = (props) => {
             setDiasableProveedor(false)
         }
         setShowMensajeAlerta(true)
+        setBuscandoProveedor(false)
     };
 
     const onSelectTipo = (selectedItem, index) => {
@@ -396,7 +398,7 @@ const Viaje = (props) => {
 
     return (
         <View><HeaderLogout />
-            <ScrollView backgroundColor={'#fff'} style={{height:'92%'}}>
+            <ScrollView backgroundColor={'#fff'} style={{ height: '92%' }} showsVerticalScrollIndicator={false}>
                 <SafeAreaView style={styles.container}>
                     <View style={styles.formulario}>
                         <StatusBar style="auto" />
@@ -407,7 +409,7 @@ const Viaje = (props) => {
                             <RadioButtonRN data={dataAlimentos}
                                 style={{ flex: 1, width: '95%' }}
                                 boxStyle={{ flex: 1, alignItems: 'center', marginHorizontal: 0, paddingHorizontal: 10 }}
-                                textStyle={{ color: '#000', fontSize: 16, fontFamily:'sans-serif' }}
+                                textStyle={{ color: '#000', fontSize: 16, fontFamily: 'sans-serif' }}
                                 initial={1}
                                 selectedBtn={(value) => setTipoAlimento(value)}
                                 box={false}
@@ -423,9 +425,14 @@ const Viaje = (props) => {
                                         <Text style={styles.text}>{documentoFiscal}:</Text>
                                         <View style={styles.inputIconContainer}>
                                             <TextInput style={styles.input} keyboardType={'default'} value={RTN} onChangeText={(value) => setRTN(value)} />
-                                            <TouchableOpacity onPress={RTN != '' ? llenarProveedor : null}>
-                                                <FontAwesome5 name="search" size={IconSelect} color={'#1A4D2E'} />
-                                            </TouchableOpacity>
+                                            {
+                                                !buscandoProveedor ?
+                                                    <TouchableOpacity onPress={RTN != '' ? llenarProveedor : null}>
+                                                        <FontAwesome5 name="search" size={IconSelect} color={'#1A4D2E'} />
+                                                    </TouchableOpacity>
+                                                    :
+                                                    <FontAwesome5 name="spinner" size={IconSelect} color={'#1A4D2E'} />
+                                            }
                                         </View>
                                     </View>
                                     <DropdownList defaultButtonText='Seleccione Proveedor' data={proveedores} onSelect={onSelectProveedor} search={true} searchPlaceHolder={'Buscar por nombre'} disabled={disableProveedor} />
@@ -449,52 +456,19 @@ const Viaje = (props) => {
                             openDate &&
                             <DateTimePicker mode='date' value={showdate} onChange={onchange} onTouchCancel={() => console.log('Cancelado')} />
                         }
-                        <View style={styles.containerImage}>
-                            <Modal animationType="fade" transparent={true} visible={modalVisible} onRequestClose={() => SetModalVisible(!modalVisible)}>
-                                <View style={styles.modal}>
-                                    <Pressable style={styles.hideimage} onPress={() => SetModalVisible(!modalVisible)}>
-                                        <Image source={{ uri: 'data:image/jpeg;base64,' + imagen }} style={styles.imageModal} />
-                                    </Pressable>
-                                </View>
-                            </Modal>
-                            <Modal animationType="fade" transparent={true} visible={modalCameraUpload} onRequestClose={() => setModalCameraUpload(!modalCameraUpload)}>
-                                <Pressable style={styles.modal} onPress={() => setModalCameraUpload(!modalCameraUpload)}>
-                                    <View style={styles.containerIconModal}>
-                                        <View style={styles.containerIconItem}>
-                                            <Pressable style={{ width: '100%' }} onPress={pickImage} >
-                                                <View style={styles.button}>
-                                                    <FontAwesome5 name="camera-retro" size={IconCamera} color={'#1A4D2E'} />
-                                                    <Text style={styles.textFoto}>Tomar Foto</Text>
-                                                </View>
-                                            </Pressable>
-                                        </View>
-                                        <View style={styles.containerIconItem}>
-                                            <Pressable style={{ width: '100%' }} onPress={upLoadImage} >
-                                                <View style={styles.button}>
-                                                    <FontAwesome5 name="file-upload" size={IconCamera} color={'#1A4D2E'} />
-                                                    <Text style={styles.textFoto}>Subir Foto</Text>
-                                                </View>
-                                            </Pressable>
-                                        </View>
-                                    </View>
-                                </Pressable>
-                            </Modal>
-                            <View style={styles.containerIcon}>
-                                <View style={styles.containerIconItem}>
-                                    <TouchableOpacity style={{ width: '100%' }} onPress={() => setModalCameraUpload(true)} >
-                                        <View style={styles.button}>
-                                            <FontAwesome5 name="camera-retro" size={IconCamera} color={'#1A4D2E'} />
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                            {
-                                imagen &&
-                                <Pressable onPress={() => SetModalVisible(true)}>
-                                    <Image source={{ uri: 'data:image/jpeg;base64,' + imagen }} style={styles.image} />
-                                </Pressable>
-                            }
-                        </View >
+                        <ModalCameraUpload
+                            modalVisible={modalVisible}
+                            onRequestCloseImage={() => SetModalVisible(!modalVisible)}
+                            OnPressUploadImage={() => SetModalVisible(!modalVisible)}
+                            imagen={imagen}
+                            modalCameraUpload={modalCameraUpload}
+                            onRequestCloseSelectUploadImage={() => setModalCameraUpload(!modalCameraUpload)}
+                            onPressOut={() => setModalCameraUpload(!modalCameraUpload)}
+                            onPressCameraUpload={pickImage}
+                            OnPressUpLoadImage={upLoadImage}
+                            onPressModalCameraUpload={() => setModalCameraUpload(true)}
+                            modalImage={() => SetModalVisible(!modalVisible)}
+                        />
                         <Buttons title={enviando ? 'Enviando..' : 'Enviar'} onPressFunction={EnviarGasto} disabled={enviando}></Buttons>
                         <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
                     </View>
@@ -548,72 +522,6 @@ const styles = StyleSheet.create({
         color: '#121212',
         padding: 2,
         textAlign: "center",
-        fontFamily: 'sans-serif'
-    },
-    containerImage: {
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginVertical: 10,
-        borderWidth: 1.5,
-        borderColor: '#30475E',
-        borderRadius: 10,
-        backgroundColor: '#f0f0f0',
-        padding: 5,
-    },
-    image: {
-        width: ImageWidth,
-        height: ImageHeigth,
-        marginBottom: 10,
-        resizeMode: 'contain',
-    },
-    button: {
-        width: '100%',
-        alignItems: 'center',
-    },
-    containerIcon: {
-        width: '100%',
-        flexDirection: 'row',
-        padding: 10,
-        borderBottomWidth: 1,
-        marginBottom: 5,
-    },
-    containerIconModal: {
-        width: '80%',
-        maxWidth: 500,
-        flexDirection: 'row',
-        padding: 10,
-        backgroundColor: '#fff',
-        borderRadius: 20,
-        borderBottomWidth: 1,
-        marginBottom: 5,
-    },
-    containerIconItem: {
-        flex: 1,
-    },
-    modal: {
-        backgroundColor: '#00000099',
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderWidth: 1,
-    },
-    imageModal: {
-        width: '90%',
-        height: '90%',
-        resizeMode: 'contain',
-    },
-    hideimage: {
-        flex: 1,
-        borderWidth: 1,
-        width: '100%',
-        alignItems: "center",
-        justifyContent: 'center',
-    },
-    textFoto: {
-        fontSize: TextoPantallas,
-        fontWeight: 'bold',
-        color: '#1A4D2E',
         fontFamily: 'sans-serif'
     }
 })

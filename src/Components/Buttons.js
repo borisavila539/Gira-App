@@ -5,12 +5,12 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
-import { TextButtons } from "./constant";
+import { TextButtons } from "./Constant";
 
 const Buttons = (props) => {
   return (
     <TouchableOpacity
-      style={{ width: '90%' }}
+      style={{ width: '100%' }}
       activeOpacity={0.5}
       onPress={props.onPressFunction}
       hitSlop={{ top: 10, bottom: 20, left: 20, right: 20 }}
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 10,
     alignItems: 'center',
-    borderRadius: 100,
+    borderRadius: 25,
     backgroundColor: '#069A8E',
   },
   text: {

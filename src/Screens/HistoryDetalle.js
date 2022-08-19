@@ -61,6 +61,7 @@ const HistoyDetalle = (props) => {
                 setDescripcionAdmin(Element['descripcionAdmin']);
                 setImagen(Element['imagen']);
                 setAdministrador(Element['admin'])
+                
 
             })
         }
@@ -126,7 +127,7 @@ const HistoyDetalle = (props) => {
                                     <Text style={styles.text}>Valor: </Text>
                                     <Text style={styles.text2}>{monedaAbreviacion}{valor}</Text>
                                     {
-                                        administrador !="" &&
+                                        administrador != null &&
                                         <>
                                             <Text></Text>
                                             <Text style={styles.text}>Administrador: </Text>

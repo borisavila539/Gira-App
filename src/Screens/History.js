@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, Alert, FlatList, RefreshControl, ActivityIndicator } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, FlatList, RefreshControl, ActivityIndicator } from "react-native";
 import { HeaderLogout, DropdownList, MyAlert } from "../Components/indexComponents";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -29,6 +29,7 @@ const History = (props) => {
     const [mensajeAlerta, setmensajeAlerta] = useState('');
     const [showMensajeAlerta, setShowMensajeAlerta] = useState(false);
     const [tipoMensaje, setTipoMensaje] = useState(false);
+    const [recargando, setRecargando] = useState(false)
     let cont = 0;
 
     const onchangeIni = (event, selectedDate) => {
@@ -81,6 +82,7 @@ const History = (props) => {
     }
 
     const Historial = async () => {
+        setRecargando(true)
         try {
             console.log(APIURL + 'api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/1/10/' + estadoID)
             const request = await fetch(APIURL + 'api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/1/10/' + estadoID);
@@ -92,6 +94,7 @@ const History = (props) => {
         } catch (error) {
             console.log('No se obtuvo el Historial')
         }
+        setRecargando(false)
     }
 
     const HistorialFiltrado = async () => {
@@ -152,15 +155,15 @@ const History = (props) => {
             return colorEstado;
         }
         return (
-            <View style={{ borderBottomWidth: 1.5, width: "100%", flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 5, borderRadius: 0, borderColor: '#A2B5BB', backgroundColor: '#f0f0f0' }}>
+            <View style={{ borderBottomWidth: 1.5, width: "100%", flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 5, borderRadius: 0, borderColor: '#A2B5BB', backgroundColor: '#fff' }}>
                 <TouchableOpacity style={{ width: '100%', flexDirection: 'row' }} onPress={() => { props.navigation.navigate('ScreenHistoryDetalle', { ID: item.idGastoViajeDetalle }) }}>
-                    <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center'}}>
+                    <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
                         <FontAwesome5
                             name='file-invoice-dollar'
                             style={{ color: EstadoColor(item.estado) }}
                             size={IconHeader}
                             solid />
-                            <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.estado) }]}>{item.estado}</Text>
+                        <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.estado) }]}>{item.estado}</Text>
                     </View>
                     <View style={{ width: '80%' }}>
                         <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.estado) }]}>
@@ -194,8 +197,8 @@ const History = (props) => {
     const handleLoadMore = () => {
         setIsLoading(true);
         HistorialFiltrado();
-
     }
+
 
     useEffect(() => {
         onchange(showdateFin, showdateIni)
@@ -279,19 +282,45 @@ const History = (props) => {
                     </View>
                 </ScrollView>
             </View>
-
-            <FlatList
-                data={showHistorialJSON}
-                keyExtractor={(item) => item.idGastoViajeDetalle.toString()}
-                renderItem={({ item }) => renderItem(item)}
-                refreshControl={
-                    <RefreshControl refreshing={refreshing} onRefresh={Historial} colors={['#069A8E']} />
-                }
-                showsVerticalScrollIndicator={false}
-                onEndReached={handleLoadMore}
-                ListFooterComponent={renderFooter}
-                style={{ backgroundColor: '#fff' }}
-            />
+            {
+                showHistorialJSON.length > 0 ?
+                    <FlatList
+                        data={showHistorialJSON}
+                        keyExtractor={(item) => item.idGastoViajeDetalle.toString()}
+                        renderItem={({ item }) => renderItem(item)}
+                        refreshControl={
+                            <RefreshControl refreshing={refreshing} onRefresh={Historial} colors={['#069A8E']} />
+                        }
+                        showsVerticalScrollIndicator={false}
+                        onEndReached={handleLoadMore}
+                        ListFooterComponent={renderFooter}
+                        style={{ backgroundColor: '#fff' }}
+                    />
+                    :
+                    <View style={{ flex: 1, width: '100%', justifyContent: "center" }}>
+                        <Text style={[styles.text, { textAlign: 'center' }]}>No se han encontrado gastos...</Text>
+                        <View style={{alignItems: "center"}}>
+                        <Text></Text>
+                            {
+                                !recargando ?
+                                    <TouchableOpacity onPress={Historial} style={{alignItems: "center", width: IconHeader,}}>
+                                        <FontAwesome5
+                                            name='sync-alt'
+                                            style={{ color: '#000' }}
+                                            size={IconHeader}
+                                            solid />
+                                    </TouchableOpacity>
+                                    :
+                                    <FontAwesome5
+                                        name='spinner'
+                                        style={{ color: '#000' }}
+                                        size={IconHeader}
+                                        solid
+                                    />
+                            }
+                        </View>
+                    </View>
+            }
             <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
         </View >
     )

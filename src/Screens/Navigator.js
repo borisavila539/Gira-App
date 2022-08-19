@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Viaje, History, Proveedor, NoSync } from "../Screens/indexScreens";
+import { Viaje, History, Proveedor, NoSync } from "../Screens/IndexScreens";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useSelector, } from 'react-redux';
 import {IconosBottomTab, LabelBottomTab, TabNumber, TextoPantallas} from "../Components/constant";
@@ -33,7 +33,7 @@ const Navegador = (props) => {
                 tabBarActiveBackgroundColor: '#fff',
                 tabBarInactiveBackgroundColor: '#069A8E',
                 tabBarStyle: { height: '9%' },
-                tabBarLabelStyle: { paddingBottom: 15, fontWeight: 'bold', fontFamily: 'sans-serif', fontSize:LabelBottomTab },
+                tabBarLabelStyle: { paddingBottom: 10, fontWeight: 'bold', fontFamily: 'sans-serif', fontSize:LabelBottomTab },
                 tabBarIconStyle: { marginTop: 5 },
                 headerShown: false,
                 tabBarHideOnKeyboard: true,

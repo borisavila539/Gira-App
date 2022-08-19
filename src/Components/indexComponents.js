@@ -1,7 +1,8 @@
 import Buttons from "./Buttons";
-import HeaderLogout from "./headerLogout";
+import HeaderLogout from "./HeaderLogout";
 import TextInputContainer from "./TextInputContainer";
 import DropdownList from "./DropDownList";
-import MyAlert from "./myAlerts"
+import MyAlert from "./MyAlerts"
+import ModalCameraUpload from "./Camera";
 
-export { Buttons, HeaderLogout, TextInputContainer, DropdownList, MyAlert };
+export { Buttons, HeaderLogout, TextInputContainer, DropdownList, MyAlert, ModalCameraUpload };

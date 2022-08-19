@@ -1,9 +1,9 @@
 import SelectDropdown from 'react-native-select-dropdown'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { ObjectHeigth, IconSelect } from './constant';
+import { ObjectHeigth, IconSelect } from './Constant';
 
 import { View, StyleSheet, Text } from 'react-native'
-import { TextoPantallas } from './constant';
+import { TextoPantallas } from './Constant';
 
 function Icon() {
     return (

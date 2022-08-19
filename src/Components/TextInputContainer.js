@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, TextInput } from "react-native";
-import { TextoPantallas } from "./constant";
+import { TextoPantallas } from "./Constant";
 
 const TextInputContainer = (props) => {
 

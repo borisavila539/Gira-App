@@ -1,11 +1,9 @@
-import { StyleSheet, View, Text, SafeAreaView, ScrollView, Modal, Pressable, TouchableOpacity, Image } from "react-native";
-import { HeaderLogout, TextInputContainer, Buttons, MyAlert } from "../Components/indexComponents";
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { StyleSheet, View, Text, SafeAreaView, ScrollView} from "react-native";
+import { HeaderLogout, TextInputContainer, Buttons, MyAlert, ModalCameraUpload } from "../Components/indexComponents";
 import * as ImagePicker from 'expo-image-picker';
 import { StatusBar } from "react-native";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { IconCamera } from "../Components/constant";
 
 const Proveedor = (props) => {
     const [nombre, setnombre] = useState('')
@@ -119,7 +117,7 @@ const Proveedor = (props) => {
     return (
         <View>
             <HeaderLogout />
-            <ScrollView backgroundColor={'#fff'} style={{height:'92%'}}>
+            <ScrollView backgroundColor={'#fff'} style={{ height: '92%' }}>
                 <StatusBar style="auto" />
 
                 <SafeAreaView style={styles.container}>
@@ -127,53 +125,19 @@ const Proveedor = (props) => {
                         <TextInputContainer title={'Nombre:'} placeholder={'Nombre Proveedor'} onChangeText={value => setnombre(value)} value={nombre} />
                         <TextInputContainer title={documentoFiscal + ':'} placeholder={documentoFiscal} onChangeText={value => setRTN(value)} value={RTN} />
                         <TextInputContainer title={'Descripcion:'} multiline={true} maxLength={300} Justify={true} height={80} onChangeText={value => setDescripcion(value)} value={descripcion} />
-
-                        <View style={styles.containerImage}>
-                            <Modal animationType="fade" transparent={true} visible={modalVisible} onRequestClose={() => SetModalVisible(!modalVisible)}>
-                                <View style={styles.modal}>
-                                    <Pressable style={styles.hideimage} onPress={() => SetModalVisible(!modalVisible)}>
-                                        <Image source={{ uri: 'data:image/jpeg;base64,' + imagen }} style={styles.imageModal} />
-                                    </Pressable>
-                                </View>
-                            </Modal>
-                            <Modal animationType="fade" transparent={true} visible={modalCameraUpload} onRequestClose={() => setModalCameraUpload(!modalCameraUpload)}>
-                                <Pressable style={styles.modal} onPress={() => setModalCameraUpload(!modalCameraUpload)}>
-                                    <View style={styles.containerIconModal}>
-                                        <View style={styles.containerIconItem}>
-                                            <Pressable style={{ width: '100%' }} onPress={pickImage} >
-                                                <View style={styles.button}>
-                                                    <FontAwesome5 name="camera-retro" size={IconCamera} color={'#1A4D2E'} />
-                                                    <Text style={styles.textFoto}>Tomar Foto</Text>
-                                                </View>
-                                            </Pressable>
-                                        </View>
-                                        <View style={styles.containerIconItem}>
-                                            <Pressable style={{ width: '100%' }} onPress={upLoadImage} >
-                                                <View style={styles.button}>
-                                                    <FontAwesome5 name="file-upload" size={IconCamera} color={'#1A4D2E'} />
-                                                    <Text style={styles.textFoto}>Subir Foto</Text>
-                                                </View>
-                                            </Pressable>
-                                        </View>
-                                    </View>
-                                </Pressable>
-                            </Modal>
-                            <View style={styles.containerIcon}>
-                                <View style={styles.containerIconItem}>
-                                    <TouchableOpacity style={{ width: '100%' }} onPress={() => setModalCameraUpload(true)} >
-                                        <View style={styles.button}>
-                                            <FontAwesome5 name="camera-retro" size={IconCamera} color={'#1A4D2E'} />
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                            {
-                                imagen &&
-                                <Pressable onPress={() => SetModalVisible(true)}>
-                                    <Image source={{ uri: 'data:image/jpeg;base64,' + imagen }} style={styles.image} />
-                                </Pressable>
-                            }
-                        </View >
+                        <ModalCameraUpload
+                            modalVisible={modalVisible}
+                            onRequestCloseImage={() => SetModalVisible(!modalVisible)}
+                            OnPressUploadImage={() => SetModalVisible(!modalVisible)}
+                            imagen={imagen}
+                            modalCameraUpload={modalCameraUpload}
+                            onRequestCloseSelectUploadImage={() => setModalCameraUpload(!modalCameraUpload)}
+                            onPressOut={() => setModalCameraUpload(!modalCameraUpload)}
+                            onPressCameraUpload={pickImage}
+                            OnPressUpLoadImage={upLoadImage}
+                            onPressModalCameraUpload={() => setModalCameraUpload(true)}
+                            modalImage={() => SetModalVisible(!modalVisible)}
+                        />
                         <Buttons title={enviando ? 'Enviando..' : 'Enviar'} onPressFunction={EnviarSolicitud} disabled={enviando}></Buttons>
                         <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
                     </View>
@@ -195,72 +159,6 @@ const styles = StyleSheet.create({
         maxWidth: 600,
         justifyContent: "center",
         alignItems: "center"
-    },
-    containerImage: {
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginVertical: 10,
-        borderWidth: 1.5,
-        borderColor: '#30475E',
-        borderRadius: 10,
-        backgroundColor: '#f0f0f0',
-        padding: 5,
-    },
-    image: {
-        width: 300,
-        height: 400,
-        marginBottom: 10,
-        resizeMode: 'contain',
-    },
-    button: {
-        width: '100%',
-        alignItems: 'center',
-    },
-    containerIcon: {
-        width: '100%',
-        flexDirection: 'row',
-        padding: 10,
-        borderBottomWidth: 1,
-        marginBottom: 5,
-    },
-    containerIconModal: {
-        width: '80%',
-        maxWidth: 500,
-        flexDirection: 'row',
-        padding: 10,
-        backgroundColor: '#fff',
-        borderRadius: 20,
-        borderBottomWidth: 1,
-        marginBottom: 5,
-    },
-    containerIconItem: {
-        flex: 1,
-    },
-    modal: {
-        backgroundColor: '#00000099',
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderWidth: 1,
-    },
-    imageModal: {
-        width: '90%',
-        height: '90%',
-        resizeMode: 'contain',
-    },
-    hideimage: {
-        flex: 1,
-        borderWidth: 1,
-        width: '100%',
-        alignItems: "center",
-        justifyContent: 'center',
-    },
-    textFoto: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#1A4D2E',
-        fontFamily: 'sans-serif'
     }
 
 })

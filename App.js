@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { HistoyDetalle, Login } from './src/Screens/indexScreens';
+import { HistoyDetalle, Login } from './src/Screens/IndexScreens';
 import Navegador from "./src/Screens/Navigator";
 import { Provider } from 'react-redux';
 import { store } from './src/store';
@@ -8,6 +8,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux'
 import { iniciarSesion, documentoMostrar, tipoMoneda } from './src/store/slices/usuarioSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TextoPantallas } from './src/Components/constant';
+import { View, Text, StyleSheet } from 'react-native';
 
 
 const Stack = createStackNavigator();
@@ -16,9 +18,10 @@ const AppNavigation = () => {
   const dispatch = useDispatch();
   const { logeado } = useSelector(state => state.usuario);
   const { APIURL } = useSelector(state => state.usuario);
+  const [mostrar, setMostrar] = useState(false)
 
   const getData = async () => {
-    
+
     const usuario = await AsyncStorage.getItem("usuario");
 
     if (usuario != null) {
@@ -55,6 +58,7 @@ const AppNavigation = () => {
       catch (error) {
       }
     }
+    setMostrar(true)
   }
 
   useEffect(() => {
@@ -62,16 +66,43 @@ const AppNavigation = () => {
   }, [])
 
   return (
-    <NavigationContainer >
-      <Stack.Navigator screenOptions={{ header: () => null }}>
-        {logeado
-          ? <Stack.Screen name='ScreenNavigator' component={Navegador} />
-          : <Stack.Screen name='ScreenLogin' component={Login} />}
-        <Stack.Screen name='ScreenHistoryDetalle' component={HistoyDetalle} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      {
+        mostrar ?
+          <NavigationContainer >
+            <Stack.Navigator screenOptions={{ header: () => null }}>
+              {logeado
+                ? <Stack.Screen name='ScreenNavigator' component={Navegador} />
+                : <Stack.Screen name='ScreenLogin' component={Login} />}
+              <Stack.Screen name='ScreenHistoryDetalle' component={HistoyDetalle} />
+            </Stack.Navigator>
+          </NavigationContainer>
+          :
+          <View style={styles.Cargando}>
+            <Text style={[styles.text, { color: '#ddd' }]}>Cargando...</Text>
+          </View>
+      }
+    </>
+
   )
 }
+const styles = StyleSheet.create({
+  Cargando: {
+    flex: 1,
+    width: '100%',
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+  },
+  text:{
+    fontSize: TextoPantallas,
+    fontWeight: 'bold',
+    textAlign: "center",
+    fontFamily: 'sans-serif'
+  }
+})
+
+
 
 export default function App() {
 

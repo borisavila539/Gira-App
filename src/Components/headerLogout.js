@@ -4,7 +4,7 @@ import { useDispatch, useSelector, } from 'react-redux';
 import { terminarSesion } from "../store/slices/usuarioSlice";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { IconHeader, TextoHeader } from "./constant";
+import { IconHeader, TextoHeader } from "./Constant";
 
 const HeaderLogout = (props) => {
     const dispatch = useDispatch();

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Text, View, StyleSheet, Modal, Pressable } from "react-native"
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { TextoPantallas } from "./constant";
+import { TextoPantallas } from "./Constant";
 function MyAlert(props) {
     return (
         <Modal visible={props.visible} transparent={true}>

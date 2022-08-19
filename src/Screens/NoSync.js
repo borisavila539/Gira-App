@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { StyleSheet, View, Text, FlatList, RefreshControl, ActivityIndicator, TouchableOpacity } from "react-native";
-import { HeaderLogout, MyAlert } from "../Components/indexComponents";
+import { HeaderLogout, MyAlert } from "../Components/IndexComponents";
 import { useSelector } from 'react-redux';
-import { IconHeader } from "../Components/constant";
+import { IconHeader } from "../Components/Constant";
 import { noSincronizado } from '../store/slices/usuarioSlice';
 import { useDispatch } from 'react-redux';
 
@@ -18,9 +18,11 @@ const NoSync = (props) => {
     const [showMensajeAlerta, setShowMensajeAlerta] = useState(false);
     const [tipoMensaje, setTipoMensaje] = useState(false);
     const [sincronizando, setSincronizando] = useState(false);
-    const [idSync, setIdSync] = useState('')
+    const [idSync, setIdSync] = useState('');
+    const [recargando, setRecargando] = useState(false);
 
     const historial = async () => {
+        setRecargando(true)
         try {
             const request = await fetch(APIURL + 'api/GastoViajeDetalle/' + user + '/4/1/10');
             let data = await request.json();
@@ -30,6 +32,8 @@ const NoSync = (props) => {
         } catch (error) {
             console.log('no cargo el historial ' + error)
         }
+        cantidadNoSync()
+        setRecargando(false)
     }
 
     const historialMas = async () => {
@@ -42,6 +46,7 @@ const NoSync = (props) => {
         } catch (error) {
             console.log('no cargo el historial ' + error)
         }
+        cantidadNoSync()
     }
     const cantidadNoSync = async () => {
         let num = 0;
@@ -85,20 +90,20 @@ const NoSync = (props) => {
         const cambioFecha = (fecha) => {
             return fecha.substring(0, 10);
         };
-        const icono = (id) =>{
-            if(id == idSync){
+        const icono = (id) => {
+            if (id == idSync) {
                 return 'spinner'
-            }else{
+            } else {
                 return 'sync-alt'
             }
         }
-        
+
         return (
             <View style={{ borderBottomWidth: 1, width: "100%", flexDirection: 'row', paddingHorizontal: 3, borderRadius: 0, borderColor: '#000', backgroundColor: '#f0f0f0' }}>
                 <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
                     {
                         !sincronizando ?
-                            <TouchableOpacity onPress={() => {SincronizarAX(item.idGastoViajeDetalle); setSincronizando(true);setIdSync(item.idGastoViajeDetalle)}}>
+                            <TouchableOpacity onPress={() => { SincronizarAX(item.idGastoViajeDetalle); setSincronizando(true); setIdSync(item.idGastoViajeDetalle) }}>
                                 <FontAwesome5
                                     name='sync-alt'
                                     style={{ color: '#000' }}
@@ -107,11 +112,11 @@ const NoSync = (props) => {
                             </TouchableOpacity>
                             :
                             <FontAwesome5
-                                    name={icono(item.idGastoViajeDetalle)}
-                                    style={{ color: '#000' }}
-                                    size={IconHeader}
-                                    solid 
-                                    />
+                                name={icono(item.idGastoViajeDetalle)}
+                                style={{ color: '#000' }}
+                                size={IconHeader}
+                                solid
+                            />
                     }
                 </View>
                 <View style={{ width: '80%' }}>
@@ -155,17 +160,43 @@ const NoSync = (props) => {
     return (
         <View style={styles.container}>
             <HeaderLogout />
-            <FlatList
-                data={historialJSON}
-                keyExtractor={(item) => item.idGastoViajeDetalle.toString()}
-                renderItem={({ item }) => renderItem(item)}
-                refreshControl={
-                    <RefreshControl refreshing={refreshing} onRefresh={historial} colors={['#069A8E']} />
-                }
-                showsVerticalScrollIndicator={false}
-                onEndReached={handleLoadMore}
-                ListFooterComponent={renderFooter}
-            />
+            {
+                historialJSON.length > 0 ?
+                    <FlatList
+                        data={historialJSON}
+                        keyExtractor={(item) => item.idGastoViajeDetalle.toString()}
+                        renderItem={({ item }) => renderItem(item)}
+                        refreshControl={
+                            <RefreshControl refreshing={refreshing} onRefresh={historial} colors={['#069A8E']} />
+                        }
+                        showsVerticalScrollIndicator={false}
+                        onEndReached={handleLoadMore}
+                        ListFooterComponent={renderFooter}
+                    />
+                    :
+                    <View style={{ flex: 1, width: '100%', justifyContent: "center" }}>
+                        <Text style={[styles.text, { textAlign: 'center' }]}>No se han encontrado gastos no sincronizados...</Text>
+                        <View style={{ alignItems: "center" }}>
+                            <Text></Text>
+                            {
+                                !recargando ?
+                                    <TouchableOpacity onPress={historial} style={{ alignItems: "center", width: IconHeader, }}>
+                                        <FontAwesome5
+                                            name='sync-alt'
+                                            style={{ color: '#000' }}
+                                            size={IconHeader}
+                                            solid />
+                                    </TouchableOpacity>
+                                    :
+                                    <FontAwesome5
+                                        name='spinner'
+                                        style={{ color: '#000' }}
+                                        size={IconHeader}
+                                        solid
+                                    />
+                            }
+                        </View>
+                    </View>}
         </View>
     )
 }
