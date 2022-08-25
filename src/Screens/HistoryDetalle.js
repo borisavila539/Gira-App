@@ -13,14 +13,14 @@ const HistoyDetalle = (props) => {
     const [categoria, setCategoria] = useState('');
     const [fechaCreacion, setFechaCreacion] = useState('');
     const [fechaFactura, setFechaFactura] = useState('');
-    const [proveedor, setProveedor] = useState('');
     const [noFactura, setNoFactura] = useState('');
     const [descripcionAsesor, setDescripcionAsesor] = useState('');
     const [valor, setValor] = useState('')
     const [descripcionAdmin, setDescripcionAdmin] = useState('');
     const [imagen, setImagen] = useState(null);
     const { monedaAbreviacion, APIURL } = useSelector(state => state.usuario);
-    const [administrador, setAdministrador] = useState('')
+    const [administrador, setAdministrador] = useState('');
+    const [serie, setSerie] =  useState('');
 
     const datosGasto = async () => {
         
@@ -53,15 +53,13 @@ const HistoyDetalle = (props) => {
 
                 let fechaf = (Element['fechaFactura']).toString();
                 setFechaFactura(fechaf.substring(0, 10).replace('-', '/').replace('-', '/'));
-
-                setProveedor(Element['proveedor']);
                 setNoFactura(Element['noFactura']);
                 setDescripcionAsesor(Element['descripcion']);
                 setValor(Element['valorFactura']);
                 setDescripcionAdmin(Element['descripcionAdmin']);
                 setImagen(Element['imagen']);
                 setAdministrador(Element['admin'])
-                
+                setSerie(Element['serie'])
 
             })
         }
@@ -109,6 +107,13 @@ const HistoyDetalle = (props) => {
                                     <Text style={styles.text2}>{fechaCreacion}</Text><Text></Text>
                                     <Text style={styles.text}>Fecha Factura: </Text>
                                     <Text style={styles.text2}>{fechaFactura}</Text><Text></Text>
+                                    {
+                                        serie != '' &&
+                                        <>
+                                            <Text style={styles.text}>No. Serie: </Text>
+                                            <Text style={styles.text2}>{serie}</Text><Text></Text>
+                                        </>
+                                    }
                                     {
                                         noFactura != '' &&
                                         <>

@@ -48,8 +48,8 @@ const Viaje = (props) => {
     const [disabledDropDown, setDisabledDropDown] = useState(true);
     const [disableProveedor, setDiasableProveedor] = useState(true);
     const [enviando, setEnviando] = useState(false);
-    const [proveedorPredefinido, setProveedorPredefinido] = useState(false);
     const [buscandoProveedor, setBuscandoProveedor] = useState(false);
+    const [serie, setSerie] = useState('')
     let result;
 
 
@@ -194,10 +194,6 @@ const Viaje = (props) => {
                 let proveedorPre = element['proveedorPredefinido']
                 if (proveedorPre.length > 0) {
                     setProveedor(element['proveedorPredefinido'])
-                    setProveedorPredefinido(true)
-                } else {
-                    setProveedor('')
-                    setProveedorPredefinido(false)
                 }
             }
         })
@@ -233,6 +229,15 @@ const Viaje = (props) => {
             alertas('Debe Seleccionar un proveedor...', true, false)
             setEnviando(false)
             return
+        }
+        console.log(serie.length)
+        if (empresa == 'IMGT') {
+            if (serie.length == 0) {
+                alertas('El campo de No. Serie es obligatorio', true, false)
+                setEnviando(false)
+                return
+            }
+
         }
 
         if (facturaObligatoria) {
@@ -317,14 +322,14 @@ const Viaje = (props) => {
                     fechaFactura: showdate,
                     fechaCreacion: hoy,
                     imagen: imagen,
-                    descripcionGasto: messageAX
+                    descripcionGasto: messageAX,
+                    serie: serie
                 })
             })
             const result = await request.json();
             if (result['idEstado']) {
                 setEnviado(true)
             } else {
-                console.log(result)
                 alertas('Gasto no enviado', true, false)
             }
 
@@ -382,17 +387,17 @@ const Viaje = (props) => {
 
     useEffect(() => {
         if (enviado) {
-            setmensajeAlerta('Su gasto fue enviado a revision')
-            setShowMensajeAlerta(true)
-            setTipoMensaje(true)
+            alertas('Su gasto fue enviado a revision',true,true)
+            setNFactura('');
+            setDescripcion('');
+            setValor('');
+            setDate('');
+            setEnviado(false);
+            setImagen(null);
+            onScreenLoad();
         }
-        setNFactura('');
-        setDescripcion('');
-        setValor('');
-        setDate('');
-        setEnviado(false);
-        setImagen(null)
-        onScreenLoad()
+
+
 
     }, [enviado])
 
@@ -418,28 +423,26 @@ const Viaje = (props) => {
                                 circleSize={10}
                             />
                         }
-                        {
-                            !proveedorPredefinido ?
-                                <>
-                                    <View style={styles.textInputDateContainer}>
-                                        <Text style={styles.text}>{documentoFiscal}:</Text>
-                                        <View style={styles.inputIconContainer}>
-                                            <TextInput style={styles.input} keyboardType={'default'} value={RTN} onChangeText={(value) => setRTN(value)} />
-                                            {
-                                                !buscandoProveedor ?
-                                                    <TouchableOpacity onPress={RTN != '' ? llenarProveedor : null}>
-                                                        <FontAwesome5 name="search" size={IconSelect} color={'#1A4D2E'} />
-                                                    </TouchableOpacity>
-                                                    :
-                                                    < ActivityIndicator size='small' color={'#000'}/>
-                                            }
-                                        </View>
-                                    </View>
-                                    <DropdownList defaultButtonText='Seleccione Proveedor' data={proveedores} onSelect={onSelectProveedor} search={true} searchPlaceHolder={'Buscar por nombre'} disabled={disableProveedor} />
-                                </>
-                                : null
-                        }
 
+                        <View style={styles.textInputDateContainer}>
+                            <Text style={styles.text}>{documentoFiscal}:</Text>
+                            <View style={styles.inputIconContainer}>
+                                <TextInput style={styles.input} keyboardType={'default'} value={RTN} onChangeText={(value) => setRTN(value)} />
+                                {
+                                    !buscandoProveedor ?
+                                        <TouchableOpacity onPress={RTN != '' ? llenarProveedor : null}>
+                                            <FontAwesome5 name="search" size={IconSelect} color={'#1A4D2E'} />
+                                        </TouchableOpacity>
+                                        :
+                                        < ActivityIndicator size='small' color={'#000'} />
+                                }
+                            </View>
+                        </View>
+                        <DropdownList defaultButtonText='Seleccione Proveedor' data={proveedores} onSelect={onSelectProveedor} search={true} searchPlaceHolder={'Buscar por nombre'} disabled={disableProveedor} />
+                        {
+                            empresa == 'IMGT' &&
+                            <TextInputContainer title={'No. Serie'} height={ObjectHeigth} value={serie} onChangeText={(value) => setSerie(value)} />
+                        }
                         <TextInputContainer title={'No. Factura:'} height={ObjectHeigth} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
                         <TextInputContainer title='Descripcion: ' multiline={true} maxLength={300} Justify={true} height={80} onChangeText={(value) => setDescripcion(value)} value={descripion} />
                         <TextInputContainer title={'Valor en ' + moneda + ':'} height={ObjectHeigth} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(value)} value={valor.toString()} />

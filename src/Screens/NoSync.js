@@ -77,7 +77,7 @@ const NoSync = (props) => {
                 setTipoMensaje(true)
             }
         } else {
-            setmensajeAlerta('Error: ' + result.Content + '\nEspere a que el administrador actualize el Cai para reintentar ')
+            setmensajeAlerta(""+ result.Content)
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
         }
