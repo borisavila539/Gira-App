@@ -444,7 +444,7 @@ const Viaje = (props) => {
                             <TextInputContainer title={'No. Serie'} height={ObjectHeigth} value={serie} onChangeText={(value) => setSerie(value)} />
                         }
                         <TextInputContainer title={'No. Factura:'} height={ObjectHeigth} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
-                        <TextInputContainer title='Descripcion: ' multiline={true} maxLength={300} Justify={true} height={80} onChangeText={(value) => setDescripcion(value)} value={descripion} />
+                        <TextInputContainer title='Descripcion: ' multiline={true} maxLength={200} Justify={true} height={80} onChangeText={(value) => setDescripcion(value)} value={descripion} />
                         <TextInputContainer title={'Valor en ' + moneda + ':'} height={ObjectHeigth} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(value)} value={valor.toString()} />
                         <TouchableOpacity onPress={() => SetOpenDate(true)}>
                             <View style={styles.textInputDateContainer}>

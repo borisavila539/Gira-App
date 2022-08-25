@@ -29,7 +29,8 @@ const History = (props) => {
     const [mensajeAlerta, setmensajeAlerta] = useState('');
     const [showMensajeAlerta, setShowMensajeAlerta] = useState(false);
     const [tipoMensaje, setTipoMensaje] = useState(false);
-    const [recargando, setRecargando] = useState(false)
+    const [recargando, setRecargando] = useState(false);
+    const [recargar, setRecargar] = useState(true);
     let cont = 0;
 
     const onchangeIni = (event, selectedDate) => {
@@ -83,8 +84,8 @@ const History = (props) => {
 
     const Historial = async () => {
         setRecargando(true)
+        setRecargar(true)
         try {
-            console.log(APIURL + 'api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/1/10/' + estadoID)
             const request = await fetch(APIURL + 'api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/1/10/' + estadoID);
             let data = await request.json()
             setHistorialJSON(data)
@@ -100,16 +101,21 @@ const History = (props) => {
     const HistorialFiltrado = async () => {
         try {
             console.log(APIURL + 'api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10/' + estadoID)
-            const request = await fetch(APIURL + 'api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10/' + estadoID);
-            let data = await request.json();
-            if (data.length == 0) {
-                setIsLoading(false)
-                return
-            }
-            setHistorialJSON(historialJSON.concat(data))
-            setShowHistorialJSON(showHistorialJSON.concat(data))
-            setIsLoading(false)
-            setPage(page + 1);
+            const request = await fetch(APIURL + 'api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10/' + estadoID)
+                .then(async (data) => {
+                    let datos = await data.json().then((data) => {
+                        if (data.length < 10) {
+                            setIsLoading(false)
+                            setRecargar(false)
+                            return
+                        }
+                        setHistorialJSON(historialJSON.concat(data))
+                        setShowHistorialJSON(showHistorialJSON.concat(data))
+                        setIsLoading(false)
+                        setPage(page + 1);
+                    })
+                })
+
         } catch (error) {
             console.log('Historial no filtrado')
         }
@@ -195,8 +201,11 @@ const History = (props) => {
     }
 
     const handleLoadMore = () => {
-        setIsLoading(true);
-        HistorialFiltrado();
+        if(recargar){
+            setIsLoading(true);
+            HistorialFiltrado();
+        }
+        return
     }
 
 
@@ -289,7 +298,7 @@ const History = (props) => {
                         keyExtractor={(item) => item.idGastoViajeDetalle.toString()}
                         renderItem={({ item }) => renderItem(item)}
                         refreshControl={
-                            <RefreshControl refreshing={refreshing} onRefresh={Historial} colors={['#069A8E']} />
+                            <RefreshControl refreshing={refreshing} onRefresh={() => { showHistorialJSON.length > 9 ? Historial : null }} colors={['#069A8E']} />
                         }
                         showsVerticalScrollIndicator={false}
                         onEndReached={handleLoadMore}

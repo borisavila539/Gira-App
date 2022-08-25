@@ -20,9 +20,12 @@ const NoSync = (props) => {
     const [sincronizando, setSincronizando] = useState(false);
     const [idSync, setIdSync] = useState('');
     const [recargando, setRecargando] = useState(false);
+    const [recargar, setRecargar] = useState(true);
 
     const historial = async () => {
         setRecargando(true)
+        setRecargar(true)
+        console.log('sincronizando')
         try {
             const request = await fetch(APIURL + 'api/GastoViajeDetalle/' + user + '/4/1/10');
             let data = await request.json();
@@ -37,12 +40,21 @@ const NoSync = (props) => {
     }
 
     const historialMas = async () => {
+        console.log('sincronizando mas')
         try {
-            const request = await fetch(APIURL + 'api/GastoViajeDetalle/' + user + '/4/' + page + '/10');
-            let data = await request.json();
-            setHistorialJSON(historialJSON.concat(data))
-            setIsLoading(false)
-            setPage(page + 1)
+            const request = await fetch(APIURL + 'api/GastoViajeDetalle/' + user + '/4/' + page + '/10')
+                .then(async (data) => {
+                    let datos = await data.json().then((data) => {
+                        if (data.length < 10) {
+                            setIsLoading(false)
+                            setRecargar(false)
+                            return
+                        }
+                        setHistorialJSON(historialJSON.concat(data))
+                        setIsLoading(false)
+                        setPage(page + 1)
+                    })
+                });
         } catch (error) {
             console.log('no cargo el historial ' + error)
         }
@@ -77,7 +89,7 @@ const NoSync = (props) => {
                 setTipoMensaje(true)
             }
         } else {
-            setmensajeAlerta(""+ result.Content)
+            setmensajeAlerta("" + result.Content)
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
         }
@@ -134,8 +146,11 @@ const NoSync = (props) => {
     }
 
     const handleLoadMore = async () => {
-        setIsLoading(true);
-        historialMas();
+        if (recargar) {
+            setIsLoading(true);
+            historialMas();
+        }
+        return
     }
 
     const renderFooter = () => {
