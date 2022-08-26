@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, SafeAreaView, ScrollView} from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, ScrollView } from "react-native";
 import { HeaderLogout, TextInputContainer, Buttons, MyAlert, ModalCameraUpload } from "../Components/IndexComponents";
 import * as ImagePicker from 'expo-image-picker';
 import { StatusBar } from "react-native";
@@ -6,9 +6,12 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 
 const Proveedor = (props) => {
-    const [nombre, setnombre] = useState('')
-    const [RTN, setRTN] = useState('')
-    const [descripcion, setDescripcion] = useState('')
+    const [nombre, setnombre] = useState('');
+    const [direccion, setDireccion] = useState('');
+    const [telefono, setTelefono] = useState('');
+    const [correo, setCorreo] = useState('');
+    const [RTN, setRTN] = useState('');
+    const [descripcion, setDescripcion] = useState('');
     const [modalVisible, SetModalVisible] = useState(false);
     const [imagen, setImagen] = useState(null);
     const [modalCameraUpload, setModalCameraUpload] = useState(false);
@@ -46,37 +49,48 @@ const Proveedor = (props) => {
         }
     };
 
+    const alertas = (mensaje, mostrar, tipo) =>{
+        setmensajeAlerta(mensaje)
+        setShowMensajeAlerta(mostrar)
+        setTipoMensaje(tipo)
+        setEnviando(false)
+    }
+
     const EnviarSolicitud = async () => {
         setEnviando(true)
         if (nombre == '') {
-            setmensajeAlerta('Debe llenar el nombre del proveedor')
-            setShowMensajeAlerta(true)
-            setTipoMensaje(false)
-            setEnviando(false)
+            alertas('Debe llenar el nombre del proveedor', true, false)
+            return
+        }
+
+        if (direccion == '') {
+            setmensajeAlerta()
+            alertas('Debe llenar la direccion del proveedor', true, false)
+            return
+        }
+
+        if (telefono == '') {
+            alertas('Debe llenar el Telefono ó Celular del proveedor', true, false)
+            return
+        }
+
+        if (correo == '') {
+            alertas('Debe llenar el correo del proveedor', true, false)
             return
         }
 
         if (RTN == '') {
-            setmensajeAlerta('Debe llenar el RTN')
-            setShowMensajeAlerta(true)
-            setTipoMensaje(false)
-            setEnviando(false)
+            alertas('Debe llenar el RTN', true, false)
             return
         }
 
         if (descripcion == '') {
-            setmensajeAlerta('Debe llenar la descripcion')
-            setShowMensajeAlerta(true)
-            setTipoMensaje(false)
-            setEnviando(false)
+            alertas('Debe llenar la descripcion', true, false)
             return
         }
 
         if (imagen == null) {
-            setmensajeAlerta('Debe subir una imagen de la factura con RTN del Proveedor Solicitado')
-            setShowMensajeAlerta(true)
-            setTipoMensaje(false)
-            setEnviando(false)
+            alertas('DDebe subir una imagen de la factura con RTN del Proveedor Solicitado', true, false)
             return
         }
 
@@ -91,16 +105,20 @@ const Proveedor = (props) => {
                     usuario: user,
                     detalle: descripcion,
                     nombre: nombre,
+                    direccion: direccion,
+                    telefono: telefono,
+                    correo: correo,
                     rtn: RTN,
                     imagen: imagen
                 })
             })
             const result = await request.json();
             if (result == 'Correo Enviado') {
-                setmensajeAlerta('Solicitud Enviada')
-                setShowMensajeAlerta(true)
-                setTipoMensaje(true)
+                alertas('Solicitud Enviada', true, true)
                 setnombre('')
+                setDireccion('')
+                setTelefono('')
+                setCorreo('')
                 setRTN('')
                 setDescripcion('')
                 setImagen(null)
@@ -123,6 +141,9 @@ const Proveedor = (props) => {
                 <SafeAreaView style={styles.container}>
                     <View style={styles.formulario}>
                         <TextInputContainer title={'Nombre:'} placeholder={'Nombre Proveedor'} onChangeText={value => setnombre(value)} value={nombre} />
+                        <TextInputContainer title={'Dirección:'} multiline={true} maxLength={300} Justify={true} height={80} onChangeText={value => setDireccion(value)} value={direccion} />
+                        <TextInputContainer title={'Telefono ó Celular:'} placeholder={'Telefono Proveedor'} onChangeText={value => setTelefono(value)} value={telefono} />
+                        <TextInputContainer title={'Correo:'} placeholder={'Correo Proveedor'} onChangeText={value => setCorreo(value)} value={correo} />
                         <TextInputContainer title={documentoFiscal + ':'} placeholder={documentoFiscal} onChangeText={value => setRTN(value)} value={RTN} />
                         <TextInputContainer title={'Descripcion:'} multiline={true} maxLength={300} Justify={true} height={80} onChangeText={value => setDescripcion(value)} value={descripcion} />
                         <ModalCameraUpload
