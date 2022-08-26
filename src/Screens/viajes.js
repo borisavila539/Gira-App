@@ -18,7 +18,7 @@ const Viaje = (props) => {
     const dispatch = useDispatch();
     const [nFactura, setNFactura] = useState('');
     const [descripion, setDescripcion] = useState('');
-    const [valor, setValor] = useState(0.00);
+    const [valor, setValor] = useState('');
     const [openDate, SetOpenDate] = useState(false);
     const [date, setDate] = useState('');
     const [showdate, setShowDate] = useState(new Date());
@@ -91,8 +91,8 @@ const Viaje = (props) => {
         if (empresa == 'IMHN') {
             if (value.length == 16) {
                 setNFactura(value[0] + value[1] + value[2] + '-' + value[3] + value[4] + value[5] + '-' + value[6] + value[7] + '-' + value[8] + value[9] + value[10] + value[11] + value[12] + value[13] + value[14] + value[15])
-            } else if (value.length == 17) {
-                value = value[0] + value[1] + value[2] + value[4] + value[5] + value[6] + value[8] + value[9] + value[11] + value[12] + value[13] + value[14] + value[15] + value[16]
+            } else if (value.length == 18) {
+                value = value.replace('-','').replace('-','').replace('-','')
                 setNFactura(value);
             } else {
                 setNFactura(value);
@@ -253,6 +253,9 @@ const Viaje = (props) => {
                     return
                 }
             } else {
+                if(empresa == 'IMHN'){
+                    //if(nFactura.length > 0 )
+                }
                 if (nFactura == '') {
                     alertas('El campo No.Factura es obligatorio.', true, false)
                     setEnviando(false)
@@ -445,7 +448,7 @@ const Viaje = (props) => {
                         }
                         <TextInputContainer title={'No. Factura:'} height={ObjectHeigth} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
                         <TextInputContainer title='Descripcion: ' multiline={true} maxLength={200} Justify={true} height={80} onChangeText={(value) => setDescripcion(value)} value={descripion} />
-                        <TextInputContainer title={'Valor en ' + moneda + ':'} height={ObjectHeigth} placeholder={'00.00'} teclado='decimal-pad' onChangeText={(value) => setValor(value)} value={valor.toString()} />
+                        <TextInputContainer title={'Valor en ' + moneda + ':'} height={ObjectHeigth} placeholder={'0.00'} teclado='decimal-pad' onChangeText={(value) => setValor(value)} value={valor} />
                         <TouchableOpacity onPress={() => SetOpenDate(true)}>
                             <View style={styles.textInputDateContainer}>
                                 <Text style={styles.text}>Fecha Factura:</Text>
