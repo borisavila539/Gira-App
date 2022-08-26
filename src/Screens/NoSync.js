@@ -114,7 +114,7 @@ const NoSync = (props) => {
             <View style={{ borderBottomWidth: 1, width: "100%", flexDirection: 'row', paddingHorizontal: 3, borderRadius: 0, borderColor: '#000', backgroundColor: '#f0f0f0' }}>
                 <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
                     {
-                        !sincronizando ?
+                        idSync != item.idGastoViajeDetalle  ?
                             <TouchableOpacity onPress={() => { SincronizarAX(item.idGastoViajeDetalle); setSincronizando(true); setIdSync(item.idGastoViajeDetalle) }}>
                                 <FontAwesome5
                                     name='sync-alt'
