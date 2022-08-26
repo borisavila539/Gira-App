@@ -93,6 +93,7 @@ const NoSync = (props) => {
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
         }
+        setIdSync('')
         setSincronizando(false)
         cantidadNoSync()
         historial()
