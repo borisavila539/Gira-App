@@ -7,9 +7,9 @@ import { useSelector } from "react-redux";
 
 const Proveedor = (props) => {
     const [nombre, setnombre] = useState('');
-    const [direccion, setDireccion] = useState('');
-    const [telefono, setTelefono] = useState('');
-    const [correo, setCorreo] = useState('');
+    //const [direccion, setDireccion] = useState('');
+    //const [telefono, setTelefono] = useState('');
+    //const [correo, setCorreo] = useState('');
     const [RTN, setRTN] = useState('');
     const [descripcion, setDescripcion] = useState('');
     const [modalVisible, SetModalVisible] = useState(false);
@@ -63,6 +63,7 @@ const Proveedor = (props) => {
             return
         }
 
+        /*
         if (direccion == '') {
             setmensajeAlerta()
             alertas('Debe llenar la direccion del proveedor', true, false)
@@ -78,7 +79,7 @@ const Proveedor = (props) => {
             alertas('Debe llenar el correo del proveedor', true, false)
             return
         }
-
+        */
         if (RTN == '') {
             alertas('Debe llenar el RTN', true, false)
             return
@@ -105,9 +106,9 @@ const Proveedor = (props) => {
                     usuario: user,
                     detalle: descripcion,
                     nombre: nombre,
-                    direccion: direccion,
-                    telefono: telefono,
-                    correo: correo,
+                    //direccion: direccion,
+                    //telefono: telefono,
+                    //correo: correo,
                     rtn: RTN,
                     imagen: imagen
                 })
@@ -116,9 +117,9 @@ const Proveedor = (props) => {
             if (result == 'Correo Enviado') {
                 alertas('Solicitud Enviada', true, true)
                 setnombre('')
-                setDireccion('')
-                setTelefono('')
-                setCorreo('')
+                //setDireccion('')
+                //setTelefono('')
+                //setCorreo('')
                 setRTN('')
                 setDescripcion('')
                 setImagen(null)
@@ -127,11 +128,7 @@ const Proveedor = (props) => {
             console.log('no se envio el correo' + err)
         }
         setEnviando(false)
-
-
     }
-
-
     return (
         <View>
             <HeaderLogout />
@@ -141,9 +138,14 @@ const Proveedor = (props) => {
                 <SafeAreaView style={styles.container}>
                     <View style={styles.formulario}>
                         <TextInputContainer title={'Nombre:'} placeholder={'Nombre Proveedor'} onChangeText={value => setnombre(value)} value={nombre} />
-                        <TextInputContainer title={'Dirección:'} multiline={true} maxLength={300} Justify={true} height={80} onChangeText={value => setDireccion(value)} value={direccion} />
-                        <TextInputContainer title={'Telefono ó Celular:'} placeholder={'Telefono Proveedor'} onChangeText={value => setTelefono(value)} value={telefono} />
-                        <TextInputContainer title={'Correo:'} placeholder={'Correo Proveedor'} onChangeText={value => setCorreo(value)} value={correo} />
+                        {
+                            /*
+                                <TextInputContainer title={'Dirección:'} multiline={true} maxLength={300} Justify={true} height={80} onChangeText={value => setDireccion(value)} value={direccion} />
+                                <TextInputContainer title={'Telefono ó Celular:'} placeholder={'Telefono Proveedor'} onChangeText={value => setTelefono(value)} value={telefono} />
+                                <TextInputContainer title={'Correo:'} placeholder={'Correo Proveedor'} onChangeText={value => setCorreo(value)} value={correo} />
+                            */
+                        }
+                        
                         <TextInputContainer title={documentoFiscal + ':'} placeholder={documentoFiscal} onChangeText={value => setRTN(value)} value={RTN} />
                         <TextInputContainer title={'Descripcion:'} multiline={true} maxLength={300} Justify={true} height={80} onChangeText={value => setDescripcion(value)} value={descripcion} />
                         <ModalCameraUpload
