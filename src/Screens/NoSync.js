@@ -45,14 +45,14 @@ const NoSync = (props) => {
             const request = await fetch(APIURL + 'api/GastoViajeDetalle/' + user + '/4/' + page + '/10')
                 .then(async (data) => {
                     let datos = await data.json().then((data) => {
+                        setHistorialJSON(historialJSON.concat(data))
+                        setIsLoading(false)
+                        setPage(page + 1)
                         if (data.length < 10) {
                             setIsLoading(false)
                             setRecargar(false)
                             return
                         }
-                        setHistorialJSON(historialJSON.concat(data))
-                        setIsLoading(false)
-                        setPage(page + 1)
                     })
                 });
         } catch (error) {

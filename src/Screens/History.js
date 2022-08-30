@@ -104,15 +104,15 @@ const History = (props) => {
             const request = await fetch(APIURL + 'api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10/' + estadoID)
                 .then(async (data) => {
                     let datos = await data.json().then((data) => {
+                        setHistorialJSON(historialJSON.concat(data))
+                        setShowHistorialJSON(showHistorialJSON.concat(data))
+                        setIsLoading(false)
+                        setPage(page + 1);
                         if (data.length < 10) {
                             setIsLoading(false)
                             setRecargar(false)
                             return
                         }
-                        setHistorialJSON(historialJSON.concat(data))
-                        setShowHistorialJSON(showHistorialJSON.concat(data))
-                        setIsLoading(false)
-                        setPage(page + 1);
                     })
                 })
 
@@ -298,7 +298,7 @@ const History = (props) => {
                         keyExtractor={(item) => item.idGastoViajeDetalle.toString()}
                         renderItem={({ item }) => renderItem(item)}
                         refreshControl={
-                            <RefreshControl refreshing={refreshing} onRefresh={() => { showHistorialJSON.length > 9 ? Historial : null }} colors={['#069A8E']} />
+                            <RefreshControl refreshing={refreshing} onRefresh={Historial} colors={['#069A8E']} />
                         }
                         showsVerticalScrollIndicator={false}
                         onEndReached={handleLoadMore}
