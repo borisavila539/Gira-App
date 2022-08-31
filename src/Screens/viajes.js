@@ -158,21 +158,26 @@ const Viaje = (props) => {
 
     const llenarProveedor = async () => {
         setBuscandoProveedor(true)
-        const request = await fetch('http://190.109.223.244:8083/api/proveedores/' + RTN + '/' + empresa);
-        let data = await request.json()
-        setProveedoresJSON(data)
-        let cont = 0;
-        data.forEach(element => {
-            cont = cont + 1
-        })
-        if (cont === 0) {
-            setmensajeAlerta('No se encontraron proveedores')
+        try{
+                const request = await fetch('http://190.109.223.244:8083/api/proveedores/' + RTN + '/' + empresa);
+            let data = await request.json()
+            setProveedoresJSON(data)
+            let cont = 0;
+            data.forEach(element => {
+                cont = cont + 1
+            })
+            if (cont === 0) {
+                setmensajeAlerta('No se encontraron proveedores')
+                setTipoMensaje(false)
+                setDiasableProveedor(true)
+            } else {
+                setmensajeAlerta('Lista de Proveedores llena')
+                setTipoMensaje(true)
+                setDiasableProveedor(false)
+            }
+        }catch(err){
+            setmensajeAlerta('No hay conexion con el servidor intente mas tarde...')
             setTipoMensaje(false)
-            setDiasableProveedor(true)
-        } else {
-            setmensajeAlerta('Lista de Proveedores llena')
-            setTipoMensaje(true)
-            setDiasableProveedor(false)
         }
         setShowMensajeAlerta(true)
         setBuscandoProveedor(false)
