@@ -18,7 +18,9 @@ const AppNavigation = () => {
   const dispatch = useDispatch();
   const { logeado } = useSelector(state => state.usuario);
   const { APIURL } = useSelector(state => state.usuario);
-  const [mostrar, setMostrar] = useState(false)
+  const [mostrar, setMostrar] = useState(false);
+  let datos =false;
+
 
   const getData = async () => {
 
@@ -37,6 +39,9 @@ const AppNavigation = () => {
         data.forEach(element => {
           documento = element['documento']
         })
+        if(document != ''){
+          datos=true;
+        }
         dispatch(documentoMostrar({ documentoFiscal: documento }))
       } catch (error) {
         console.log(error)
@@ -52,7 +57,9 @@ const AppNavigation = () => {
           moneda = element['moneda']
           abreviacion = element['abreviacion']
         })
-
+        if(moneda!=''){
+          datos=true;
+        }
         dispatch(tipoMoneda({ monedaAbreviacion: abreviacion, moneda }))
       }
       catch (error) {
@@ -71,9 +78,13 @@ const AppNavigation = () => {
         mostrar ?
           <NavigationContainer >
             <Stack.Navigator screenOptions={{ header: () => null }}>
-              {logeado
-                ? <Stack.Screen name='ScreenNavigator' component={Navegador} />
-                : <Stack.Screen name='ScreenLogin' component={Login} />}
+              {
+                logeado?                 
+                  <Stack.Screen name='ScreenNavigator' component={Navegador} /> 
+                :
+                  <Stack.Screen name='ScreenLogin' component={Login} />
+          
+              }
               <Stack.Screen name='ScreenHistoryDetalle' component={HistoyDetalle} />
             </Stack.Navigator>
           </NavigationContainer>

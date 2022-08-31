@@ -93,8 +93,11 @@ const History = (props) => {
             setPage(2);
             cont++;
         } catch (error) {
+            setHistorialJSON([])
+            setShowHistorialJSON([])
             console.log('No se obtuvo el Historial')
         }
+        llenarEstado()
         setRecargando(false)
     }
 

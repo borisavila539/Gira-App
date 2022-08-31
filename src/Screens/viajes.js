@@ -10,9 +10,10 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import RadioButtonRN from 'radio-buttons-react-native';
-import { noSincronizado } from '../store/slices/usuarioSlice';
+import { noSincronizado, terminarSesion } from '../store/slices/usuarioSlice';
 import moment from "moment";
 import { IconSelect, ObjectHeigth, TextoPantallas } from "../Components/Constant";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Viaje = (props) => {
     const dispatch = useDispatch();
@@ -126,6 +127,8 @@ const Viaje = (props) => {
             setmensajeAlerta('No hay conexion con el servidor intente mas tarde...')
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
+            await AsyncStorage.removeItem("usuario");
+            dispatch(terminarSesion());
         }
     };
 
@@ -141,9 +144,16 @@ const Viaje = (props) => {
     }
 
     const llenarCategoria = async (id) => {
-        const request = await fetch(APIURL + 'api/CategoriaTipoGastoViaje/' + id);
-        setResultCategoriaJSON(await request.json())
-        setIdCategoria(null)
+        try{
+            const request = await fetch(APIURL + 'api/CategoriaTipoGastoViaje/' + id);
+            setResultCategoriaJSON(await request.json())
+            setIdCategoria(null)
+        }catch(err){
+            setmensajeAlerta('No hay conexion con el servidor intente mas tarde...')
+            setShowMensajeAlerta(true)
+            setTipoMensaje(false)
+        }
+        
     };
 
     const llenarProveedor = async () => {
@@ -337,6 +347,9 @@ const Viaje = (props) => {
             }
 
         } catch (err) {
+            setmensajeAlerta('No hay conexion con el servidor intente mas tarde...')
+            setShowMensajeAlerta(true)
+            setTipoMensaje(false)
             console.log('no se envio: ' + err)
         }
         setEnviando(false)

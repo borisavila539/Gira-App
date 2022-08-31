@@ -33,6 +33,7 @@ const NoSync = (props) => {
             setIsLoading(false)
             setPage(2)
         } catch (error) {
+            setHistorialJSON([])
             console.log('no cargo el historial ' + error)
         }
         cantidadNoSync()
