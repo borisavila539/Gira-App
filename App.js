@@ -39,7 +39,7 @@ const AppNavigation = () => {
         data.forEach(element => {
           documento = element['documento']
         })
-        if(document != ''){
+        if(documento != ''){
           datos=true;
         }
         dispatch(documentoMostrar({ documentoFiscal: documento }))
