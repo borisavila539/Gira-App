@@ -119,7 +119,6 @@ const Viaje = (props) => {
     };
 
     const onScreenLoad = async () => {
-
         try {
             const request = await fetch(APIURL + 'api/TipoGastoViaje/' + empresa);
             setResultTipoJSON(await request.json())
@@ -129,6 +128,15 @@ const Viaje = (props) => {
             setTipoMensaje(false)
             await AsyncStorage.removeItem("usuario");
             dispatch(terminarSesion());
+        }
+        try{
+            const request = await fetch(APIURL + 'api/CategoriaTipoGastoViaje/' + empresa);
+            setResultCategoriaJSON(await request.json())
+            setIdCategoria(null)
+        }catch(err){
+            setmensajeAlerta('No hay conexion con el servidor intente mas tarde...')
+            setShowMensajeAlerta(true)
+            setTipoMensaje(false)
         }
     };
 
@@ -144,16 +152,16 @@ const Viaje = (props) => {
     }
 
     const llenarCategoria = async (id) => {
-        try{
-            const request = await fetch(APIURL + 'api/CategoriaTipoGastoViaje/' + id);
-            setResultCategoriaJSON(await request.json())
-            setIdCategoria(null)
-        }catch(err){
-            setmensajeAlerta('No hay conexion con el servidor intente mas tarde...')
-            setShowMensajeAlerta(true)
-            setTipoMensaje(false)
-        }
-        
+        let array = [];
+        resultCategoriaJSON.forEach(element=>{
+            if(element["idTipoGastoViaje"] == id){
+                array.push(element.nombre)
+                if (element['nombre'] == 'Alimentacion') {
+                    setIdAlimentos(element['idCategoriaTipoGastoViaje'])
+                }
+            }
+        })
+        setResultCategoria(array)
     };
 
     const llenarProveedor = async () => {
@@ -207,8 +215,10 @@ const Viaje = (props) => {
                 setIdCategoria((element['idCategoriaTipoGastoViaje']))
                 setNombreCategoria(element['nombre'])
                 let proveedorPre = element['proveedorPredefinido']
-                if (proveedorPre.length > 0) {
-                    setProveedor(element['proveedorPredefinido'])
+                if(proveedorPre){
+                    if (proveedorPre.length > 0) {
+                        setProveedor(element['proveedorPredefinido'])
+                    }
                 }
             }
         })
@@ -233,19 +243,18 @@ const Viaje = (props) => {
                 }
             })
         }
-
+        
         if (IdCategoria == null) {
             alertas('Debe seleccionar una Categoria...', true, false)
             setEnviando(false)
             return
         }
-
         if (proveedor == '') {
             alertas('Debe Seleccionar un proveedor...', true, false)
             setEnviando(false)
             return
         }
-        console.log(serie.length)
+
         if (empresa == 'IMGT') {
             if (serie.length == 0) {
                 alertas('El campo de No. Serie es obligatorio', true, false)
@@ -268,9 +277,6 @@ const Viaje = (props) => {
                     return
                 }
             } else {
-                if(empresa == 'IMHN'){
-                    //if(nFactura.length > 0 )
-                }
                 if (nFactura == '') {
                     alertas('El campo No.Factura es obligatorio.', true, false)
                     setEnviando(false)
@@ -278,6 +284,8 @@ const Viaje = (props) => {
                 }
             }
         }
+
+        
         if (descripcionObligatoria) {
             if (descripion == '') {
                 alertas('El campo Descripcion es obligatorio.', true, false)
@@ -305,7 +313,7 @@ const Viaje = (props) => {
                 return
             }
         }
-
+        
         let hoy = moment().format();
 
         //Creacion de mensaje que se enviara a AX
@@ -345,6 +353,7 @@ const Viaje = (props) => {
                 })
             })
             const result = await request.json();
+            console.log(result)
             if (result['idEstado']) {
                 setEnviado(true)
             } else {
@@ -382,19 +391,6 @@ const Viaje = (props) => {
             setResultTipo(array)
         }
     }, [resultTipoJSON])
-
-    useEffect(() => {
-        let array = [];
-        if (resultCategoriaJSON) {
-            resultCategoriaJSON.forEach(element => {
-                array.push(element['nombre'])
-                if (element['nombre'] == 'Alimentacion') {
-                    setIdAlimentos(element['idCategoriaTipoGastoViaje'])
-                }
-            });
-            setResultCategoria(array)
-        }
-    }, [resultCategoriaJSON])
 
     useEffect(() => {
         let array = [];

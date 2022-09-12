@@ -57,6 +57,7 @@ const HistoyDetalle = (props) => {
                 setDescripcionAsesor(Element['descripcion']);
                 setValor(Element['valorFactura']);
                 setDescripcionAdmin(Element['descripcionAdmin']);
+                console.log(Element['imagen'])
                 setImagen(Element['imagen']);
                 setAdministrador(Element['admin'])
                 setSerie(Element['serie'])
