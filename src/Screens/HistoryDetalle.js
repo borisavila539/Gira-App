@@ -8,7 +8,6 @@ import { ImageHeigth, ImageWidth, TextoPantallas } from "../Components/Constant"
 const HistoyDetalle = (props) => {
     const [modalVisible, SetModalVisible] = useState(false);
     const [resultHistorialJSON, setResultHistorialJSON] = useState([]);
-    const [resultCategoriaJSON, setResultCategoriaJSON] = useState([]);
     const [tipo, setTipo] = useState('');
     const [categoria, setCategoria] = useState('');
     const [fechaCreacion, setFechaCreacion] = useState('');
@@ -64,7 +63,7 @@ const HistoyDetalle = (props) => {
 
             })
         }
-    }, [resultHistorialJSON, resultCategoriaJSON])
+    }, [resultHistorialJSON])
     return (
         <View style={{ flex: 1, width: '100%' }}>
             <HeaderLogout back={true} navegacion={props.navigation} />

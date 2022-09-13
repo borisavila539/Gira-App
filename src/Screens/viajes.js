@@ -14,6 +14,7 @@ import { noSincronizado, terminarSesion } from '../store/slices/usuarioSlice';
 import moment from "moment";
 import { IconSelect, ObjectHeigth, TextoPantallas } from "../Components/Constant";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as MediaLibrary from 'expo-media-library'
 
 const Viaje = (props) => {
     const dispatch = useDispatch();
@@ -66,6 +67,11 @@ const Viaje = (props) => {
             if (!result.cancelled) {
                 setImagen(result.base64);
                 setModalCameraUpload(false);
+            }
+            const {status} = await MediaLibrary.requestPermissionsAsync();
+            if(status == "granted"){
+                await MediaLibrary.saveToLibraryAsync(result.uri);
+                console.log('imagen guardada')
             }
         } else {
             setmensajeAlerta('Estado permisos de camara: ' + permiso.status)
