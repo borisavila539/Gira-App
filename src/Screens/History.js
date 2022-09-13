@@ -134,9 +134,17 @@ const History = (props) => {
         }
     }
     const onSelectEstado = (selectedItem, index) => {
-        setEstadoID(index)
+        let cont = 0;
+        resultEstadoJSON.forEach(element =>{
+            if(element['nombre'] == selectedItem){
+                setEstadoID(element['idEstado'])
+                cont ++;
+            }
+        })
+        if(cont == 0){
+            setEstadoID(0)
+        } 
     }
-
 
     const renderItem = (item) => {
         const cambioFecha = (fecha) => {
