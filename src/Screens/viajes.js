@@ -56,7 +56,6 @@ const Viaje = (props) => {
 
     const pickImage = async () => {
         const permiso = await ImagePicker.requestCameraPermissionsAsync();
-        console.log(permiso)
         if (permiso.granted) {
             result = await ImagePicker.launchCameraAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images = "Images",
@@ -146,7 +145,7 @@ const Viaje = (props) => {
             const request = await fetch(APIURL + "api/GastoViajeDetalle/" + user + '/4');
             num = await request.json();
         } catch (error) {
-            console.log('No hay sincronizados')
+            
         }
         dispatch(noSincronizado({ nosync: num }))
     }
@@ -332,39 +331,46 @@ const Viaje = (props) => {
         }
 
         try {
-            const request = await fetch(APIURL + 'api/GastoViajeDetalle', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    idCategoriaTipoGastoViaje: IdCategoria,
-                    usuarioAsesor: user,
-                    proveedor: proveedor,
-                    noFactura: nFactura,
-                    descripcion: descripion,
-                    valorFactura: parseFloat(valor),
-                    fechaFactura: showdate,
-                    fechaCreacion: hoy,
-                    imagen: imagen,
-                    descripcionGasto: messageAX,
-                    serie: serie
-                })
-            })
-            const result = await request.json();
-            console.log(result)
-            if (result['idEstado']) {
-                setEnviado(true)
-            } else {
-                alertas('Gasto no enviado', true, false)
-            }
+            const verificacion = await fetch(APIURL + 'api/GastoViajeDetalle/verificar/' + nFactura.replace("-","").replace("-","").replace("-",""))
+            .then( async(data) =>{
+                let verificar = await data.json();
+                if(!verificar){
+                    const request = await fetch(APIURL + 'api/GastoViajeDetalle', {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            idCategoriaTipoGastoViaje: IdCategoria,
+                            usuarioAsesor: user,
+                            proveedor: proveedor,
+                            noFactura: nFactura,
+                            descripcion: descripion,
+                            valorFactura: parseFloat(valor),
+                            fechaFactura: showdate,
+                            fechaCreacion: hoy,
+                            imagen: imagen,
+                            descripcionGasto: messageAX,
+                            serie: serie
+                        })
+                    })
+                    const result = await request.json();
+                    if (result['idEstado']) {
+                        setEnviado(true)
+                    } else {
+                        alertas('Gasto no enviado', true, false)
+                    }
+                }else{
+                    alertas( 'Factura: ' + nFactura + ' ya existe en el registro', true, false)
+                    setEnviando(false)
+                }
+            });
 
         } catch (err) {
             setmensajeAlerta('No hay conexion con el servidor intente mas tarde...')
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
-            console.log('no se envio: ' + err)
         }
         setEnviando(false)
     }
@@ -474,7 +480,7 @@ const Viaje = (props) => {
                         </TouchableOpacity>
                         {
                             openDate &&
-                            <DateTimePicker mode='date' value={showdate} onChange={onchange} onTouchCancel={() => console.log('Cancelado')} />
+                            <DateTimePicker mode='date' value={showdate} onChange={onchange}/>
                         }
                         <ModalCameraUpload
                             modalVisible={modalVisible}
