@@ -4,6 +4,10 @@ import { StyleSheet, View, Text, Image, Modal, Pressable, ScrollView, SafeAreaVi
 import HeaderLogout from "../Components/HeaderLogout";
 import { useSelector } from 'react-redux';
 import { ImageHeigth, ImageWidth, TextoPantallas } from "../Components/Constant";
+import Buttons from "../Components/Buttons";
+import * as FileSystem from "expo-file-system";
+import * as MediaLibrary from 'expo-media-library';
+import MyAlert from "../Components/MyAlerts";
 
 const HistoyDetalle = (props) => {
     const [modalVisible, SetModalVisible] = useState(false);
@@ -20,6 +24,11 @@ const HistoyDetalle = (props) => {
     const { monedaAbreviacion, APIURL } = useSelector(state => state.usuario);
     const [administrador, setAdministrador] = useState('');
     const [serie, setSerie] =  useState('');
+    const [descargar, setDescargar] = useState(false)
+
+    const [mensajeAlerta, setmensajeAlerta] = useState('');
+    const [showMensajeAlerta, setShowMensajeAlerta] = useState(false);
+    const [tipoMensaje, setTipoMensaje] = useState(false);
 
     const datosGasto = async () => {
         
@@ -31,6 +40,24 @@ const HistoyDetalle = (props) => {
         } catch (error) {
             console.log('No hay historial: ' + error)
         }
+    }
+
+    const descargarImagen = async() =>{
+        setDescargar(true)
+        console.log('guardando')
+        const fileUri = FileSystem.documentDirectory + 'imagen.png';
+        await FileSystem.writeAsStringAsync(fileUri, imagen, {encoding: FileSystem.EncodingType.Base64}).then(
+            async()=>{
+                const mediaResult = await MediaLibrary.saveToLibraryAsync(fileUri);
+                console.log('guardado')
+                setDescargar(false)
+
+                setmensajeAlerta('Imagen Guardada en galeria')
+                setShowMensajeAlerta(true)
+                setTipoMensaje(true)
+            }
+        )
+        
     }
 
     useEffect(() => {
@@ -56,7 +83,6 @@ const HistoyDetalle = (props) => {
                 setDescripcionAsesor(Element['descripcion']);
                 setValor(Element['valorFactura']);
                 setDescripcionAdmin(Element['descripcionAdmin']);
-                console.log(Element['imagen'])
                 setImagen(Element['imagen']);
                 setAdministrador(Element['admin'])
                 setSerie(Element['serie'])
@@ -80,6 +106,10 @@ const HistoyDetalle = (props) => {
                             <View style={styles.modal}>
                                 <Pressable style={styles.hideimage} onPress={() => SetModalVisible(!modalVisible)}>
                                     <Image source={{ uri: 'data:image/jpeg;base64,' + imagen }} style={styles.imageModal} />
+                                    <View style={{width:'80%', maxWidth: 300}}>
+                                    <Buttons title={descargar?'Descargando...':"Descargar"} onPressFunction={descargarImagen}></Buttons>
+
+                                    </View>
                                 </Pressable>
 
                             </View>
@@ -161,6 +191,7 @@ const HistoyDetalle = (props) => {
                     <Text style={[styles.text, { color: '#ddd' }]}>Cargando...</Text>
                 </View>
             }
+            <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
         </View>
     )
 }
