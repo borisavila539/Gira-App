@@ -48,13 +48,15 @@ const HistoyDetalle = (props) => {
         const fileUri = FileSystem.documentDirectory + 'imagen.png';
         await FileSystem.writeAsStringAsync(fileUri, imagen, {encoding: FileSystem.EncodingType.Base64}).then(
             async()=>{
-                const mediaResult = await MediaLibrary.saveToLibraryAsync(fileUri);
-                console.log('guardado')
-                setDescargar(false)
+                const mediaResult = await MediaLibrary.saveToLibraryAsync(fileUri).then((res)=>{
+                    console.log('guardado')
+                    setDescargar(false)
 
-                setmensajeAlerta('Imagen Guardada en galeria')
-                setShowMensajeAlerta(true)
-                setTipoMensaje(true)
+                    setmensajeAlerta('Imagen Guardada en galeria')
+                    setShowMensajeAlerta(true)
+                    setTipoMensaje(true)
+                });
+                
             }
         )
         
