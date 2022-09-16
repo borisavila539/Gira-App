@@ -73,11 +73,8 @@ const NoSync = (props) => {
     }
 
     const SincronizarAX = async (id) => {
-        console.log(id)
-        console.log(APIURLAVENTAS + 'api/DatosEnviarAX/' + id)
         const request = await fetch(APIURLAVENTAS + 'api/DatosEnviarAX/' + id)
         let result = await request.json()
-        console.log(result.Content)
         if (result.Content == '"OK"') {
             const request2 = await fetch(APIURLAVENTAS + 'api/ActualizarEstadoGasto/' + id + '/2/-/-/-', {
                 method: 'POST'
@@ -90,7 +87,12 @@ const NoSync = (props) => {
                 setTipoMensaje(true)
             }
         } else {
-            setmensajeAlerta("" + result.Content)
+            if(result.Content.length > 50){
+                setmensajeAlerta("Error al sincronizar, intentelo mas tarde...")
+            }else{
+                setmensajeAlerta("" + result.Content)
+            }
+            
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
         }
