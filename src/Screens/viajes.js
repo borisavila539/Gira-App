@@ -68,8 +68,8 @@ const Viaje = (props) => {
                 setImagen(result.base64);
                 setModalCameraUpload(false);
             }
-            const {status} = await MediaLibrary.requestPermissionsAsync();
-            if(status == "granted"){
+            const { status } = await MediaLibrary.requestPermissionsAsync();
+            if (status == "granted") {
                 await MediaLibrary.saveToLibraryAsync(result.uri);
                 console.log('imagen guardada')
             }
@@ -98,7 +98,7 @@ const Viaje = (props) => {
             if (value.length == 16) {
                 setNFactura(value[0] + value[1] + value[2] + '-' + value[3] + value[4] + value[5] + '-' + value[6] + value[7] + '-' + value[8] + value[9] + value[10] + value[11] + value[12] + value[13] + value[14] + value[15])
             } else if (value.length == 18) {
-                value = value.replace('-','').replace('-','').replace('-','')
+                value = value.replace('-', '').replace('-', '').replace('-', '')
                 setNFactura(value);
             } else {
                 setNFactura(value);
@@ -134,11 +134,11 @@ const Viaje = (props) => {
             await AsyncStorage.removeItem("usuario");
             dispatch(terminarSesion());
         }
-        try{
+        try {
             const request = await fetch(APIURL + 'api/CategoriaTipoGastoViaje/' + empresa);
             setResultCategoriaJSON(await request.json())
             setIdCategoria(null)
-        }catch(err){
+        } catch (err) {
             setmensajeAlerta('No hay conexion con el servidor intente mas tarde...')
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
@@ -151,15 +151,15 @@ const Viaje = (props) => {
             const request = await fetch(APIURL + "api/GastoViajeDetalle/" + user + '/4');
             num = await request.json();
         } catch (error) {
-            
+
         }
         dispatch(noSincronizado({ nosync: num }))
     }
 
     const llenarCategoria = async (id) => {
         let array = [];
-        resultCategoriaJSON.forEach(element=>{
-            if(element["idTipoGastoViaje"] == id){
+        resultCategoriaJSON.forEach(element => {
+            if (element["idTipoGastoViaje"] == id) {
                 array.push(element.nombre)
                 if (element['nombre'] == 'Alimentacion') {
                     setIdAlimentos(element['idCategoriaTipoGastoViaje'])
@@ -171,8 +171,8 @@ const Viaje = (props) => {
 
     const llenarProveedor = async () => {
         setBuscandoProveedor(true)
-        try{
-                const request = await fetch('http://190.109.223.244:8083/api/proveedores/' + RTN + '/' + empresa);
+        try {
+            const request = await fetch('http://190.109.223.244:8083/api/proveedores/' + RTN + '/' + empresa);
             let data = await request.json()
             setProveedoresJSON(data)
             let cont = 0;
@@ -188,7 +188,7 @@ const Viaje = (props) => {
                 setTipoMensaje(true)
                 setDiasableProveedor(false)
             }
-        }catch(err){
+        } catch (err) {
             setmensajeAlerta('No hay conexion con el servidor intente mas tarde...')
             setTipoMensaje(false)
         }
@@ -220,7 +220,7 @@ const Viaje = (props) => {
                 setIdCategoria((element['idCategoriaTipoGastoViaje']))
                 setNombreCategoria(element['nombre'])
                 let proveedorPre = element['proveedorPredefinido']
-                if(proveedorPre){
+                if (proveedorPre) {
                     if (proveedorPre.length > 0) {
                         setProveedor(element['proveedorPredefinido'])
                     }
@@ -248,7 +248,7 @@ const Viaje = (props) => {
                 }
             })
         }
-        
+
         if (IdCategoria == null) {
             alertas('Debe seleccionar una Categoria...', true, false)
             setEnviando(false)
@@ -290,7 +290,7 @@ const Viaje = (props) => {
             }
         }
 
-        
+
         if (descripcionObligatoria) {
             if (descripion == '') {
                 alertas('El campo Descripcion es obligatorio.', true, false)
@@ -318,7 +318,7 @@ const Viaje = (props) => {
                 return
             }
         }
-        
+
         let hoy = moment().format();
 
         //Creacion de mensaje que se enviara a AX
@@ -337,43 +337,56 @@ const Viaje = (props) => {
         }
 
         try {
-            const verificacion = await fetch(APIURL + 'api/GastoViajeDetalle/verificar/' + nFactura.replace("-","").replace("-","").replace("-",""))
-            .then( async(data) =>{
-                let verificar = await data.json();
-                if(!verificar){
-                    const request = await fetch(APIURL + 'api/GastoViajeDetalle', {
-                        method: 'POST',
-                        headers: {
-                            Accept: 'application/json',
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            idCategoriaTipoGastoViaje: IdCategoria,
-                            usuarioAsesor: user,
-                            proveedor: proveedor,
-                            noFactura: nFactura,
-                            descripcion: descripion,
-                            valorFactura: parseFloat(valor),
-                            fechaFactura: showdate,
-                            fechaCreacion: hoy,
-                            imagen: imagen,
-                            descripcionGasto: messageAX,
-                            serie: serie
-                        })
+            let verificar = false;
+            if (nFactura != '') {
+                const verificacion = await fetch(APIURL + 'api/GastoViajeDetalle/verificar/' + nFactura.replace("-", "").replace("-", "").replace("-", ""));
+                verificar = await verificacion.json();
+                console.log(verificar)
+            } else {
+                verificar = false;
+                console.log("factura vaicia" + verificar)
+            }
+
+            if (!verificar || nFactura == '') {
+                const request = await fetch(APIURL + 'api/GastoViajeDetalle', {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        idCategoriaTipoGastoViaje: IdCategoria,
+                        usuarioAsesor: user,
+                        proveedor: proveedor,
+                        noFactura: nFactura,
+                        descripcion: descripion,
+                        valorFactura: parseFloat(valor),
+                        fechaFactura: showdate,
+                        fechaCreacion: hoy,
+                        imagen: imagen,
+                        descripcionGasto: messageAX,
+                        serie: serie
                     })
-                    const result = await request.json();
-                    if (result['idEstado']) {
+                })
+
+                try {
+                    let result = await request.json();
+                    if (result) {
                         setEnviado(true)
                     } else {
                         alertas('Gasto no enviado', true, false)
                     }
-                }else{
-                    alertas( 'Factura: ' + nFactura + ' ya existe en el registro', true, false)
-                    setEnviando(false)
+                } catch (err) {
+                    console.log("error json")
                 }
-            });
+            } else {
+                alertas('Factura: ' + nFactura + ' ya existe en el registro', true, false)
+                setEnviando(false)
+            }
+
 
         } catch (err) {
+            console.log(err)
             setmensajeAlerta('No hay conexion con el servidor intente mas tarde...')
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
@@ -416,14 +429,13 @@ const Viaje = (props) => {
 
     useEffect(() => {
         if (enviado) {
-            alertas('Su gasto fue enviado a revision',true,true)
+            alertas('Su gasto fue enviado a revision', true, true)
             setNFactura('');
             setDescripcion('');
             setValor('');
             setDate('');
             setEnviado(false);
             setImagen(null);
-            onScreenLoad();
         }
 
 
@@ -486,7 +498,7 @@ const Viaje = (props) => {
                         </TouchableOpacity>
                         {
                             openDate &&
-                            <DateTimePicker mode='date' value={showdate} onChange={onchange}/>
+                            <DateTimePicker mode='date' value={showdate} onChange={onchange} />
                         }
                         <ModalCameraUpload
                             modalVisible={modalVisible}
