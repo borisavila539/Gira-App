@@ -18,7 +18,7 @@ const History = (props) => {
     const [showdateFin, setShowDateFin] = useState(new Date());
     const [historialJSON, setHistorialJSON] = useState([]);
     const [showHistorialJSON, setShowHistorialJSON] = useState([]);
-    const { user, monedaAbreviacion, APIURL } = useSelector(state => state.usuario);
+    const { user, monedaAbreviacion, APIURLAVENTAS } = useSelector(state => state.usuario);
     const [resultEstadoJSON, setResultEstadoJSON] = useState([]);
     const [resultEstado, setresultEstado] = useState([]);
     const [estadoID, setEstadoID] = useState(0);
@@ -103,8 +103,8 @@ const History = (props) => {
 
     const HistorialFiltrado = async () => {
         try {
-            console.log(APIURL + 'api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10/' + estadoID)
-            const request = await fetch(APIURL + 'api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10/' + estadoID)
+            console.log(APIURLAVENTAS + 'api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10/' + estadoID)
+            const request = await fetch(APIURLAVENTAS + 'api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10/' + estadoID)
                 .then(async (data) => {
                     let datos = await data.json().then((data) => {
                         setHistorialJSON(historialJSON.concat(data))
@@ -126,7 +126,7 @@ const History = (props) => {
 
     const llenarEstado = async () => {
         try {
-            const request = await fetch(APIURL + 'api/Estado');
+            const request = await fetch(APIURLAVENTAS + 'api/Estado');
             let data = await request.json();
             setResultEstadoJSON(data)
         } catch (error) {

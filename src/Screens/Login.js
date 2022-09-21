@@ -14,7 +14,7 @@ const Login = (props) => {
     const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
     const [viewPassword, setViewPassword] = useState(true);
-    const { mensaje, APIURL } = useSelector(state => state.usuario);
+    const { mensaje, APIURLAVENTAS } = useSelector(state => state.usuario);
     const [mensajeAlerta, setmensajeAlerta] = useState('');
     const [showMensajeAlerta, setShowMensajeAlerta] = useState(false);
     const [tipoMensaje, setTipoMensaje] = useState(false);
@@ -23,7 +23,7 @@ const Login = (props) => {
     const onPressHandle = async () => {
         setEnviando(true)
         try {
-            const request = await fetch("http://190.109.203.183:9080/api/authentication/movil", {
+            const request = await fetch(APIURLAVENTAS +"api/authentication/movil", {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -48,7 +48,7 @@ const Login = (props) => {
                 dispatch(iniciarSesion({ user: nombreUsuario, nombre, empresa }));
                 //Consultar el Tipo de documento fiscal de cada pais
                 try {
-                    const request = await fetch(APIURL + 'api/Empresa/' + empresa);
+                    const request = await fetch(APIURLAVENTAS + 'api/Empresa/' + empresa);
                     const data = await request.json();
                     let documento = '';
                     data.forEach(element => {
@@ -61,7 +61,7 @@ const Login = (props) => {
 
                 //Consultar Tipo de moneda de cada pais
                 try {
-                    const request = await fetch(APIURL + 'api/MaestroMoneda/' + empresa);
+                    const request = await fetch(APIURLAVENTAS + 'api/MaestroMoneda/' + empresa);
                     const data = await request.json();
                     let moneda = '';
                     let abreviacion = '';

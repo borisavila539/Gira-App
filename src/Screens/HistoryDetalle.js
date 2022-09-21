@@ -21,7 +21,7 @@ const HistoyDetalle = (props) => {
     const [valor, setValor] = useState('')
     const [descripcionAdmin, setDescripcionAdmin] = useState('');
     const [imagen, setImagen] = useState(null);
-    const { monedaAbreviacion, APIURL } = useSelector(state => state.usuario);
+    const { monedaAbreviacion, APIURLAVENTAS } = useSelector(state => state.usuario);
     const [administrador, setAdministrador] = useState('');
     const [serie, setSerie] =  useState('');
     const [descargar, setDescargar] = useState(false)
@@ -33,7 +33,7 @@ const HistoyDetalle = (props) => {
     const datosGasto = async () => {
         
         try {
-            const request = await fetch(APIURL + 'api/GastoViajeDetalle/' + props.route.params.ID);
+            const request = await fetch(APIURLAVENTAS + 'api/GastoViajeDetalle/' + props.route.params.ID);
             let data = await request.json();
 
             setResultHistorialJSON(data)

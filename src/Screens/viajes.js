@@ -24,7 +24,7 @@ const Viaje = (props) => {
     const [openDate, SetOpenDate] = useState(false);
     const [date, setDate] = useState('');
     const [showdate, setShowDate] = useState(new Date());
-    const { empresa, user, nombre, documentoFiscal, moneda, APIURL } = useSelector(state => state.usuario);
+    const { empresa, user, nombre, documentoFiscal, moneda, APIURLAVENTAS } = useSelector(state => state.usuario);
     const [resultTipo, setResultTipo] = useState([]);
     const [resultCategoria, setResultCategoria] = useState([]);
     const [resultTipoJSON, setResultTipoJSON] = useState([]);
@@ -125,7 +125,7 @@ const Viaje = (props) => {
 
     const onScreenLoad = async () => {
         try {
-            const request = await fetch(APIURL + 'api/TipoGastoViaje/' + empresa);
+            const request = await fetch(APIURLAVENTAS + 'api/TipoGasto/' + empresa);
             setResultTipoJSON(await request.json())
         } catch (error) {
             setmensajeAlerta('No hay conexion con el servidor intente mas tarde...')
@@ -135,7 +135,7 @@ const Viaje = (props) => {
             dispatch(terminarSesion());
         }
         try {
-            const request = await fetch(APIURL + 'api/CategoriaTipoGastoViaje/' + empresa);
+            const request = await fetch(APIURLAVENTAS + 'api/CategoriaGasto/' + empresa);
             setResultCategoriaJSON(await request.json())
             setIdCategoria(null)
         } catch (err) {
@@ -148,7 +148,7 @@ const Viaje = (props) => {
     const cantidadNoSync = async () => {
         let num = 0;
         try {
-            const request = await fetch(APIURL + "api/GastoViajeDetalle/" + user + '/4');
+            const request = await fetch(APIURLAVENTAS + "api/GastoViajeDetalle/" + user + '/4');
             num = await request.json();
         } catch (error) {
 
@@ -161,7 +161,7 @@ const Viaje = (props) => {
         resultCategoriaJSON.forEach(element => {
             if (element["idTipoGastoViaje"] == id) {
                 array.push(element.nombre)
-                if (element['nombre'] == 'Alimentacion') {
+                if (element['CategoriaNombre'] == 'Alimentacion') {
                     setIdAlimentos(element['idCategoriaTipoGastoViaje'])
                 }
             }
@@ -218,7 +218,7 @@ const Viaje = (props) => {
         resultCategoriaJSON.forEach(element => {
             if (element['nombre'] == selectedItem) {
                 setIdCategoria((element['idCategoriaTipoGastoViaje']))
-                setNombreCategoria(element['nombre'])
+                setNombreCategoria(element['CategoriaNombre'])
                 let proveedorPre = element['proveedorPredefinido']
                 if (proveedorPre) {
                     if (proveedorPre.length > 0) {
@@ -339,7 +339,7 @@ const Viaje = (props) => {
         try {
             let verificar = false;
             if (nFactura != '') {
-                const verificacion = await fetch(APIURL + 'api/GastoViajeDetalle/verificar/' + nFactura.replace("-", "").replace("-", "").replace("-", ""));
+                const verificacion = await fetch(APIURLAVENTAS + 'api/GastoViajeDetalle/verificar/' + nFactura.replace("-", "").replace("-", "").replace("-", ""));
                 verificar = await verificacion.json();
                 console.log(verificar)
             } else {
@@ -348,7 +348,7 @@ const Viaje = (props) => {
             }
 
             if (!verificar || nFactura == '') {
-                const request = await fetch(APIURL + 'api/GastoViajeDetalle', {
+                const request = await fetch(APIURLAVENTAS + 'api/GastoViajeDetalle', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',

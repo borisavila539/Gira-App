@@ -11,7 +11,7 @@ const NoSync = (props) => {
     const dispatch = useDispatch();
     const [page, setPage] = useState(1);
     const [historialJSON, setHistorialJSON] = useState([]);
-    const { user, monedaAbreviacion, APIURL, APIURLAVENTAS } = useSelector(state => state.usuario);
+    const { user, monedaAbreviacion, APIURLAVENTAS } = useSelector(state => state.usuario);
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [mensajeAlerta, setmensajeAlerta] = useState('');
@@ -27,7 +27,7 @@ const NoSync = (props) => {
         setRecargar(true)
         console.log('sincronizando')
         try {
-            const request = await fetch(APIURL + 'api/GastoViajeDetalle/' + user + '/4/1/10');
+            const request = await fetch(APIURLAVENTAS + 'api/GastoViajeDetalle/' + user + '/4/1/10');
             let data = await request.json();
             setHistorialJSON(data)
             setIsLoading(false)
@@ -43,7 +43,7 @@ const NoSync = (props) => {
     const historialMas = async () => {
         console.log('sincronizando mas')
         try {
-            const request = await fetch(APIURL + 'api/GastoViajeDetalle/' + user + '/4/' + page + '/10')
+            const request = await fetch(APIURLAVENTAS + 'api/GastoViajeDetalle/' + user + '/4/' + page + '/10')
                 .then(async (data) => {
                     let datos = await data.json().then((data) => {
                         setHistorialJSON(historialJSON.concat(data))
@@ -64,7 +64,7 @@ const NoSync = (props) => {
     const cantidadNoSync = async () => {
         let num = 0;
         try {
-            const request = await fetch(APIURL + "api/GastoViajeDetalle/" + user + '/4');
+            const request = await fetch(APIURLAVENTAS + "api/GastoViajeDetalle/" + user + '/4');
             num = await request.json();
         } catch (error) {
             console.log('No hay sincronizados')

@@ -18,7 +18,7 @@ const Proveedor = (props) => {
     const [mensajeAlerta, setmensajeAlerta] = useState('');
     const [showMensajeAlerta, setShowMensajeAlerta] = useState(false);
     const [tipoMensaje, setTipoMensaje] = useState(false);
-    const { user, documentoFiscal, APIURL } = useSelector(state => state.usuario);
+    const { user, documentoFiscal, APIURLAVENTAS } = useSelector(state => state.usuario);
     const [enviando, setEnviando] = useState(false);
 
     let result;
@@ -96,7 +96,7 @@ const Proveedor = (props) => {
         }
 
         try {
-            const request = await fetch(APIURL + 'api/Usuarios', {
+            const request = await fetch(APIURLAVENTAS + 'api/Usuarios', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
