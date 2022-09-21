@@ -17,7 +17,7 @@ const Stack = createStackNavigator();
 const AppNavigation = () => {
   const dispatch = useDispatch();
   const { logeado } = useSelector(state => state.usuario);
-  const { APIURL } = useSelector(state => state.usuario);
+  const { APIURLAVENTAS } = useSelector(state => state.usuario);
   const [mostrar, setMostrar] = useState(false);
   let datos =false;
 
@@ -33,7 +33,7 @@ const AppNavigation = () => {
 
       //Consultar el Tipo de documento fiscal de cada pais
       try {
-        const request = await fetch(APIURL + 'api/Empresa/' + empresa);
+        const request = await fetch(APIURLAVENTAS + 'api/Empresa/' + empresa);
         const data = await request.json();
         let documento = '';
         data.forEach(element => {
@@ -49,7 +49,7 @@ const AppNavigation = () => {
 
       //Consultar Tipo de moneda de cada pais
       try {
-        const request = await fetch(APIURL + 'api/MaestroMoneda/' + empresa);
+        const request = await fetch(APIURLAVENTAS + 'api/MaestroMoneda/' + empresa);
         const data = await request.json();
         let moneda = '';
         let abreviacion = '';

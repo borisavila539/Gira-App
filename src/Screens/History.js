@@ -86,7 +86,7 @@ const History = (props) => {
         setRecargando(true)
         setRecargar(true)
         try {
-            const request = await fetch(APIURL + 'api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/1/10/' + estadoID);
+            const request = await fetch(APIURLAVENTAS + 'api/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/1/10/' + estadoID);
             let data = await request.json()
             setHistorialJSON(data)
             setShowHistorialJSON(data)
