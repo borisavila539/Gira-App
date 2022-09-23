@@ -159,8 +159,8 @@ const Viaje = (props) => {
     const llenarCategoria = async (id) => {
         let array = [];
         resultCategoriaJSON.forEach(element => {
-            if (element["idTipoGastoViaje"] == id) {
-                array.push(element.nombre)
+            if (element["IdTipoGastoViaje"] == id) {
+                array.push(element['CategoriaNombre'])
                 if (element['CategoriaNombre'] == 'Alimentacion') {
                     setIdAlimentos(element['idCategoriaTipoGastoViaje'])
                 }
@@ -198,8 +198,8 @@ const Viaje = (props) => {
 
     const onSelectTipo = (selectedItem, index) => {
         resultTipoJSON.forEach(element => {
-            if (element['nombre'] == selectedItem) {
-                llenarCategoria(element['idTipoGastoViaje'])
+            if (element['Nombre'] == selectedItem) {
+                llenarCategoria(element['Id'])
                 setDisabledDropDown(false)
             }
         })
@@ -216,13 +216,13 @@ const Viaje = (props) => {
 
     const onSelectCategoria = (selectedItem, index) => {
         resultCategoriaJSON.forEach(element => {
-            if (element['nombre'] == selectedItem) {
+            if (element['CategoriaNombre'] == selectedItem) {
                 setIdCategoria((element['idCategoriaTipoGastoViaje']))
                 setNombreCategoria(element['CategoriaNombre'])
-                let proveedorPre = element['proveedorPredefinido']
+                let proveedorPre = element['ProveedorPredefinido']
                 if (proveedorPre) {
                     if (proveedorPre.length > 0) {
-                        setProveedor(element['proveedorPredefinido'])
+                        setProveedor(element['ProveedorPredefinido'])
                     }
                 }
             }
@@ -410,7 +410,7 @@ const Viaje = (props) => {
         let array = [];
         if (resultTipoJSON) {
             resultTipoJSON.forEach(element => {
-                array.push(element['nombre'])
+                array.push(element['Nombre'])
 
             });
             setResultTipo(array)

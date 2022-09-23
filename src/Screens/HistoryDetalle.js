@@ -69,22 +69,22 @@ const HistoyDetalle = (props) => {
     useEffect(() => {
         if (resultHistorialJSON) {
             resultHistorialJSON.forEach(Element => {
-                setTipo(Element['tipo'])
+                setTipo(Element['Tipo'])
                 setCategoria(Element['categoria']);
 
-                let fechac = (Element['fechaCreacion']).toString();
+                let fechac = (Element['FechaCreacion']).toString();
                 let hora = fechac.substring(11, 13);
                 let tiempo = '';
                 tiempo = parseInt(hora) >= 12 ? 'PM' : 'AM';
 
                 setFechaCreacion(fechac.replace('T', ' ').substring(0, 16).replace('-', '/').replace('-', '/') + ' ' + tiempo);
 
-                let fechaf = (Element['fechaFactura']).toString();
+                let fechaf = (Element['FechaFactura']).toString();
                 setFechaFactura(fechaf.substring(0, 10).replace('-', '/').replace('-', '/'));
-                setNoFactura(Element['noFactura']);
-                setDescripcionAsesor(Element['descripcion']);
-                setValor(Element['valorFactura']);
-                setDescripcionAdmin(Element['descripcionAdmin']);
+                setNoFactura(Element['NoFactura']);
+                setDescripcionAsesor(Element['Descripcion']);
+                setValor(Element['ValorFactura']);
+                setDescripcionAdmin(Element['DescripcionAdmin']);
                 setImagen(Element['imagen']);
                 setAdministrador(Element['admin'])
                 setSerie(Element['serie'])

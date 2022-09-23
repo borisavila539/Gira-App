@@ -126,6 +126,7 @@ const History = (props) => {
 
     const llenarEstado = async () => {
         try {
+            console.log('estado')
             const request = await fetch(APIURLAVENTAS + 'api/Estado');
             let data = await request.json();
             setResultEstadoJSON(data)
@@ -136,8 +137,8 @@ const History = (props) => {
     const onSelectEstado = (selectedItem, index) => {
         let cont = 0;
         resultEstadoJSON.forEach(element =>{
-            if(element['nombre'] == selectedItem){
-                setEstadoID(element['idEstado'])
+            if(element['Nombre'] == selectedItem){
+                setEstadoID(element['IdEstado'])
                 cont ++;
             }
         })
@@ -173,27 +174,27 @@ const History = (props) => {
         }
         return (
             <View style={{ borderBottomWidth: 1.5, width: "100%", flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 5, borderRadius: 0, borderColor: '#A2B5BB', backgroundColor: '#fff' }}>
-                <TouchableOpacity style={{ width: '100%', flexDirection: 'row' }} onPress={() => { props.navigation.navigate('ScreenHistoryDetalle', { ID: item.idGastoViajeDetalle }) }}>
+                <TouchableOpacity style={{ width: '100%', flexDirection: 'row' }} onPress={() => { props.navigation.navigate('ScreenHistoryDetalle', { ID: item.IdGastoViajeDetalle }) }}>
                     <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
                         <FontAwesome5
                             name='file-invoice-dollar'
-                            style={{ color: EstadoColor(item.estado) }}
+                            style={{ color: EstadoColor(item.Estado) }}
                             size={IconHeader}
                             solid />
-                        <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.estado) }]}>{item.estado}</Text>
+                        <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.Estado) }]}>{item.Estado}</Text>
                     </View>
                     <View style={{ width: '80%' }}>
-                        <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.estado) }]}>
+                        <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.Estado) }]}>
                             <Text style={styles.text2}>Categoria:</Text> {item.categoria}
                         </Text>
-                        <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.estado) }]}>
-                            <Text style={styles.text2}>Valor: </Text>{monedaAbreviacion}{item.valorFactura}
+                        <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.Estado) }]}>
+                            <Text style={styles.text2}>Valor: </Text>{monedaAbreviacion}{item.ValorFactura}
                         </Text>
-                        <Text style={[styles.text, { color: EstadoColor(item.estado) }]}>
-                            <Text style={styles.text2}>Fecha Creacion:</Text> {item.fechaCreacion.replace('T', ' ').substring(0, 16).replace('-', '/').replace('-', '/')}
+                        <Text style={[styles.text, { color: EstadoColor(item.Estado) }]}>
+                            <Text style={styles.text2}>Fecha Creacion:</Text> {item.FechaCreacion.replace('T', ' ').substring(0, 16).replace('-', '/').replace('-', '/')}
                         </Text>
-                        <Text style={[styles.text, { color: EstadoColor(item.estado) }]}>
-                            <Text style={styles.text2}>Fecha Factura:</Text> {cambioFecha(item.fechaFactura)}
+                        <Text style={[styles.text, { color: EstadoColor(item.Estado) }]}>
+                            <Text style={styles.text2}>Fecha Factura:</Text> {cambioFecha(item.FechaFactura)}
                         </Text>
                     </View>
                 </TouchableOpacity>
@@ -238,7 +239,7 @@ const History = (props) => {
         let array = ['Todos'];
         if (resultEstadoJSON) {
             resultEstadoJSON.forEach(element => {
-                array.push(element['nombre'])
+                array.push(element['Nombre'])
             })
         }
         setresultEstado(array)
@@ -306,7 +307,7 @@ const History = (props) => {
                 showHistorialJSON.length > 0 ?
                     <FlatList
                         data={showHistorialJSON}
-                        keyExtractor={(item) => item.idGastoViajeDetalle.toString()}
+                        keyExtractor={(item) => item.IdGastoViajeDetalle.toString()}
                         renderItem={({ item }) => renderItem(item)}
                         refreshControl={
                             <RefreshControl refreshing={refreshing} onRefresh={Historial} colors={['#069A8E']} />

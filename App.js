@@ -54,8 +54,8 @@ const AppNavigation = () => {
         let moneda = '';
         let abreviacion = '';
         data.forEach(element => {
-          moneda = element['moneda']
-          abreviacion = element['abreviacion']
+          moneda = element['Moneda']
+          abreviacion = element['Abreviacion']
         })
         if(moneda!=''){
           datos=true;
