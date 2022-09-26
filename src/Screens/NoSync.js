@@ -118,8 +118,8 @@ const NoSync = (props) => {
             <View style={{ borderBottomWidth: 1, width: "100%", flexDirection: 'row', paddingHorizontal: 3, borderRadius: 0, borderColor: '#000', backgroundColor: '#f0f0f0' }}>
                 <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
                     {
-                        idSync != item.idGastoViajeDetalle  ?
-                            <TouchableOpacity onPress={() => { SincronizarAX(item.idGastoViajeDetalle); setSincronizando(true); setIdSync(item.idGastoViajeDetalle) }}>
+                        idSync != item.IdGastoViajeDetalle  ?
+                            <TouchableOpacity onPress={() => { SincronizarAX(item.IdGastoViajeDetalle); setSincronizando(true); setIdSync(item.IdGastoViajeDetalle) }}>
                                 <FontAwesome5
                                     name='sync-alt'
                                     style={{ color: '#000' }}
@@ -135,13 +135,13 @@ const NoSync = (props) => {
                         <Text style={styles.text2}>Categoria:</Text> {item.categoria}
                     </Text>
                     <Text style={[styles.text, { textAlign: 'left' }]}>
-                        <Text style={styles.text2}>Valor: </Text>{monedaAbreviacion}{item.valorFactura}
+                        <Text style={styles.text2}>Valor: </Text>{monedaAbreviacion}{item.ValorFactura}
                     </Text>
                     <Text style={styles.text}>
-                        <Text style={styles.text2}>Fecha Creacion:</Text> {item.fechaCreacion.replace('T', ' ').substring(0, 16).replace('-', '/').replace('-', '/')}
+                        <Text style={styles.text2}>Fecha Creacion:</Text> {item.FechaCreacion.replace('T', ' ').substring(0, 16).replace('-', '/').replace('-', '/')}
                     </Text>
                     <Text style={styles.text}>
-                        <Text style={styles.text2}>Fecha Factura:</Text> {cambioFecha(item.fechaFactura)}
+                        <Text style={styles.text2}>Fecha Factura:</Text> {cambioFecha(item.FechaFactura)}
                     </Text>
                 </View>
                 <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
@@ -178,7 +178,7 @@ const NoSync = (props) => {
                 historialJSON.length > 0 ?
                     <FlatList
                         data={historialJSON}
-                        keyExtractor={(item) => item.idGastoViajeDetalle.toString()}
+                        keyExtractor={(item) => item.IdGastoViajeDetalle.toString()}
                         renderItem={({ item }) => renderItem(item)}
                         refreshControl={
                             <RefreshControl refreshing={refreshing} onRefresh={historial} colors={['#069A8E']} />

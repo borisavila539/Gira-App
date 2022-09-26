@@ -371,6 +371,7 @@ const Viaje = (props) => {
 
                 try {
                     let result = await request.json();
+                    console.log(result)
                     if (result) {
                         setEnviado(true)
                     } else {
