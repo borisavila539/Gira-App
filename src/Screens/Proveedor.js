@@ -122,6 +122,7 @@ const Proveedor = (props) => {
             })
             
         } catch (err) {
+            alertas('Solicitud no Enviada, intente mas tarde...', true, false)
             console.log('no se envio el correo' + err)
         }
         setEnviando(false)
