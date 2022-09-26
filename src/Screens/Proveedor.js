@@ -32,6 +32,7 @@ const Proveedor = (props) => {
         });
         if (!result.cancelled) {
             setImagen(result.base64);
+            console.log(result.base64)
             setModalCameraUpload(false);
         }
     };
@@ -91,7 +92,7 @@ const Proveedor = (props) => {
         }
 
         if (imagen == null) {
-            alertas('DDebe subir una imagen de la factura con RTN del Proveedor Solicitado', true, false)
+            alertas('Debe subir una imagen de la factura con RTN del Proveedor Solicitado', true, false)
             return
         }
 
@@ -112,18 +113,14 @@ const Proveedor = (props) => {
                     rtn: RTN,
                     imagen: imagen
                 })
-            })
-            const result = await request.json();
-            if (result == 'Correo Enviado') {
+            }).then(()=>{
                 alertas('Solicitud Enviada', true, true)
                 setnombre('')
-                //setDireccion('')
-                //setTelefono('')
-                //setCorreo('')
                 setRTN('')
                 setDescripcion('')
                 setImagen(null)
-            }
+            })
+            
         } catch (err) {
             console.log('no se envio el correo' + err)
         }
