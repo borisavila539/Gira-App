@@ -80,11 +80,15 @@ const NoSync = (props) => {
                 method: 'POST'
             })
             const result2 = await request2.json();
-            console.log(result2)
+            console.log('result:'+result2)
             if (result2 == 1) {
-                setmensajeAlerta('Gasto sincronizado con AX')
-                setShowMensajeAlerta(true)
-                setTipoMensaje(true)
+                if(historialJSON.length != 1)
+                {
+                    setmensajeAlerta('Gasto sincronizado con AX')
+                    setShowMensajeAlerta(true)
+                    setTipoMensaje(true)
+                }
+                
             }
         } else {
             if(result.Content.length > 50){
@@ -175,7 +179,7 @@ const NoSync = (props) => {
         <View style={styles.container}>
             <HeaderLogout />
             {
-                historialJSON.length > 0 ?
+                historialJSON.length > 0 || showMensajeAlerta ?
                     <FlatList
                         data={historialJSON}
                         keyExtractor={(item) => item.IdGastoViajeDetalle.toString()}
@@ -188,24 +192,25 @@ const NoSync = (props) => {
                         ListFooterComponent={renderFooter}
                     />
                     :
-                    <View style={{ flex: 1, width: '100%', justifyContent: "center" }}>
-                        <Text style={[styles.text, { textAlign: 'center' }]}>No se han encontrado gastos no sincronizados...</Text>
-                        <View style={{ alignItems: "center" }}>
-                            <Text></Text>
-                            {
-                                !recargando ?
-                                    <TouchableOpacity onPress={historial} style={{ alignItems: "center", width: IconHeader, }}>
-                                        <FontAwesome5
-                                            name='sync'
-                                            style={{ color: '#dde' }}
-                                            size={IconHeader}
-                                            solid />
-                                    </TouchableOpacity>
-                                    :
-                                    < ActivityIndicator size='large' color={'#dde'} />
-                            }
-                        </View>
-                    </View>}
+                            <View style={{ flex: 1, width: '100%', justifyContent: "center" }}>
+                                <Text style={[styles.text, { textAlign: 'center' }]}>No se han encontrado gastos no sincronizados...</Text>
+                                <View style={{ alignItems: "center" }}>
+                                    <Text></Text>
+                                    {
+                                        !recargando ?
+                                            <TouchableOpacity onPress={historial} style={{ alignItems: "center", width: IconHeader, }}>
+                                                <FontAwesome5
+                                                    name='sync'
+                                                    style={{ color: '#dde' }}
+                                                    size={IconHeader}
+                                                    solid />
+                                            </TouchableOpacity>
+                                            :
+                                            < ActivityIndicator size='large' color={'#dde'} />
+                                    }
+                                </View>
+                            </View>
+            }
         </View>
     )
 }
