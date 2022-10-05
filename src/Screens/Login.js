@@ -62,15 +62,17 @@ const Login = (props) => {
                 //Consultar Tipo de moneda de cada pais
                 try {
                     const request = await fetch(APIURLAVENTAS + 'api/MaestroMoneda/' + empresa);
-                    const data = await request.json();
-                    let moneda = '';
-                    let abreviacion = '';
-                    data.forEach(element => {
-                        moneda = element['moneda']
-                        abreviacion = element['abreviacion']
-                    })
-
-                    dispatch(tipoMoneda({ monedaAbreviacion: abreviacion, moneda }))
+                    await request.json().then(data =>{
+                        let moneda = '';
+                        let abreviacion = '';
+                        data.forEach(element => {
+                            moneda = element['Moneda']?element['Moneda']:''
+                            abreviacion = element['Abreviacion']?element['Abreviacion']:''
+                        })
+    
+                        dispatch(tipoMoneda({ monedaAbreviacion: abreviacion, moneda }))
+                    });
+                    
                 }
                 catch (error) {
                 }
@@ -107,7 +109,6 @@ const Login = (props) => {
                         source={require('../../assets/Logo.png')}
                         style={styles.imagen}
                     />
-                    <Text style={styles.text}>Login</Text>
                 </View>
 
                 <View style={styles.containerinputs}>
@@ -170,9 +171,10 @@ const styles = StyleSheet.create({
         height: '50%',
         maxHeight: 500,
         alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: '#fff',
-        borderBottomLeftRadius: 50,
-        borderBottomEndRadius: 50,
+        borderBottomLeftRadius: 30,
+        borderBottomEndRadius: 30,
         marginBottom: 30
     },
     imagen: {

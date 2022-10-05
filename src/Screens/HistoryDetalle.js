@@ -162,7 +162,7 @@ const HistoyDetalle = (props) => {
 
                                     }
                                     <Text style={styles.text}>Valor: </Text>
-                                    <Text style={styles.text2}>{monedaAbreviacion}{valor}</Text>
+                                    <Text style={styles.text2}>{monedaAbreviacion}{parseFloat(valor).toFixed(2)}</Text>
                                     {
                                         administrador != null &&
                                         <>

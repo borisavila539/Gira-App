@@ -173,7 +173,7 @@ const History = (props) => {
             return colorEstado;
         }
         return (
-            <View style={{ borderBottomWidth: 1.5, width: "100%", flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 5, borderRadius: 0, borderColor: '#A2B5BB', backgroundColor: '#fff' }}>
+            <View style={{ borderWidth: 1.5, width: "98%", flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 5, borderRadius: 5, borderColor: '#628E90', backgroundColor: '#fff', marginHorizontal: '1%', marginVertical: 2 }}>
                 <TouchableOpacity style={{ width: '100%', flexDirection: 'row' }} onPress={() => { props.navigation.navigate('ScreenHistoryDetalle', { ID: item.IdGastoViajeDetalle }) }}>
                     <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
                         <FontAwesome5
@@ -188,7 +188,7 @@ const History = (props) => {
                             <Text style={styles.text2}>Categoria:</Text> {item.categoria}
                         </Text>
                         <Text style={[styles.text, { textAlign: 'left', color: EstadoColor(item.Estado) }]}>
-                            <Text style={styles.text2}>Valor: </Text>{monedaAbreviacion}{item.ValorFactura}
+                            <Text style={styles.text2}>Valor: </Text>{monedaAbreviacion}{item.ValorFactura.toFixed(2)}
                         </Text>
                         <Text style={[styles.text, { color: EstadoColor(item.Estado) }]}>
                             <Text style={styles.text2}>Fecha Creacion:</Text> {item.FechaCreacion.replace('T', ' ').substring(0, 16).replace('-', '/').replace('-', '/')}

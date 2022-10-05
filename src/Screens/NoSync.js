@@ -119,7 +119,7 @@ const NoSync = (props) => {
         }
 
         return (
-            <View style={{ borderBottomWidth: 1, width: "100%", flexDirection: 'row', paddingHorizontal: 3, borderRadius: 0, borderColor: '#000', backgroundColor: '#f0f0f0' }}>
+            <View style={{ borderWidth: 1, width: "98%", flexDirection: 'row', paddingHorizontal: 3, borderRadius: 5, borderColor: '#628E90', backgroundColor: '#f0f0f0', marginHorizontal: '1%', marginVertical:2 }}>
                 <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center' }}>
                     {
                         idSync != item.IdGastoViajeDetalle  ?
@@ -139,7 +139,7 @@ const NoSync = (props) => {
                         <Text style={styles.text2}>Categoria:</Text> {item.categoria}
                     </Text>
                     <Text style={[styles.text, { textAlign: 'left' }]}>
-                        <Text style={styles.text2}>Valor: </Text>{monedaAbreviacion}{item.ValorFactura}
+                        <Text style={styles.text2}>Valor: </Text>{monedaAbreviacion}{item.ValorFactura.toFixed(2)}
                     </Text>
                     <Text style={styles.text}>
                         <Text style={styles.text2}>Fecha Creacion:</Text> {item.FechaCreacion.replace('T', ' ').substring(0, 16).replace('-', '/').replace('-', '/')}

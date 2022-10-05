@@ -231,7 +231,13 @@ const Viaje = (props) => {
             setAlimentacionIsSelected(true);
         } else {
             setAlimentacionIsSelected(false);
+            setProveedor('')
         }
+
+        setRTN('')
+        setNFactura('')
+        setProveedoresJSON([])
+        setDiasableProveedor(true)
     };
 
     const EnviarGasto = async () => {
@@ -339,15 +345,49 @@ const Viaje = (props) => {
         try {
             let verificar = false;
             if (nFactura != '') {
-                const verificacion = await fetch(APIURLAVENTAS + 'api/GastoViajeDetalle/verificar/' + nFactura.replace("-", "").replace("-", "").replace("-", ""));
-                verificar = await verificacion.json();
-                console.log(verificar)
+                const verificacion = await fetch(APIURLAVENTAS + 'api/GastoViajeDetalle/verificar/' + nFactura);
+                await verificacion.json().then(async(res) =>{
+                    if(!res){
+                        const request = await fetch(APIURLAVENTAS + 'api/GastoViajeDetalle', {
+                            method: 'POST',
+                            headers: {
+                                Accept: 'application/json',
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                idCategoriaTipoGastoViaje: IdCategoria,
+                                usuarioAsesor: user,
+                                proveedor: proveedor,
+                                noFactura: nFactura,
+                                descripcion: descripion,
+                                valorFactura: parseFloat(valor),
+                                fechaFactura: showdate,
+                                fechaCreacion: hoy,
+                                imagen: imagen,
+                                descripcionGasto: messageAX,
+                                serie: serie
+                            })
+                        })
+        
+                        try {
+                            let result = await request.json();
+                            console.log(result)
+                            if (result) {
+                                setEnviado(true)
+                            } else {
+                                alertas('Gasto no enviado', true, false)
+                            }
+                        } catch (err) {
+                            console.log("error json")
+                        }
+                    }else{
+                        alertas('Factura: ' + nFactura + ' ya existe en el registro', true, false)
+                        setEnviando(false)
+                    }
+                    console.log('verificar: '+res)
+                });
+                
             } else {
-                verificar = false;
-                console.log("factura vaicia" + verificar)
-            }
-
-            if (!verificar || nFactura == '') {
                 const request = await fetch(APIURLAVENTAS + 'api/GastoViajeDetalle', {
                     method: 'POST',
                     headers: {
@@ -380,9 +420,6 @@ const Viaje = (props) => {
                 } catch (err) {
                     console.log("error json")
                 }
-            } else {
-                alertas('Factura: ' + nFactura + ' ya existe en el registro', true, false)
-                setEnviando(false)
             }
 
 
@@ -483,11 +520,11 @@ const Viaje = (props) => {
                         <DropdownList defaultButtonText='Seleccione Proveedor' data={proveedores} onSelect={onSelectProveedor} search={true} searchPlaceHolder={'Buscar por nombre'} disabled={disableProveedor} />
                         {
                             empresa == 'IMGT' &&
-                            <TextInputContainer title={'No. Serie'} height={ObjectHeigth} value={serie} onChangeText={(value) => setSerie(value)} />
+                            <TextInputContainer editable={proveedor!='' ? true:false} title={'No. Serie'} height={ObjectHeigth} value={serie} onChangeText={(value) => setSerie(value)} />
                         }
-                        <TextInputContainer title={'No. Factura:'} height={ObjectHeigth} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
+                        <TextInputContainer editable={proveedor!='' ? true:false} title={'No. Factura:'} height={ObjectHeigth} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
                         <TextInputContainer title='Descripcion: ' multiline={true} maxLength={200} Justify={true} height={80} onChangeText={(value) => setDescripcion(value)} value={descripion} />
-                        <TextInputContainer title={'Valor en ' + moneda + ':'} height={ObjectHeigth} placeholder={'0.00'} teclado='decimal-pad' onChangeText={(value) => setValor(value)} value={valor} />
+                        <TextInputContainer title={moneda?'Valor en ' + moneda + ':': 'Valor:'} height={ObjectHeigth} placeholder={'0.00'} teclado='decimal-pad' onChangeText={(value) => setValor(value)} value={valor} />
                         <TouchableOpacity onPress={() => SetOpenDate(true)}>
                             <View style={styles.textInputDateContainer}>
                                 <Text style={styles.text}>Fecha Factura:</Text>
