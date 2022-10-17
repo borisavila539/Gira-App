@@ -248,9 +248,9 @@ const Viaje = (props) => {
         if (resultCategoriaJSON) {
             resultCategoriaJSON.forEach(element => {
                 if (element["idCategoriaTipoGastoViaje"] == IdCategoria) {
-                    facturaObligatoria = element["facturaObligatoria"]
-                    descripcionObligatoria = element["descripcion"]
-                    imagenObligatoria = element["imagenObligatoria"]
+                    facturaObligatoria = element["FacturaObligatoria"]
+                    descripcionObligatoria = element["Descripcion"]
+                    imagenObligatoria = element["imagen"]
                 }
             })
         }
