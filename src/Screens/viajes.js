@@ -372,7 +372,7 @@ const Viaje = (props) => {
                         try {
                             let result = await request.json();
                             console.log(result)
-                            if (result) {
+                            if (result == true) {
                                 setEnviado(true)
                             } else {
                                 alertas('Gasto no enviado', true, false)
@@ -412,7 +412,7 @@ const Viaje = (props) => {
                 try {
                     let result = await request.json();
                     console.log(result)
-                    if (result) {
+                    if (result == true) {
                         setEnviado(true)
                     } else {
                         alertas('Gasto no enviado', true, false)
@@ -474,6 +474,7 @@ const Viaje = (props) => {
             setDate('');
             setEnviado(false);
             setImagen(null);
+            setSerie("")
         }
 
 
