@@ -345,7 +345,7 @@ const Viaje = (props) => {
         try {
             let verificar = false;
             if (nFactura != '') {
-                const verificacion = await fetch(APIURLAVENTAS + 'api/GastoViajeDetalle/verificar/' + nFactura);
+                const verificacion = await fetch(APIURLAVENTAS + 'api/GastoViajeDetalle/verificar/' + nFactura + "/" + proveedor  );
                 await verificacion.json().then(async(res) =>{
                     if(!res){
                         const request = await fetch(APIURLAVENTAS + 'api/GastoViajeDetalle', {
@@ -381,7 +381,7 @@ const Viaje = (props) => {
                             console.log("error json")
                         }
                     }else{
-                        alertas('Factura: ' + nFactura + ' ya existe en el registro', true, false)
+                        alertas('Factura: ' + nFactura + ' ya existe para proveedor seleccionado', true, false)
                         setEnviando(false)
                     }
                     console.log('verificar: '+res)
@@ -412,7 +412,7 @@ const Viaje = (props) => {
                 try {
                     let result = await request.json();
                     console.log(result)
-                    if (result == true) {
+                    if (result) {
                         setEnviado(true)
                     } else {
                         alertas('Gasto no enviado', true, false)
