@@ -18,6 +18,8 @@ const HistoyDetalle = (props) => {
     const [fechaFactura, setFechaFactura] = useState('');
     const [noFactura, setNoFactura] = useState('');
     const [descripcionAsesor, setDescripcionAsesor] = useState('');
+    const [ exento, setExento] = useState('');
+    const [ gravado, setGravado] = useState('');
     const [valor, setValor] = useState('')
     const [descripcionAdmin, setDescripcionAdmin] = useState('');
     const [imagen, setImagen] = useState(null);
@@ -83,6 +85,8 @@ const HistoyDetalle = (props) => {
                 setFechaFactura(fechaf.substring(0, 10).replace('-', '/').replace('-', '/'));
                 setNoFactura(Element['NoFactura']);
                 setDescripcionAsesor(Element['Descripcion']);
+                setExento(Element['importeExento']);
+                setGravado(Element['importeGravado']);
                 setValor(Element['ValorFactura']);
                 setDescripcionAdmin(Element['DescripcionAdmin']);
                 setImagen(Element['imagen']);
@@ -157,11 +161,28 @@ const HistoyDetalle = (props) => {
                                         descripcionAsesor != '' &&
                                         <>
                                             <Text style={styles.text}>Descripcion: </Text>
-                                            <Text style={styles.text2}>{descripcionAsesor}</Text><Text></Text>
+                                            <Text style={styles.text2}>{descripcionAsesor}</Text>
                                         </>
 
                                     }
-                                    <Text style={styles.text}>Valor: </Text>
+                                    {
+                                      parseFloat(gravado?gravado:0) != 0 &&
+                                      <>
+                                      <Text></Text>
+                                        <Text style={styles.text}>Importe Gravado: </Text>
+                                        <Text style={styles.text2}>{monedaAbreviacion}{parseFloat(gravado).toFixed(2)}</Text>
+                                      </>   
+                                    }
+                                    {
+                                      parseFloat(exento?exento:0) != 0 &&
+                                      <>
+                                      <Text></Text>
+                                        <Text style={styles.text}>Importe Exento: </Text>
+                                        <Text style={styles.text2}>{monedaAbreviacion}{parseFloat(exento).toFixed(2)}</Text>
+                                      </>   
+                                    }
+                                    <Text></Text>
+                                    <Text style={styles.text}>Total Factura: </Text>
                                     <Text style={styles.text2}>{monedaAbreviacion}{parseFloat(valor).toFixed(2)}</Text>
                                     {
                                         administrador != null &&

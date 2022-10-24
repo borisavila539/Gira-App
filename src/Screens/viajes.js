@@ -15,11 +15,14 @@ import moment from "moment";
 import { IconSelect, ObjectHeigth, TextoPantallas } from "../Components/Constant";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as MediaLibrary from 'expo-media-library'
+import { parse } from "@fortawesome/fontawesome-svg-core";
 
 const Viaje = (props) => {
     const dispatch = useDispatch();
     const [nFactura, setNFactura] = useState('');
     const [descripion, setDescripcion] = useState('');
+    const [ exento, setExento] = useState('');
+    const [ gravado, setGravado] = useState('');
     const [valor, setValor] = useState('');
     const [openDate, SetOpenDate] = useState(false);
     const [date, setDate] = useState('');
@@ -305,8 +308,8 @@ const Viaje = (props) => {
             }
         }
 
-        if (valor == 0) {
-            alertas('El campo Valor es obligatorio.', true, false)
+        if(exento == '' && gravado == '' ){
+            alertas('Debe llenar el importe Gravado o exento.', true, false)
             setEnviando(false)
             return
         }
@@ -360,7 +363,9 @@ const Viaje = (props) => {
                                 proveedor: proveedor,
                                 noFactura: nFactura,
                                 descripcion: descripion,
-                                valorFactura: parseFloat(valor),
+                                importeExento: parseFloat(exento?exento:0),
+                                importeGravado: parseFloat(gravado?gravado:0),
+                                valorFactura: parseFloat(exento?exento:0) + parseFloat(gravado?gravado:0),
                                 fechaFactura: showdate,
                                 fechaCreacion: hoy,
                                 imagen: imagen,
@@ -525,7 +530,8 @@ const Viaje = (props) => {
                         }
                         <TextInputContainer editable={proveedor!='' ? true:false} title={'No. Factura:'} height={ObjectHeigth} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
                         <TextInputContainer title='Descripcion: ' multiline={true} maxLength={200} Justify={true} height={80} onChangeText={(value) => setDescripcion(value)} value={descripion} />
-                        <TextInputContainer title={moneda?'Valor en ' + moneda + ':': 'Valor:'} height={ObjectHeigth} placeholder={'0.00'} teclado='decimal-pad' onChangeText={(value) => setValor(value)} value={valor} />
+                        <TextInputContainer title={'Importe Gravado:'} height={ObjectHeigth} placeholder={'0.00'} teclado='decimal-pad' onChangeText={(value) => setGravado(value)} value={gravado}/>
+                        <TextInputContainer title={'Importe Exento:'} height={ObjectHeigth} placeholder={'0.00'} teclado='decimal-pad' onChangeText={(value) => setExento(value)} value={exento}/>
                         <TouchableOpacity onPress={() => SetOpenDate(true)}>
                             <View style={styles.textInputDateContainer}>
                                 <Text style={styles.text}>Fecha Factura:</Text>
