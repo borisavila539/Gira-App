@@ -348,7 +348,7 @@ const Viaje = (props) => {
         try {
             let verificar = false;
             if (nFactura != '') {
-                const verificacion = await fetch(APIURLAVENTAS + 'api/GastoViajeDetalle/verificar/' + nFactura + "/" + proveedor  );
+                const verificacion = await fetch(APIURLAVENTAS + 'api/GastoViajeDetalle/verificar/' + nFactura + "/" + proveedor + "/-"  );
                 await verificacion.json().then(async(res) =>{
                     if(!res){
                         const request = await fetch(APIURLAVENTAS + 'api/GastoViajeDetalle', {
@@ -358,19 +358,19 @@ const Viaje = (props) => {
                                 'Content-Type': 'application/json',
                             },
                             body: JSON.stringify({
-                                idCategoriaTipoGastoViaje: IdCategoria,
-                                usuarioAsesor: user,
-                                proveedor: proveedor,
-                                noFactura: nFactura,
-                                descripcion: descripion,
+                                IdCategoriaTipoGastoViaje: IdCategoria,
+                                UsuarioAsesor: user,
+                                Proveedor: proveedor,
+                                NoFactura: nFactura,
+                                Descripcion: descripion,
+                                ValorFactura: parseFloat(exento?exento:0) + parseFloat(gravado?gravado:0),
+                                FechaFactura: showdate,
+                                FechaCreacion: hoy,
+                                Imagen: imagen,
+                                DescripcionGasto: messageAX,
+                                Serie: serie,
                                 importeExento: parseFloat(exento?exento:0),
                                 importeGravado: parseFloat(gravado?gravado:0),
-                                valorFactura: parseFloat(exento?exento:0) + parseFloat(gravado?gravado:0),
-                                fechaFactura: showdate,
-                                fechaCreacion: hoy,
-                                imagen: imagen,
-                                descripcionGasto: messageAX,
-                                serie: serie
                             })
                         })
         
