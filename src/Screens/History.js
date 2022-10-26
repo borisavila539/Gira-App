@@ -148,6 +148,7 @@ const History = (props) => {
     }
 
     const renderItem = (item) => {
+        console.log(item)
         const cambioFecha = (fecha) => {
             return fecha.substring(0, 10).replace('-', '/').replace('-', '/');
         };

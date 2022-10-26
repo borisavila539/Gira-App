@@ -15,6 +15,7 @@ const usuarioSlice = createSlice({
         moneda:"",
         //APIURL:"http://190.109.223.244:7106/", //http://190.109.223.244:7106/   http://10.100.1.27:5055
         APIURLAVENTAS: "http://190.109.203.183:9080/",
+        APIURLPROXY: "http://190.109.223.244:8083/",
         logeado: false
     },
     reducers: {
