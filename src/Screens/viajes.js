@@ -363,7 +363,7 @@ const Viaje = (props) => {
                                 Proveedor: proveedor,
                                 NoFactura: nFactura,
                                 Descripcion: descripion,
-                                ValorFactura: parseFloat(exento?exento:0) + parseFloat(gravado?gravado:0),
+                                ValorFactura: valor,
                                 FechaFactura: showdate,
                                 FechaCreacion: hoy,
                                 Imagen: imagen,
@@ -477,6 +477,8 @@ const Viaje = (props) => {
             setDescripcion('');
             setValor('');
             setDate('');
+            setGravado('');
+            setExento('');
             setEnviado(false);
             setImagen(null);
             setSerie("")
@@ -530,8 +532,10 @@ const Viaje = (props) => {
                         }
                         <TextInputContainer editable={proveedor!='' ? true:false} title={'No. Factura:'} height={ObjectHeigth} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
                         <TextInputContainer title='Descripcion: ' multiline={true} maxLength={200} Justify={true} height={80} onChangeText={(value) => setDescripcion(value)} value={descripion} />
-                        <TextInputContainer title={'Importe Gravado:'} height={ObjectHeigth} placeholder={'0.00'} teclado='decimal-pad' onChangeText={(value) => setGravado(value)} value={gravado}/>
-                        <TextInputContainer title={'Importe Exento:'} height={ObjectHeigth} placeholder={'0.00'} teclado='decimal-pad' onChangeText={(value) => setExento(value)} value={exento}/>
+                        <TextInputContainer title={'Importe Gravado:'} height={ObjectHeigth} placeholder={'0.00'} teclado='decimal-pad' onChangeText={(value) => {setGravado(value);setValor( parseFloat(exento?exento:0) + parseFloat(value?value:0)*1.15+'')}} value={gravado}/>
+                        <TextInputContainer title={'Importe Exento:'} height={ObjectHeigth} placeholder={'0.00'} teclado='decimal-pad' onChangeText={(value) => {setExento(value);setValor( parseFloat(value?value:0) + parseFloat(gravado?gravado:0)*1.15+'')}} value={exento}/>
+                        <TextInputContainer title={'Total:'} height={ObjectHeigth} placeholder={'0.00'} value={parseFloat(valor) >0? parseFloat(valor).toFixed(2):""} editable={false}/>
+                        
                         <TouchableOpacity onPress={() => SetOpenDate(true)}>
                             <View style={styles.textInputDateContainer}>
                                 <Text style={styles.text}>Fecha Factura:</Text>
