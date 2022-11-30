@@ -35,7 +35,7 @@ const HistoyDetalle = (props) => {
     const datosGasto = async () => {
         
         try {
-            const request = await fetch(APIURLAVENTAS + 'api/GastoViajeDetalle/' + props.route.params.ID);
+            const request = await fetch(APIURLAVENTAS + 'GastoViajeDetalle/' + props.route.params.ID);
             let data = await request.json();
 
             setResultHistorialJSON(data)

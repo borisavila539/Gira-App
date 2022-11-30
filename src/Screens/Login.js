@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { StyleSheet, View, Image, TextInput, Pressable, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -48,7 +48,7 @@ const Login = (props) => {
                 dispatch(iniciarSesion({ user: nombreUsuario, nombre, empresa }));
                 //Consultar el Tipo de documento fiscal de cada pais
                 try {
-                    const request = await fetch(APIURLAVENTAS + 'api/Empresa/' + empresa);
+                    const request = await fetch(APIURLAVENTAS + 'Empresa/' + empresa);
                     const data = await request.json();
                     let documento = '';
                     data.forEach(element => {
@@ -61,7 +61,7 @@ const Login = (props) => {
 
                 //Consultar Tipo de moneda de cada pais
                 try {
-                    const request = await fetch(APIURLAVENTAS + 'api/MaestroMoneda/' + empresa);
+                    const request = await fetch(APIURLAVENTAS + 'MaestroMoneda/' + empresa);
                     await request.json().then(data =>{
                         let moneda = '';
                         let abreviacion = '';

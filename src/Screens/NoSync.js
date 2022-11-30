@@ -27,7 +27,7 @@ const NoSync = (props) => {
         setRecargar(true)
         console.log('sincronizando')
         try {
-            const request = await fetch(APIURLAVENTAS + 'api/GastoViajeDetalle/' + user + '/4/1/10');
+            const request = await fetch(APIURLAVENTAS + 'GastoViajeDetalle/' + user + '/4/1/10');
             let data = await request.json();
             setHistorialJSON(data)
             setIsLoading(false)
@@ -43,7 +43,7 @@ const NoSync = (props) => {
     const historialMas = async () => {
         console.log('sincronizando mas')
         try {
-            const request = await fetch(APIURLAVENTAS + 'api/GastoViajeDetalle/' + user + '/4/' + page + '/10')
+            const request = await fetch(APIURLAVENTAS + 'GastoViajeDetalle/' + user + '/4/' + page + '/10')
                 .then(async (data) => {
                     let datos = await data.json().then((data) => {
                         setHistorialJSON(historialJSON.concat(data))
@@ -73,10 +73,10 @@ const NoSync = (props) => {
     }
 
     const SincronizarAX = async (id) => {
-        const request = await fetch(APIURLAVENTAS + 'api/DatosEnviarAX/' + id)
+        const request = await fetch(APIURLAVENTAS + 'DatosEnviarAX/' + id)
         let result = await request.json()
         if (result.Content == '"OK"') {
-            const request2 = await fetch(APIURLAVENTAS + 'api/ActualizarEstadoGasto/' + id + '/2/-/-/-', {
+            const request2 = await fetch(APIURLAVENTAS + 'ActualizarEstadoGasto/' + id + '/2/-/-/-', {
                 method: 'POST'
             })
             const result2 = await request2.json();
