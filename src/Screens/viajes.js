@@ -54,7 +54,7 @@ const Viaje = (props) => {
     const [enviando, setEnviando] = useState(false);
     const [buscandoProveedor, setBuscandoProveedor] = useState(false);
     const [serie, setSerie] = useState('')
-    const [impuesto, setImpuesto] = useState(0.15);
+    const [impuesto, setImpuesto] = useState(0);
     let result;
 
 
@@ -128,7 +128,7 @@ const Viaje = (props) => {
 
     const onScreenLoad = async () => {
         try {
-            const request = await fetch(APIURLAVENTAS + 'TipoGasto/' + empresa);
+            const request = await fetch(APIURLAVENTAS + 'Gira/TipoGasto/' + empresa);
             setResultTipoJSON(await request.json())
         } catch (error) {
             setmensajeAlerta('No hay conexion con el servidor intente mas tarde...')
@@ -138,7 +138,7 @@ const Viaje = (props) => {
             dispatch(terminarSesion());
         }
         try {
-            const request = await fetch(APIURLAVENTAS + 'CategoriaGasto/' + empresa);
+            const request = await fetch(APIURLAVENTAS + 'Gira/CategoriaGasto/' + empresa);
             setResultCategoriaJSON(await request.json())
             setIdCategoria(null)
         } catch (err) {
@@ -151,7 +151,7 @@ const Viaje = (props) => {
     const cantidadNoSync = async () => {
         let num = 0;
         try {
-            const request = await fetch(APIURLAVENTAS + "GastoViajeDetalle/" + user + '/4');
+            const request = await fetch(APIURLAVENTAS + "Gira/GastoViajeDetalle/" + user + '/4');
             num = await request.json();
         } catch (error) {
 
@@ -174,7 +174,7 @@ const Viaje = (props) => {
 
     const getImpuesto = async() =>{
         try {
-            await fetch(APIURLAVENTAS + 'GrupoImpuesto/' + empresa).then(resp =>{
+            await fetch(APIURLAVENTAS + 'Gira/GrupoImpuesto/' + empresa).then(resp =>{
                 let data = resp.json().then(result =>{
                     setImpuesto(parseFloat(result.Content.replace('"').replace('"')))
                 })
@@ -360,10 +360,10 @@ const Viaje = (props) => {
         try {
             let verificar = false;
             if (nFactura != '') {
-                const verificacion = await fetch(APIURLAVENTAS + 'GastoViajeDetalle/verificar/' + nFactura + "/" + proveedor + "/-"  );
+                const verificacion = await fetch(APIURLAVENTAS + 'Gira/GastoViajeDetalle/verificar/' + nFactura + "/" + proveedor + "/-"  );
                 await verificacion.json().then(async(res) =>{
                     if(!res){
-                        const request = await fetch(APIURLAVENTAS + 'GastoViajeDetalle', {
+                        const request = await fetch(APIURLAVENTAS + 'Gira/GastoViajeDetalle', {
                             method: 'POST',
                             headers: {
                                 Accept: 'application/json',
@@ -405,7 +405,7 @@ const Viaje = (props) => {
                 });
                 
             } else {
-                const request = await fetch(APIURLAVENTAS + 'GastoViajeDetalle', {
+                const request = await fetch(APIURLAVENTAS + 'Gira/GastoViajeDetalle', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
@@ -459,7 +459,7 @@ const Viaje = (props) => {
     useEffect(() => {
         onScreenLoad();
         cantidadNoSync();
-        //getImpuesto();
+        getImpuesto();
     }, [])
 
     useEffect(() => {

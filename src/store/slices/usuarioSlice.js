@@ -13,7 +13,7 @@ const usuarioSlice = createSlice({
         nosync: 0,
         monedaAbreviacion:"",
         moneda:"",
-        APIURLAVENTAS: "http://190.109.203.183:9080/api/Gira/",
+        APIURLAVENTAS: "http://localhost:62632/api/",
         APIURLPROXY: "http://190.109.223.244:8083/",
         logeado: false
     },

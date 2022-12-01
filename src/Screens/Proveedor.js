@@ -97,7 +97,7 @@ const Proveedor = (props) => {
         }
 
         try {
-            const request = await fetch(APIURLAVENTAS + 'Usuarios', {
+            const request = await fetch(APIURLAVENTAS + 'Gira/Usuarios', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',

@@ -23,7 +23,7 @@ const Login = (props) => {
     const onPressHandle = async () => {
         setEnviando(true)
         try {
-            const request = await fetch(APIURLAVENTAS +"api/authentication/movil", {
+            const request = await fetch(APIURLAVENTAS + "authentication/movil", {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -48,7 +48,7 @@ const Login = (props) => {
                 dispatch(iniciarSesion({ user: nombreUsuario, nombre, empresa }));
                 //Consultar el Tipo de documento fiscal de cada pais
                 try {
-                    const request = await fetch(APIURLAVENTAS + 'Empresa/' + empresa);
+                    const request = await fetch(APIURLAVENTAS + 'Gira/Empresa/' + empresa);
                     const data = await request.json();
                     let documento = '';
                     data.forEach(element => {
@@ -61,7 +61,7 @@ const Login = (props) => {
 
                 //Consultar Tipo de moneda de cada pais
                 try {
-                    const request = await fetch(APIURLAVENTAS + 'MaestroMoneda/' + empresa);
+                    const request = await fetch(APIURLAVENTAS + 'Gira/MaestroMoneda/' + empresa);
                     await request.json().then(data =>{
                         let moneda = '';
                         let abreviacion = '';
@@ -87,6 +87,7 @@ const Login = (props) => {
         } catch (err) {
             console.log(err)
             if(mensaje == ''){
+                console.log(err)
                 setmensajeAlerta('No hay conexion con el servidor, intente mas tarde....')
             }else{
                 setmensajeAlerta(mensaje)

@@ -86,7 +86,7 @@ const History = (props) => {
         setRecargando(true)
         setRecargar(true)
         try {
-            const request = await fetch(APIURLAVENTAS + 'GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/1/10/' + estadoID);
+            const request = await fetch(APIURLAVENTAS + 'Gira/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/1/10/' + estadoID);
             let data = await request.json()
             setHistorialJSON(data)
             setShowHistorialJSON(data)
@@ -103,8 +103,8 @@ const History = (props) => {
 
     const HistorialFiltrado = async () => {
         try {
-            console.log(APIURLAVENTAS + 'GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10/' + estadoID)
-            const request = await fetch(APIURLAVENTAS + 'GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10/' + estadoID)
+            console.log(APIURLAVENTAS + 'Gira/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10/' + estadoID)
+            const request = await fetch(APIURLAVENTAS + 'Gira/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10/' + estadoID)
                 .then(async (data) => {
                     let datos = await data.json().then((data) => {
                         setHistorialJSON(historialJSON.concat(data))
@@ -127,7 +127,7 @@ const History = (props) => {
     const llenarEstado = async () => {
         try {
             console.log('estado')
-            const request = await fetch(APIURLAVENTAS + 'Estado');
+            const request = await fetch(APIURLAVENTAS + 'Gira/Estado');
             let data = await request.json();
             setResultEstadoJSON(data)
         } catch (error) {
