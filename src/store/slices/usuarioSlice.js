@@ -13,8 +13,8 @@ const usuarioSlice = createSlice({
         nosync: 0,
         monedaAbreviacion:"",
         moneda:"",
-        APIURLAVENTAS: "http://190.109.203.183:9080/api/",
-        APIURLPROXY: "http://190.109.223.244:8083/",
+        APIURLAVENTAS: "https://crm.intermoda.hn:41443/api/",
+        APIURLPROXY: "http://eva.intermoda.hn:7081/",
         logeado: false
     },
     reducers: {
