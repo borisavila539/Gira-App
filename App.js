@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { iniciarSesion, documentoMostrar, tipoMoneda } from './src/store/slices/usuarioSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TextoPantallas } from './src/Components/Constant';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, SafeAreaView } from 'react-native';
 
 
 const Stack = createStackNavigator();
@@ -73,10 +73,12 @@ const AppNavigation = () => {
   }, [])
 
   return (
-    <>
+    <SafeAreaView style={{flex:1}}>
+     
       {
         mostrar ?
           <NavigationContainer >
+            
             <Stack.Navigator screenOptions={{ header: () => null }}>
               {
                 logeado?                 
@@ -93,7 +95,7 @@ const AppNavigation = () => {
             <Text style={[styles.text, { color: '#ddd' }]}>Cargando...</Text>
           </View>
       }
-    </>
+    </SafeAreaView>
 
   )
 }
@@ -119,6 +121,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
+       <StatusBar backgroundColor={'#069A8E'}/>
       <AppNavigation />
     </Provider>
   );
