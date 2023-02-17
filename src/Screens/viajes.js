@@ -65,7 +65,7 @@ const Viaje = (props) => {
                 mediaTypes: ImagePicker.MediaTypeOptions.Images = "Images",
                 base64: true,
                 allowsEditing: true,
-                quality: 1
+                quality: 0.5
             });
             if (!result.cancelled) {
                 setImagen(result.base64);
@@ -257,6 +257,7 @@ const Viaje = (props) => {
 
     const EnviarGasto = async () => {
         setEnviando(true)
+        debugger
         let facturaObligatoria = false;
         let descripcionObligatoria = false;
         let imagenObligatoria = false;
@@ -357,6 +358,23 @@ const Viaje = (props) => {
             messageAX = nombreCategoria + ' sem ' + semana + ' ' + nombre;
         }
 
+        let resul = JSON.stringify({
+            IdCategoriaTipoGastoViaje: IdCategoria,
+            UsuarioAsesor: user,
+            Proveedor: proveedor,
+            NoFactura: nFactura,
+            Descripcion: descripion,
+            ValorFactura: valor,
+            FechaFactura: showdate,
+            FechaCreacion: hoy,
+            Imagen: imagen,
+            DescripcionGasto: messageAX,
+            Serie: serie,
+            importeExento: parseFloat(exento?exento:0),
+            importeGravado: parseFloat(gravado?gravado:0),
+        });
+
+        console.log(resul)
         try {
             let verificar = false;
             if (nFactura != '') {
