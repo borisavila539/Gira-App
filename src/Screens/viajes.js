@@ -65,7 +65,7 @@ const Viaje = (props) => {
                 mediaTypes: ImagePicker.MediaTypeOptions.Images = "Images",
                 base64: true,
                 allowsEditing: true,
-                quality: 0.5
+                quality: 0.2
             });
             if (!result.cancelled) {
                 setImagen(result.base64);
@@ -88,7 +88,7 @@ const Viaje = (props) => {
             mediaTypes: ImagePicker.MediaTypeOptions.Images = "Images",
             base64: true,
             allowsEditing: true,
-            quality: 1
+            quality: 0.2
         });
         if (!result.cancelled) {
             setImagen(result.base64);
@@ -257,7 +257,6 @@ const Viaje = (props) => {
 
     const EnviarGasto = async () => {
         setEnviando(true)
-        debugger
         let facturaObligatoria = false;
         let descripcionObligatoria = false;
         let imagenObligatoria = false;
@@ -435,12 +434,13 @@ const Viaje = (props) => {
                         proveedor: proveedor,
                         noFactura: nFactura,
                         descripcion: descripion,
-                        valorFactura: parseFloat(valor),
+                        valorFactura: valor,
                         fechaFactura: showdate,
                         fechaCreacion: hoy,
                         imagen: imagen,
                         descripcionGasto: messageAX,
-                        serie: serie
+                        serie: serie,
+                        importeExento: parseFloat(exento?exento:0)
                     })
                 })
 
