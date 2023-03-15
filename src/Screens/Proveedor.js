@@ -42,7 +42,7 @@ const Proveedor = (props) => {
             mediaTypes: ImagePicker.MediaTypeOptions.Images = "Images",
             base64: true,
             allowsEditing: true,
-            quality: 0.3
+            quality: 0.2
         });
         if (!result.cancelled) {
             setImagen(result.base64);
