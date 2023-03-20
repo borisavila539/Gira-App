@@ -13,7 +13,7 @@ const usuarioSlice = createSlice({
         nosync: 0,
         monedaAbreviacion:"",
         moneda:"",
-        APIURLAVENTAS: "http://localhost:62632/api/",
+        APIURLAVENTAS: "https://crm.intermoda.hn:41443/api/",
         APIURLPROXY: "http://eva.intermoda.hn:7081/",
         logeado: false
     },
