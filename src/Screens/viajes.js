@@ -162,7 +162,7 @@ const Viaje = (props) => {
     const llenarCategoria = async (id) => {
         let array = [];
         resultCategoriaJSON.forEach(element => {
-            if (element["IdTipoGastoViaje"] == id) {
+            if (element["IdTipoGastoViaje"] == id && element["activo"] == true) {
                 array.push(element['CategoriaNombre'])
                 if (element['CategoriaNombre'] == 'Alimentacion') {
                     setIdAlimentos(element['idCategoriaTipoGastoViaje'])
