@@ -23,7 +23,7 @@ const Login = (props) => {
     const onPressHandle = async () => {
         setEnviando(true)
         try {
-            const request = await fetch(APIURLAVENTAS + "authentication/movil", {
+            const request = await fetch(APIURLAVENTAS + "authentication", {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
