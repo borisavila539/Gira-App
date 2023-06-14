@@ -55,8 +55,12 @@ const Viaje = (props) => {
     const [buscandoProveedor, setBuscandoProveedor] = useState(false);
     const [serie, setSerie] = useState('')
     const [impuesto, setImpuesto] = useState(0);
-    let result;
+    const [combustiblesJson,setCombustiblesJson] = useState([]);
+    const [combustibles,setCombustibles] = useState([]);
+    const [combustibleSelect, setCombustibleSelect] = useState('')
+    const [combustibleID, setCombustibleId] = useState(0)
 
+    let result;
 
     const pickImage = async () => {
         const permiso = await ImagePicker.requestCameraPermissionsAsync();
@@ -74,7 +78,7 @@ const Viaje = (props) => {
             const { status } = await MediaLibrary.requestPermissionsAsync();
             if (status == "granted") {
                 await MediaLibrary.saveToLibraryAsync(result.uri);
-                console.log('imagen guardada')
+
             }
         } else {
             setmensajeAlerta('Estado permisos de camara: ' + permiso.status)
@@ -146,7 +150,13 @@ const Viaje = (props) => {
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
         }
-    };
+
+        if(empresa == 'IMGT'){
+            const request = await fetch(APIURLAVENTAS + 'Gira/combustibles');
+            setCombustiblesJson(await request.json());
+            setCombustibleId(0);
+        }
+    }
 
     const cantidadNoSync = async () => {
         let num = 0;
@@ -172,15 +182,17 @@ const Viaje = (props) => {
         setResultCategoria(array)
     };
 
-    const getImpuesto = async() =>{
-        try {
-            await fetch(APIURLAVENTAS + 'Gira/GrupoImpuesto/' + empresa).then(resp =>{
-                let data = resp.json().then(result =>{
-                    setImpuesto(parseFloat(result.Content.replace('"').replace('"')))
+    const getImpuesto = async () => {
+        if (empresa == 'IMHN') {
+            try {
+                await fetch(APIURLAVENTAS + 'Gira/GrupoImpuesto/' + empresa).then(resp => {
+                    let data = resp.json().then(result => {
+                        setImpuesto(parseFloat(result.Content.replace('"').replace('"')))
+                    })
                 })
-            })
-        }catch(err){
-            console.log(err)
+            } catch (err) {
+                console.log(err)
+            }
         }
     }
 
@@ -216,6 +228,8 @@ const Viaje = (props) => {
             if (element['Nombre'] == selectedItem) {
                 llenarCategoria(element['Id'])
                 setDisabledDropDown(false)
+                setCombustibleId(null)
+
             }
         })
     };
@@ -225,6 +239,16 @@ const Viaje = (props) => {
             let elem = element['Identificacion'] + '\n' + element['Nombre'];
             if (elem == selectedItem) {
                 setProveedor(element['CodigoProveedor'])
+            }
+        })
+    }
+
+    const onSelectCombustible = (selectedItem, index) =>{
+        combustiblesJson.forEach(element =>{
+            let elem = element['Nombre'];
+
+            if(elem == selectedItem ){
+                setCombustibleId(element['Id'])
             }
         })
     }
@@ -253,6 +277,7 @@ const Viaje = (props) => {
         setNFactura('')
         setProveedoresJSON([])
         setDiasableProveedor(true)
+        setCombustibleId(null)
     };
 
     const EnviarGasto = async () => {
@@ -277,6 +302,11 @@ const Viaje = (props) => {
         }
         if (proveedor == '') {
             alertas('Debe Seleccionar un proveedor...', true, false)
+            setEnviando(false)
+            return
+        }
+        if(combustibleID == null && nombreCategoria == 'Combustible' && empresa == 'IMGT'){
+            alertas('Debe Seleccionar un combustible...', true, false)
             setEnviando(false)
             return
         }
@@ -319,11 +349,22 @@ const Viaje = (props) => {
                 return
             }
         }
+        if (empresa == 'IMHN') {
 
-        if(exento == '' && gravado == '' ){
-            alertas('Debe llenar el importe Gravado o exento.', true, false)
-            setEnviando(false)
-            return
+            if (exento == '' && gravado == '') {
+                alertas('Debe llenar el importe Gravado o exento.', true, false)
+                setEnviando(false)
+                return
+            }
+        }
+
+        if (empresa == 'IMGT') {
+            //Meter validaciones de combustible y exento de hospedaje
+            if (valor == '') {
+                alertas('Debe llenar el importe Total', true, false)
+                setEnviando(false)
+                return
+            }
         }
 
         if (date == '') {
@@ -369,17 +410,18 @@ const Viaje = (props) => {
             Imagen: imagen,
             DescripcionGasto: messageAX,
             Serie: serie,
-            importeExento: parseFloat(exento?exento:0),
-            importeGravado: parseFloat(gravado?gravado:0),
+            importeExento: parseFloat(exento ? exento : 0),
+            importeGravado: parseFloat(gravado ? gravado : 0),
+            CombustibleID: empresa == 'IMGT' ? combustibleID : null
         });
 
-        console.log(resul)
+
         try {
             let verificar = false;
             if (nFactura != '') {
-                const verificacion = await fetch(APIURLAVENTAS + 'Gira/GastoViajeDetalle/verificar/' + nFactura + "/" + proveedor + "/-"  );
-                await verificacion.json().then(async(res) =>{
-                    if(!res){
+                const verificacion = await fetch(APIURLAVENTAS + 'Gira/GastoViajeDetalle/verificar/' + nFactura + "/" + proveedor + "/"+ (serie != ''? serie: '-'));
+                await verificacion.json().then(async (res) => {
+                    if (!res) {
                         const request = await fetch(APIURLAVENTAS + 'Gira/GastoViajeDetalle', {
                             method: 'POST',
                             headers: {
@@ -398,14 +440,15 @@ const Viaje = (props) => {
                                 Imagen: imagen,
                                 DescripcionGasto: messageAX,
                                 Serie: serie,
-                                importeExento: parseFloat(exento?exento:0),
-                                importeGravado: parseFloat(gravado?gravado:0),
+                                importeExento: parseFloat(exento ? exento : 0),
+                                importeGravado: parseFloat(gravado ? gravado : 0),
+                                CombustibleID: empresa == 'IMGT' ? combustibleID : null
                             })
                         })
-        
+
                         try {
                             let result = await request.json();
-                            console.log(result)
+
                             if (result == true) {
                                 setEnviado(true)
                             } else {
@@ -414,13 +457,13 @@ const Viaje = (props) => {
                         } catch (err) {
                             console.log("error json")
                         }
-                    }else{
+                    } else {
                         alertas('Factura: ' + nFactura + ' ya existe para proveedor seleccionado', true, false)
                         setEnviando(false)
                     }
-                    console.log('verificar: '+res)
+
                 });
-                
+
             } else {
                 const request = await fetch(APIURLAVENTAS + 'Gira/GastoViajeDetalle', {
                     method: 'POST',
@@ -440,13 +483,13 @@ const Viaje = (props) => {
                         imagen: imagen,
                         descripcionGasto: messageAX,
                         serie: serie,
-                        importeExento: parseFloat(exento?exento:0)
+                        importeExento: parseFloat(exento ? exento : 0),
+                        CombustibleID: empresa == 'IMGT' ? combustibleID : null
                     })
                 })
 
                 try {
                     let result = await request.json();
-                    console.log(result)
                     if (result) {
                         setEnviado(true)
                     } else {
@@ -459,7 +502,7 @@ const Viaje = (props) => {
 
 
         } catch (err) {
-            console.log(err)
+
             setmensajeAlerta('No hay conexion con el servidor intente mas tarde...')
             setShowMensajeAlerta(true)
             setTipoMensaje(false)
@@ -500,6 +543,16 @@ const Viaje = (props) => {
             setProveedores(array)
         }
     }, [proveedoresJSON])
+
+    useEffect(()=>{
+        let array = [];
+        if(combustiblesJson){
+            combustiblesJson.forEach(element =>{
+                array.push(element['Nombre'])
+            });
+            setCombustibles(array)
+        }
+    },[combustiblesJson])
 
     useEffect(() => {
         if (enviado) {
@@ -558,15 +611,43 @@ const Viaje = (props) => {
                         </View>
                         <DropdownList defaultButtonText='Seleccione Proveedor' data={proveedores} onSelect={onSelectProveedor} search={true} searchPlaceHolder={'Buscar por nombre'} disabled={disableProveedor} />
                         {
-                            empresa == 'IMGT' &&
-                            <TextInputContainer editable={proveedor!='' ? true:false} title={'No. Serie'} height={ObjectHeigth} value={serie} onChangeText={(value) => setSerie(value)} />
+                            combustiblesJson.length > 0 && nombreCategoria == 'Combustible' &&
+                            <DropdownList defaultButtonText= 'Seleccione Combustible' data={combustibles} onSelect={onSelectCombustible} search={true} searchPlaceHolder={'Buscar por nombre'} disabled={false}/>
                         }
-                        <TextInputContainer editable={proveedor!='' ? true:false} title={'No. Factura:'} height={ObjectHeigth} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
+                        {
+                            empresa == 'IMGT' &&
+                            <TextInputContainer editable={proveedor != '' ? true : false} title={'No. Serie'} height={ObjectHeigth} value={serie} onChangeText={(value) => setSerie(value)} />
+                        }
+                        <TextInputContainer editable={proveedor != '' ? true : false} title={'No. Factura:'} height={ObjectHeigth} placeholder={empresa == 'IMHN' ? 'XXX-XXX-XX-XXXXXXXX' : ''} maxLength={empresa == 'IMHN' ? 19 : null} teclado={empresa == 'IMHN' ? 'decimal-pad' : 'default'} value={nFactura} onChangeText={(value) => onChanceNFactura(value)} />
                         <TextInputContainer title='Descripcion: ' multiline={true} maxLength={200} Justify={true} height={80} onChangeText={(value) => setDescripcion(value)} value={descripion} />
-                        <TextInputContainer title={'Importe Gravado:'} height={ObjectHeigth} placeholder={'0.00'} teclado='decimal-pad' onChangeText={(value) => {setGravado(value);setValor( parseFloat(exento?exento:0) + parseFloat(value?value:0)*(1+impuesto)+'')}} value={gravado}/>
-                        <TextInputContainer title={'Importe Exento:'} height={ObjectHeigth} placeholder={'0.00'} teclado='decimal-pad' onChangeText={(value) => {setExento(value);setValor( parseFloat(value?value:0) + parseFloat(gravado?gravado:0)*(1+impuesto)+'')}} value={exento}/>
-                        <TextInputContainer title={'Total:'} height={ObjectHeigth} placeholder={'0.00'} value={parseFloat(valor) >0? parseFloat(valor).toFixed(2):""} editable={false}/>
-                        
+                        {
+                            empresa == 'IMHN' &&
+                            <>
+                                <TextInputContainer title={'Importe Gravado:'} height={ObjectHeigth} placeholder={'0.00'} teclado='decimal-pad' onChangeText={(value) => { setGravado(value); setValor(parseFloat(exento ? exento : 0) + parseFloat(value ? value : 0) * (1 + impuesto) + '') }} value={gravado} />
+                                <TextInputContainer title={'Importe Exento:'} height={ObjectHeigth} placeholder={'0.00'} teclado='decimal-pad' onChangeText={(value) => { setExento(value); setValor(parseFloat(value ? value : 0) + parseFloat(gravado ? gravado : 0) * (1 + impuesto) + '') }} value={exento} />
+                            </>
+                        }
+                        {
+                            empresa == 'IMGT' && nombreCategoria == 'Hospedaje' &&
+                            <>
+                                <TextInputContainer title={'Importe Exento:'} height={ObjectHeigth} placeholder={'0.00'} teclado='decimal-pad' onChangeText={(value) => { setExento(value) }} value={exento} />
+                            </>
+                        }
+                        {
+                            empresa == 'IMGT' && nombreCategoria == 'Combustible' &&
+                            <>
+                                <TextInputContainer title={'Cantidad Galones:'} height={ObjectHeigth} placeholder={'0.00'} teclado='decimal-pad' onChangeText={(value) => { setExento(value) }} value={exento} />
+                            </>
+                        }
+                        {
+                            empresa == 'IMHN' &&
+                            <TextInputContainer title={'Total:'} height={ObjectHeigth} placeholder={'0.00'} value={parseFloat(valor) > 0 ? parseFloat(valor).toFixed(2) : ""} editable={false} />
+                        }
+
+                        {
+                            empresa == 'IMGT' &&
+                            <TextInputContainer title={'Total:'} height={ObjectHeigth} placeholder={'0.00'} teclado='decimal-pad' onChangeText={(value) => { setValor(value) }} value={valor} editable={true} />
+                        }
                         <TouchableOpacity onPress={() => SetOpenDate(true)}>
                             <View style={styles.textInputDateContainer}>
                                 <Text style={styles.text}>Fecha Factura:</Text>
