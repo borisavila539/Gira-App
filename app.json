@@ -19,7 +19,12 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.intermoda.gira"
+      "bundleIdentifier": "com.intermoda.gira",
+      "permissions":[
+        "NSMicrophoneUsageDescription",
+        "NSPhotoLibraryUsageDescription",
+        "NSCameraUsageDescription"
+      ]
     },
     "android": {
       "package": "com.intermoda.gira",

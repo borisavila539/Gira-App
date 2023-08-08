@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, SafeAreaView, ScrollView } from "react-native";
-import { HeaderLogout, TextInputContainer, Buttons, MyAlert, ModalCameraUpload } from "../Components/IndexComponents";
+import { HeaderLogout, TextInputContainer, Buttons, MyAlert, ModalCameraUpload } from "../Components/indexComponents";
 import * as ImagePicker from 'expo-image-picker';
 import { StatusBar } from "react-native";
 import { useState } from "react";

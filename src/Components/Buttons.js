@@ -5,7 +5,7 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
-import { TextButtons } from "./Constant";
+import { TextButtons } from "./constant";
 
 const Buttons = (props) => {
   return (
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     fontSize: TextButtons,
     color: '#fff',
     fontWeight: 'bold',
-    fontFamily: 'sans-serif'
+    //fontFamily: 'sans-serif'
   },
 })
 

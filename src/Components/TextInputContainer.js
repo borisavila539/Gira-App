@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, TextInput } from "react-native";
-import { TextoPantallas } from "./Constant";
+import { TextoPantallas } from "./constant";
 
 const TextInputContainer = (props) => {
 
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         fontSize: TextoPantallas,
         fontWeight: 'bold',
         color: '#005555',
-        fontFamily: 'sans-serif'
+        //fontFamily: 'sans-serif'
     },
     textInput: {
         width: '100%',
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         borderColor: '#30475E',
         color: '#121212',
         padding: 2,
-        fontFamily: 'sans-serif'
+        //fontFamily: 'sans-serif'
     }
 })
 
