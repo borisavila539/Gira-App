@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { StyleSheet, View, Text, Image, Modal, Pressable, ScrollView, SafeAreaView } from "react-native";
-import HeaderLogout from "../Components/HeaderLogout";
+import HeaderLogout from "../Components/headerLogout";
 import { useSelector } from 'react-redux';
-import { ImageHeigth, ImageWidth, TextoPantallas } from "../Components/Constant";
+import { ImageHeigth, ImageWidth, TextoPantallas } from "../Components/constant";
 import Buttons from "../Components/Buttons";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from 'expo-media-library';
-import MyAlert from "../Components/MyAlerts";
+import MyAlert from "../Components/myAlerts";
 
 const HistoyDetalle = (props) => {
     const [modalVisible, SetModalVisible] = useState(false);
@@ -231,14 +231,14 @@ const styles = StyleSheet.create({
         fontSize: TextoPantallas,
         fontWeight: 'bold',
         textAlign: "center",
-        fontFamily: 'sans-serif'
+        //fontFamily: 'sans-serif'
     },
     text2: {
         fontSize: TextoPantallas,
         fontWeight: "normal",
         fontStyle: "italic",
         textAlign: "center",
-        fontFamily: 'sans-serif'
+        //fontFamily: 'sans-serif'
     },
     containerDetalle: {
         flex: 1,

@@ -1,12 +1,12 @@
 import { StyleSheet, View, Text, TouchableOpacity, TextInput, FlatList, RefreshControl, ActivityIndicator } from "react-native";
-import { HeaderLogout, DropdownList, MyAlert } from "../Components/IndexComponents";
+import { HeaderLogout, DropdownList, MyAlert } from "../Components/indexComponents";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { useEffect } from "react";
 import { useSelector } from 'react-redux';
-import { IconHeader } from "../Components/Constant";
+import { IconHeader } from "../Components/constant";
 
 
 const History = (props) => {
@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         textAlign: "right",
         fontStyle: "italic",
-        fontFamily: 'sans-serif'
+        //fontFamily: 'sans-serif'
     },
     text2: {
         fontSize: 16,
@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
         fontStyle: "italic",
         fontWeight: "bold",
         fontStyle: "normal",
-        fontFamily: 'sans-serif'
+        //fontFamily: 'sans-serif'
     },
     inputIconContainer: {
         flexDirection: 'row',
@@ -392,7 +392,7 @@ const styles = StyleSheet.create({
         color: '#121212',
         padding: 2,
         textAlign: "center",
-        fontFamily: 'sans-serif'
+        //fontFamily: 'sans-serif'
     },
     filters: {
         width: '100%',

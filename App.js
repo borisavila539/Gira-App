@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { HistoyDetalle, Login } from './src/Screens/IndexScreens';
+import { HistoyDetalle, Login } from './src/Screens/indexScreens'
 import Navegador from "./src/Screens/Navigator";
 import { Provider } from 'react-redux';
 import { store } from './src/store';
@@ -8,7 +8,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux'
 import { iniciarSesion, documentoMostrar, tipoMoneda } from './src/store/slices/usuarioSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { TextoPantallas } from './src/Components/Constant';
+import { TextoPantallas } from './src/Components/constant';
 import { View, Text, StyleSheet, StatusBar, SafeAreaView } from 'react-native';
 
 
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     fontSize: TextoPantallas,
     fontWeight: 'bold',
     textAlign: "center",
-    fontFamily: 'sans-serif'
+    //fontFamily: 'sans-serif'
   }
 })
 

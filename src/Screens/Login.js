@@ -3,11 +3,11 @@ import { useState } from 'react';
 import { StyleSheet, View, Image, TextInput, Pressable, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { Buttons, MyAlert } from '../Components/IndexComponents';
+import { Buttons, MyAlert } from '../Components/indexComponents';
 import { useDispatch, useSelector } from 'react-redux'
 import { iniciarSesion, mensajeLogin, documentoMostrar, tipoMoneda } from '../store/slices/usuarioSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { IconSelect, TextButtons } from '../Components/Constant';
+import { IconSelect, TextButtons } from '../Components/constant';
 
 const Login = (props) => {
     const dispatch = useDispatch();
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         fontSize: TextButtons,
         color: '#005555',
-        fontFamily: 'sans-serif'
+        //fontFamily: 'sans-serif'
     },
     textInputAlign: {
         flexDirection: 'row',
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
         fontSize: 40,
         marginBottom: 15,
         fontWeight: 'bold',
-        fontFamily: 'sans-serif'
+        //fontFamily: 'sans-serif'
     }
 })
 

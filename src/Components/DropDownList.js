@@ -1,9 +1,9 @@
 import SelectDropdown from 'react-native-select-dropdown'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { ObjectHeigth, IconSelect } from './Constant';
+import { ObjectHeigth, IconSelect } from './constant';
 
 import { View, StyleSheet, Text } from 'react-native'
-import { TextoPantallas } from './Constant';
+import { TextoPantallas } from './constant';
 
 function Icon() {
     return (
@@ -37,8 +37,8 @@ const DropdownList = (props) => {
                 disableAutoScroll={true}
                 disabled={props.disabled}
                 rowStyle={{height:60, flex:1}}
-                rowTextStyle={{fontFamily: 'sans-serif', fontSize: TextoPantallas}}
-                buttonTextStyle={{fontFamily: 'sans-serif', fontSize: TextoPantallas}}                
+                rowTextStyle={{fontSize: TextoPantallas}}
+                buttonTextStyle={{ fontSize: TextoPantallas}}                
             />
         </View>
     )

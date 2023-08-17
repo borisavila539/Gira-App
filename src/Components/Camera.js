@@ -1,6 +1,6 @@
 import { Image, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { IconCamera } from "./Constant";
+import { IconCamera } from "./constant";
 
 const ModalCameraUpload = (props) => {
     return (
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         color: '#1A4D2E',
-        fontFamily: 'sans-serif'
+        //fontFamily: 'sans-serif'
     },
     containerIcon: {
         width: '100%',

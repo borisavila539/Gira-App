@@ -1,6 +1,6 @@
-import { StyleSheet, View, TouchableOpacity, SafeAreaView, Text, ActivityIndicator } from "react-native";
-import { Buttons, HeaderLogout } from "../Components/IndexComponents";
-import { TextInputContainer, DropdownList, MyAlert, ModalCameraUpload } from "../Components/IndexComponents";
+import { StyleSheet, View, TouchableOpacity, SafeAreaView, Text, ActivityIndicator, Platform } from "react-native";
+import { Buttons, HeaderLogout } from "../Components/indexComponents";
+import { TextInputContainer, DropdownList, MyAlert, ModalCameraUpload } from "../Components/indexComponents";
 import { StatusBar } from "react-native";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { useState } from "react";
@@ -12,9 +12,10 @@ import * as ImagePicker from 'expo-image-picker';
 import RadioButtonRN from 'radio-buttons-react-native';
 import { noSincronizado, terminarSesion } from '../store/slices/usuarioSlice';
 import moment from "moment";
-import { IconSelect, ObjectHeigth, TextoPantallas } from "../Components/Constant";
+import { IconSelect, ObjectHeigth, TextoPantallas } from "../Components/constant";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as MediaLibrary from 'expo-media-library';
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 const Viaje = (props) => {
     const dispatch = useDispatch();
@@ -71,13 +72,13 @@ const Viaje = (props) => {
                 allowsEditing: true,
                 quality: 0.2
             });
-            if (!result.cancelled) {
-                setImagen(result.base64);
+            if (!result.canceled ){
+                setImagen(result.assets[0].base64);
                 setModalCameraUpload(false);
             }
             const { status } = await MediaLibrary.requestPermissionsAsync();
             if (status == "granted") {
-                await MediaLibrary.saveToLibraryAsync(result.uri);
+                await MediaLibrary.saveToLibraryAsync(result.assets[0].uri);
 
             }
         } else {
@@ -94,8 +95,8 @@ const Viaje = (props) => {
             allowsEditing: true,
             quality: 0.2
         });
-        if (!result.cancelled) {
-            setImagen(result.base64);
+        if (!result.canceled) {
+            setImagen(result.assets[0].base64);
             setModalCameraUpload(false);
         }
     };
@@ -585,7 +586,7 @@ const Viaje = (props) => {
                             <RadioButtonRN data={dataAlimentos}
                                 style={{ flex: 1, width: '95%' }}
                                 boxStyle={{ flex: 1, alignItems: 'center', marginHorizontal: 0, paddingHorizontal: 10 }}
-                                textStyle={{ color: '#000', fontSize: 16, fontFamily: 'sans-serif' }}
+                                textStyle={{ color: '#000', fontSize: 16 }}
                                 initial={1}
                                 selectedBtn={(value) => setTipoAlimento(value)}
                                 box={false}
@@ -659,7 +660,13 @@ const Viaje = (props) => {
                         </TouchableOpacity>
                         {
                             openDate &&
-                            <DateTimePicker mode='date' value={showdate} onChange={onchange} />
+                            <RNDateTimePicker 
+                                testID="dateTimePicker" 
+                                display="default"
+                                mode="date" value={showdate} 
+                                onChange={onchange} 
+                                style={{width:"100%"}}/>
+                            //<DateTimePicker testID="dateTimePicker" display="spinner" mode='date'  value={showdate} onChange={onchange} />
                         }
                         <ModalCameraUpload
                             modalVisible={modalVisible}
@@ -704,7 +711,7 @@ const styles = StyleSheet.create({
         fontSize: TextoPantallas,
         fontWeight: 'bold',
         color: '#005555',
-        fontFamily: 'sans-serif'
+        //fontFamily: 'sans-serif'
     },
     inputIconContainer: {
         flexDirection: 'row',
@@ -727,7 +734,7 @@ const styles = StyleSheet.create({
         color: '#121212',
         padding: 2,
         textAlign: "center",
-        fontFamily: 'sans-serif'
+        //fontFamily: 'sans-serif'
     }
 })
 

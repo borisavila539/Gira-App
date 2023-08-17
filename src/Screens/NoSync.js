@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { StyleSheet, View, Text, FlatList, RefreshControl, ActivityIndicator, TouchableOpacity } from "react-native";
-import { HeaderLogout, MyAlert } from "../Components/IndexComponents";
+import { HeaderLogout, MyAlert } from "../Components/indexComponents";
 import { useSelector } from 'react-redux';
-import { IconHeader } from "../Components/Constant";
+import { IconHeader } from "../Components/constant";
 import { noSincronizado } from '../store/slices/usuarioSlice';
 import { useDispatch } from 'react-redux';
 
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         textAlign: "right",
         fontStyle: "italic",
-        fontFamily: 'sans-serif'
+        //fontFamily: 'sans-serif'
     },
     text2: {
         fontSize: 16,
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
         fontStyle: "italic",
         fontWeight: "bold",
         fontStyle: "normal",
-        fontFamily: 'sans-serif'
+        //fontFamily: 'sans-serif'
     },
 })
 
