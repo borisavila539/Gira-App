@@ -101,9 +101,9 @@ const Login = (props) => {
     return (
         <View style={{ flex: 1 }}>
 
-            <LinearGradient
+            <View
                 style={styles.container}
-                colors={['#069A8E', '#005555']} //'#069A8E','#005555'
+                //colors={'#069A8E'} //'#069A8E','#005555'
             >
                 <View style={styles.imagenContainer}>
                     <Image
@@ -155,7 +155,7 @@ const Login = (props) => {
                         />
                     </View>
                 </View>
-            </LinearGradient>
+            </View>
             <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
         </View>
     )
@@ -166,6 +166,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         alignItems: 'center',
+        backgroundColor:'#069A8E'
     },
     imagenContainer: {
         width: '100%',
