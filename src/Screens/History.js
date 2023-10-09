@@ -51,7 +51,7 @@ const History = (props) => {
                 setShowDateIni(selectedDate)
             }
         }
-        console.log(event)
+        //console.log(event)
     }
 
     const onchangeFIn = (event, selectedDate) => {
@@ -95,7 +95,7 @@ const History = (props) => {
         } catch (error) {
             setHistorialJSON([])
             setShowHistorialJSON([])
-            console.log('No se obtuvo el Historial')
+            //console.log('No se obtuvo el Historial')
         }
         llenarEstado()
         setRecargando(false)
@@ -103,7 +103,7 @@ const History = (props) => {
 
     const HistorialFiltrado = async () => {
         try {
-            console.log(APIURLAVENTAS + 'Gira/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10/' + estadoID)
+            //console.log(APIURLAVENTAS + 'Gira/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10/' + estadoID)
             const request = await fetch(APIURLAVENTAS + 'Gira/GastoViajeDetalle/' + user + '/' + dateIni + '/' + dateFin + '/' + page + '/10/' + estadoID)
                 .then(async (data) => {
                     let datos = await data.json().then((data) => {
@@ -126,7 +126,7 @@ const History = (props) => {
 
     const llenarEstado = async () => {
         try {
-            console.log('estado')
+            //console.log('estado')
             const request = await fetch(APIURLAVENTAS + 'Gira/Estado');
             let data = await request.json();
             setResultEstadoJSON(data)
@@ -148,7 +148,7 @@ const History = (props) => {
     }
 
     const renderItem = (item) => {
-        console.log(item)
+        //console.log(item)
         const cambioFecha = (fecha) => {
             return fecha.substring(0, 10).replace('-', '/').replace('-', '/');
         };
@@ -231,9 +231,9 @@ const History = (props) => {
     useEffect(() => {
         if (dateIni != '' && dateFin != '') {
             Historial()
-            console.log(cont)
+            //console.log(cont)
         }
-        console.log('recargado')
+        //console.log('recargado')
     }, [dateIni, dateFin, estadoID])
 
     useEffect(() => {
