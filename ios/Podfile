@@ -14,7 +14,7 @@ target 'Gira' do
   config = use_native_modules!
 
   use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
-
+  pod 'RNScreens', :path => '../node_modules/react-native-screens'
   # Flags change depending on the env values.
   flags = get_default_flags()
 
